@@ -1,0 +1,503 @@
+
+# Roman Pots run 17, data by Tomas
+
+
+#common outputs
+top  /star/data01/pwg_tasks/upc02/Part6/
+
+#list staged by Tomas
+add_input  18095008  /star/data01/pwg_tasks/upc02/Part6/18095008.list
+add_input  18095009  /star/data01/pwg_tasks/upc02/Part6/18095009.list
+add_input  18095022  /star/data01/pwg_tasks/upc02/Part6/18095022.list
+add_input  18098049  /star/data01/pwg_tasks/upc02/Part6/18098049.list
+add_input  18098053  /star/data01/pwg_tasks/upc02/Part6/18098053.list
+add_input  18098054  /star/data01/pwg_tasks/upc02/Part6/18098054.list
+add_input  18099006  /star/data01/pwg_tasks/upc02/Part6/18099006.list
+add_input  18099007  /star/data01/pwg_tasks/upc02/Part6/18099007.list
+add_input  18099011  /star/data01/pwg_tasks/upc02/Part6/18099011.list
+add_input  18099012  /star/data01/pwg_tasks/upc02/Part6/18099012.list
+add_input  18099013  /star/data01/pwg_tasks/upc02/Part6/18099013.list
+add_input  18099014  /star/data01/pwg_tasks/upc02/Part6/18099014.list
+add_input  18099015  /star/data01/pwg_tasks/upc02/Part6/18099015.list
+add_input  18099017  /star/data01/pwg_tasks/upc02/Part6/18099017.list
+add_input  18099018  /star/data01/pwg_tasks/upc02/Part6/18099018.list
+add_input  18099019  /star/data01/pwg_tasks/upc02/Part6/18099019.list
+add_input  18099025  /star/data01/pwg_tasks/upc02/Part6/18099025.list
+add_input  18099026  /star/data01/pwg_tasks/upc02/Part6/18099026.list
+add_input  18099027  /star/data01/pwg_tasks/upc02/Part6/18099027.list
+add_input  18099028  /star/data01/pwg_tasks/upc02/Part6/18099028.list
+add_input  18099031  /star/data01/pwg_tasks/upc02/Part6/18099031.list
+add_input  18099032  /star/data01/pwg_tasks/upc02/Part6/18099032.list
+add_input  18099033  /star/data01/pwg_tasks/upc02/Part6/18099033.list
+add_input  18099034  /star/data01/pwg_tasks/upc02/Part6/18099034.list
+add_input  18099036  /star/data01/pwg_tasks/upc02/Part6/18099036.list
+add_input  18099037  /star/data01/pwg_tasks/upc02/Part6/18099037.list
+add_input  18099038  /star/data01/pwg_tasks/upc02/Part6/18099038.list
+add_input  18099040  /star/data01/pwg_tasks/upc02/Part6/18099040.list
+add_input  18099041  /star/data01/pwg_tasks/upc02/Part6/18099041.list
+add_input  18099047  /star/data01/pwg_tasks/upc02/Part6/18099047.list
+add_input  18100001  /star/data01/pwg_tasks/upc02/Part6/18100001.list
+add_input  18100002  /star/data01/pwg_tasks/upc02/Part6/18100002.list
+add_input  18100003  /star/data01/pwg_tasks/upc02/Part6/18100003.list
+add_input  18100004  /star/data01/pwg_tasks/upc02/Part6/18100004.list
+add_input  18100007  /star/data01/pwg_tasks/upc02/Part6/18100007.list
+add_input  18100008  /star/data01/pwg_tasks/upc02/Part6/18100008.list
+add_input  18100009  /star/data01/pwg_tasks/upc02/Part6/18100009.list
+add_input  18100010  /star/data01/pwg_tasks/upc02/Part6/18100010.list
+add_input  18100011  /star/data01/pwg_tasks/upc02/Part6/18100011.list
+add_input  18100013  /star/data01/pwg_tasks/upc02/Part6/18100013.list
+add_input  18100014  /star/data01/pwg_tasks/upc02/Part6/18100014.list
+add_input  18100015  /star/data01/pwg_tasks/upc02/Part6/18100015.list
+add_input  18100016  /star/data01/pwg_tasks/upc02/Part6/18100016.list
+add_input  18100017  /star/data01/pwg_tasks/upc02/Part6/18100017.list
+add_input  18100018  /star/data01/pwg_tasks/upc02/Part6/18100018.list
+add_input  18100022  /star/data01/pwg_tasks/upc02/Part6/18100022.list
+add_input  18100023  /star/data01/pwg_tasks/upc02/Part6/18100023.list
+add_input  18100025  /star/data01/pwg_tasks/upc02/Part6/18100025.list
+add_input  18100027  /star/data01/pwg_tasks/upc02/Part6/18100027.list
+add_input  18100029  /star/data01/pwg_tasks/upc02/Part6/18100029.list
+add_input  18100033  /star/data01/pwg_tasks/upc02/Part6/18100033.list
+add_input  18100034  /star/data01/pwg_tasks/upc02/Part6/18100034.list
+add_input  18100044  /star/data01/pwg_tasks/upc02/Part6/18100044.list
+add_input  18100045  /star/data01/pwg_tasks/upc02/Part6/18100045.list
+add_input  18100046  /star/data01/pwg_tasks/upc02/Part6/18100046.list
+add_input  18100048  /star/data01/pwg_tasks/upc02/Part6/18100048.list
+add_input  18100049  /star/data01/pwg_tasks/upc02/Part6/18100049.list
+add_input  18100050  /star/data01/pwg_tasks/upc02/Part6/18100050.list
+add_input  18100051  /star/data01/pwg_tasks/upc02/Part6/18100051.list
+add_input  18100052  /star/data01/pwg_tasks/upc02/Part6/18100052.list
+add_input  18100053  /star/data01/pwg_tasks/upc02/Part6/18100053.list
+add_input  18100054  /star/data01/pwg_tasks/upc02/Part6/18100054.list
+add_input  18100055  /star/data01/pwg_tasks/upc02/Part6/18100055.list
+add_input  18100056  /star/data01/pwg_tasks/upc02/Part6/18100056.list
+add_input  18100057  /star/data01/pwg_tasks/upc02/Part6/18100057.list
+add_input  18100058  /star/data01/pwg_tasks/upc02/Part6/18100058.list
+add_input  18100059  /star/data01/pwg_tasks/upc02/Part6/18100059.list
+add_input  18100060  /star/data01/pwg_tasks/upc02/Part6/18100060.list
+add_input  18100061  /star/data01/pwg_tasks/upc02/Part6/18100061.list
+add_input  18101002  /star/data01/pwg_tasks/upc02/Part6/18101002.list
+add_input  18101004  /star/data01/pwg_tasks/upc02/Part6/18101004.list
+add_input  18101006  /star/data01/pwg_tasks/upc02/Part6/18101006.list
+add_input  18101007  /star/data01/pwg_tasks/upc02/Part6/18101007.list
+add_input  18101008  /star/data01/pwg_tasks/upc02/Part6/18101008.list
+add_input  18101009  /star/data01/pwg_tasks/upc02/Part6/18101009.list
+add_input  18101010  /star/data01/pwg_tasks/upc02/Part6/18101010.list
+add_input  18101011  /star/data01/pwg_tasks/upc02/Part6/18101011.list
+add_input  18101012  /star/data01/pwg_tasks/upc02/Part6/18101012.list
+add_input  18101015  /star/data01/pwg_tasks/upc02/Part6/18101015.list
+add_input  18101016  /star/data01/pwg_tasks/upc02/Part6/18101016.list
+add_input  18101017  /star/data01/pwg_tasks/upc02/Part6/18101017.list
+add_input  18101018  /star/data01/pwg_tasks/upc02/Part6/18101018.list
+add_input  18101019  /star/data01/pwg_tasks/upc02/Part6/18101019.list
+add_input  18101020  /star/data01/pwg_tasks/upc02/Part6/18101020.list
+add_input  18101021  /star/data01/pwg_tasks/upc02/Part6/18101021.list
+add_input  18101022  /star/data01/pwg_tasks/upc02/Part6/18101022.list
+add_input  18101026  /star/data01/pwg_tasks/upc02/Part6/18101026.list
+add_input  18101027  /star/data01/pwg_tasks/upc02/Part6/18101027.list
+add_input  18101028  /star/data01/pwg_tasks/upc02/Part6/18101028.list
+add_input  18101030  /star/data01/pwg_tasks/upc02/Part6/18101030.list
+add_input  18101031  /star/data01/pwg_tasks/upc02/Part6/18101031.list
+add_input  18101036  /star/data01/pwg_tasks/upc02/Part6/18101036.list
+add_input  18101037  /star/data01/pwg_tasks/upc02/Part6/18101037.list
+add_input  18101038  /star/data01/pwg_tasks/upc02/Part6/18101038.list
+add_input  18101039  /star/data01/pwg_tasks/upc02/Part6/18101039.list
+add_input  18101040  /star/data01/pwg_tasks/upc02/Part6/18101040.list
+add_input  18101041  /star/data01/pwg_tasks/upc02/Part6/18101041.list
+add_input  18101042  /star/data01/pwg_tasks/upc02/Part6/18101042.list
+add_input  18101043  /star/data01/pwg_tasks/upc02/Part6/18101043.list
+add_input  18101044  /star/data01/pwg_tasks/upc02/Part6/18101044.list
+add_input  18101045  /star/data01/pwg_tasks/upc02/Part6/18101045.list
+add_input  18101046  /star/data01/pwg_tasks/upc02/Part6/18101046.list
+add_input  18101047  /star/data01/pwg_tasks/upc02/Part6/18101047.list
+add_input  18101056  /star/data01/pwg_tasks/upc02/Part6/18101056.list
+add_input  18101057  /star/data01/pwg_tasks/upc02/Part6/18101057.list
+add_input  18102001  /star/data01/pwg_tasks/upc02/Part6/18102001.list
+add_input  18102002  /star/data01/pwg_tasks/upc02/Part6/18102002.list
+add_input  18102003  /star/data01/pwg_tasks/upc02/Part6/18102003.list
+add_input  18102004  /star/data01/pwg_tasks/upc02/Part6/18102004.list
+add_input  18102005  /star/data01/pwg_tasks/upc02/Part6/18102005.list
+add_input  18102007  /star/data01/pwg_tasks/upc02/Part6/18102007.list
+add_input  18102008  /star/data01/pwg_tasks/upc02/Part6/18102008.list
+add_input  18102009  /star/data01/pwg_tasks/upc02/Part6/18102009.list
+add_input  18102010  /star/data01/pwg_tasks/upc02/Part6/18102010.list
+add_input  18102011  /star/data01/pwg_tasks/upc02/Part6/18102011.list
+add_input  18102012  /star/data01/pwg_tasks/upc02/Part6/18102012.list
+add_input  18102013  /star/data01/pwg_tasks/upc02/Part6/18102013.list
+add_input  18102014  /star/data01/pwg_tasks/upc02/Part6/18102014.list
+add_input  18102015  /star/data01/pwg_tasks/upc02/Part6/18102015.list
+add_input  18102016  /star/data01/pwg_tasks/upc02/Part6/18102016.list
+add_input  18102017  /star/data01/pwg_tasks/upc02/Part6/18102017.list
+add_input  18102018  /star/data01/pwg_tasks/upc02/Part6/18102018.list
+add_input  18102021  /star/data01/pwg_tasks/upc02/Part6/18102021.list
+add_input  18102023  /star/data01/pwg_tasks/upc02/Part6/18102023.list
+add_input  18102024  /star/data01/pwg_tasks/upc02/Part6/18102024.list
+add_input  18102067  /star/data01/pwg_tasks/upc02/Part6/18102067.list
+add_input  18102068  /star/data01/pwg_tasks/upc02/Part6/18102068.list
+add_input  18103001  /star/data01/pwg_tasks/upc02/Part6/18103001.list
+add_input  18103003  /star/data01/pwg_tasks/upc02/Part6/18103003.list
+add_input  18103009  /star/data01/pwg_tasks/upc02/Part6/18103009.list
+add_input  18103012  /star/data01/pwg_tasks/upc02/Part6/18103012.list
+add_input  18103013  /star/data01/pwg_tasks/upc02/Part6/18103013.list
+add_input  18103015  /star/data01/pwg_tasks/upc02/Part6/18103015.list
+add_input  18103016  /star/data01/pwg_tasks/upc02/Part6/18103016.list
+add_input  18103017  /star/data01/pwg_tasks/upc02/Part6/18103017.list
+add_input  18103018  /star/data01/pwg_tasks/upc02/Part6/18103018.list
+add_input  18103020  /star/data01/pwg_tasks/upc02/Part6/18103020.list
+add_input  18103021  /star/data01/pwg_tasks/upc02/Part6/18103021.list
+add_input  18103023  /star/data01/pwg_tasks/upc02/Part6/18103023.list
+add_input  18103054  /star/data01/pwg_tasks/upc02/Part6/18103054.list
+add_input  18103055  /star/data01/pwg_tasks/upc02/Part6/18103055.list
+add_input  18103056  /star/data01/pwg_tasks/upc02/Part6/18103056.list
+add_input  18103057  /star/data01/pwg_tasks/upc02/Part6/18103057.list
+add_input  18103058  /star/data01/pwg_tasks/upc02/Part6/18103058.list
+add_input  18103060  /star/data01/pwg_tasks/upc02/Part6/18103060.list
+add_input  18104001  /star/data01/pwg_tasks/upc02/Part6/18104001.list
+add_input  18104002  /star/data01/pwg_tasks/upc02/Part6/18104002.list
+add_input  18104003  /star/data01/pwg_tasks/upc02/Part6/18104003.list
+add_input  18104004  /star/data01/pwg_tasks/upc02/Part6/18104004.list
+add_input  18104005  /star/data01/pwg_tasks/upc02/Part6/18104005.list
+add_input  18104008  /star/data01/pwg_tasks/upc02/Part6/18104008.list
+add_input  18104009  /star/data01/pwg_tasks/upc02/Part6/18104009.list
+add_input  18104010  /star/data01/pwg_tasks/upc02/Part6/18104010.list
+add_input  18104011  /star/data01/pwg_tasks/upc02/Part6/18104011.list
+add_input  18104012  /star/data01/pwg_tasks/upc02/Part6/18104012.list
+add_input  18104013  /star/data01/pwg_tasks/upc02/Part6/18104013.list
+add_input  18104014  /star/data01/pwg_tasks/upc02/Part6/18104014.list
+add_input  18104015  /star/data01/pwg_tasks/upc02/Part6/18104015.list
+add_input  18104016  /star/data01/pwg_tasks/upc02/Part6/18104016.list
+add_input  18104017  /star/data01/pwg_tasks/upc02/Part6/18104017.list
+add_input  18104018  /star/data01/pwg_tasks/upc02/Part6/18104018.list
+add_input  18104019  /star/data01/pwg_tasks/upc02/Part6/18104019.list
+add_input  18104020  /star/data01/pwg_tasks/upc02/Part6/18104020.list
+add_input  18104021  /star/data01/pwg_tasks/upc02/Part6/18104021.list
+add_input  18104022  /star/data01/pwg_tasks/upc02/Part6/18104022.list
+add_input  18104023  /star/data01/pwg_tasks/upc02/Part6/18104023.list
+add_input  18104025  /star/data01/pwg_tasks/upc02/Part6/18104025.list
+add_input  18104026  /star/data01/pwg_tasks/upc02/Part6/18104026.list
+add_input  18104027  /star/data01/pwg_tasks/upc02/Part6/18104027.list
+add_input  18104032  /star/data01/pwg_tasks/upc02/Part6/18104032.list
+add_input  18104033  /star/data01/pwg_tasks/upc02/Part6/18104033.list
+add_input  18104036  /star/data01/pwg_tasks/upc02/Part6/18104036.list
+add_input  18104037  /star/data01/pwg_tasks/upc02/Part6/18104037.list
+add_input  18104038  /star/data01/pwg_tasks/upc02/Part6/18104038.list
+add_input  18104039  /star/data01/pwg_tasks/upc02/Part6/18104039.list
+add_input  18104040  /star/data01/pwg_tasks/upc02/Part6/18104040.list
+add_input  18104041  /star/data01/pwg_tasks/upc02/Part6/18104041.list
+add_input  18104043  /star/data01/pwg_tasks/upc02/Part6/18104043.list
+add_input  18104044  /star/data01/pwg_tasks/upc02/Part6/18104044.list
+add_input  18104045  /star/data01/pwg_tasks/upc02/Part6/18104045.list
+add_input  18104046  /star/data01/pwg_tasks/upc02/Part6/18104046.list
+add_input  18104047  /star/data01/pwg_tasks/upc02/Part6/18104047.list
+add_input  18104048  /star/data01/pwg_tasks/upc02/Part6/18104048.list
+add_input  18105002  /star/data01/pwg_tasks/upc02/Part6/18105002.list
+add_input  18105009  /star/data01/pwg_tasks/upc02/Part6/18105009.list
+add_input  18105010  /star/data01/pwg_tasks/upc02/Part6/18105010.list
+add_input  18105012  /star/data01/pwg_tasks/upc02/Part6/18105012.list
+add_input  18105013  /star/data01/pwg_tasks/upc02/Part6/18105013.list
+add_input  18105014  /star/data01/pwg_tasks/upc02/Part6/18105014.list
+add_input  18105015  /star/data01/pwg_tasks/upc02/Part6/18105015.list
+add_input  18105017  /star/data01/pwg_tasks/upc02/Part6/18105017.list
+add_input  18105018  /star/data01/pwg_tasks/upc02/Part6/18105018.list
+add_input  18105019  /star/data01/pwg_tasks/upc02/Part6/18105019.list
+add_input  18105020  /star/data01/pwg_tasks/upc02/Part6/18105020.list
+add_input  18105021  /star/data01/pwg_tasks/upc02/Part6/18105021.list
+add_input  18105022  /star/data01/pwg_tasks/upc02/Part6/18105022.list
+add_input  18105023  /star/data01/pwg_tasks/upc02/Part6/18105023.list
+add_input  18105024  /star/data01/pwg_tasks/upc02/Part6/18105024.list
+add_input  18105028  /star/data01/pwg_tasks/upc02/Part6/18105028.list
+add_input  18105029  /star/data01/pwg_tasks/upc02/Part6/18105029.list
+add_input  18105030  /star/data01/pwg_tasks/upc02/Part6/18105030.list
+add_input  18105031  /star/data01/pwg_tasks/upc02/Part6/18105031.list
+add_input  18105037  /star/data01/pwg_tasks/upc02/Part6/18105037.list
+add_input  18105038  /star/data01/pwg_tasks/upc02/Part6/18105038.list
+add_input  18105039  /star/data01/pwg_tasks/upc02/Part6/18105039.list
+add_input  18105040  /star/data01/pwg_tasks/upc02/Part6/18105040.list
+add_input  18105041  /star/data01/pwg_tasks/upc02/Part6/18105041.list
+add_input  18105042  /star/data01/pwg_tasks/upc02/Part6/18105042.list
+add_input  18105043  /star/data01/pwg_tasks/upc02/Part6/18105043.list
+add_input  18105044  /star/data01/pwg_tasks/upc02/Part6/18105044.list
+add_input  18105045  /star/data01/pwg_tasks/upc02/Part6/18105045.list
+add_input  18105046  /star/data01/pwg_tasks/upc02/Part6/18105046.list
+add_input  18105047  /star/data01/pwg_tasks/upc02/Part6/18105047.list
+add_input  18105048  /star/data01/pwg_tasks/upc02/Part6/18105048.list
+add_input  18105049  /star/data01/pwg_tasks/upc02/Part6/18105049.list
+add_input  18105051  /star/data01/pwg_tasks/upc02/Part6/18105051.list
+add_input  18105053  /star/data01/pwg_tasks/upc02/Part6/18105053.list
+add_input  18105054  /star/data01/pwg_tasks/upc02/Part6/18105054.list
+add_input  18105055  /star/data01/pwg_tasks/upc02/Part6/18105055.list
+add_input  18105056  /star/data01/pwg_tasks/upc02/Part6/18105056.list
+add_input  18106002  /star/data01/pwg_tasks/upc02/Part6/18106002.list
+add_input  18106004  /star/data01/pwg_tasks/upc02/Part6/18106004.list
+add_input  18106006  /star/data01/pwg_tasks/upc02/Part6/18106006.list
+add_input  18106008  /star/data01/pwg_tasks/upc02/Part6/18106008.list
+add_input  18106009  /star/data01/pwg_tasks/upc02/Part6/18106009.list
+add_input  18106011  /star/data01/pwg_tasks/upc02/Part6/18106011.list
+add_input  18106013  /star/data01/pwg_tasks/upc02/Part6/18106013.list
+add_input  18106019  /star/data01/pwg_tasks/upc02/Part6/18106019.list
+add_input  18106020  /star/data01/pwg_tasks/upc02/Part6/18106020.list
+add_input  18106021  /star/data01/pwg_tasks/upc02/Part6/18106021.list
+add_input  18106023  /star/data01/pwg_tasks/upc02/Part6/18106023.list
+add_input  18106024  /star/data01/pwg_tasks/upc02/Part6/18106024.list
+add_input  18106029  /star/data01/pwg_tasks/upc02/Part6/18106029.list
+add_input  18106030  /star/data01/pwg_tasks/upc02/Part6/18106030.list
+add_input  18106031  /star/data01/pwg_tasks/upc02/Part6/18106031.list
+add_input  18106032  /star/data01/pwg_tasks/upc02/Part6/18106032.list
+add_input  18106033  /star/data01/pwg_tasks/upc02/Part6/18106033.list
+add_input  18106034  /star/data01/pwg_tasks/upc02/Part6/18106034.list
+add_input  18106035  /star/data01/pwg_tasks/upc02/Part6/18106035.list
+add_input  18106036  /star/data01/pwg_tasks/upc02/Part6/18106036.list
+add_input  18106038  /star/data01/pwg_tasks/upc02/Part6/18106038.list
+add_input  18106044  /star/data01/pwg_tasks/upc02/Part6/18106044.list
+add_input  18106045  /star/data01/pwg_tasks/upc02/Part6/18106045.list
+add_input  18106046  /star/data01/pwg_tasks/upc02/Part6/18106046.list
+add_input  18106048  /star/data01/pwg_tasks/upc02/Part6/18106048.list
+add_input  18106054  /star/data01/pwg_tasks/upc02/Part6/18106054.list
+add_input  18106056  /star/data01/pwg_tasks/upc02/Part6/18106056.list
+add_input  18106057  /star/data01/pwg_tasks/upc02/Part6/18106057.list
+add_input  18106058  /star/data01/pwg_tasks/upc02/Part6/18106058.list
+add_input  18106059  /star/data01/pwg_tasks/upc02/Part6/18106059.list
+add_input  18106062  /star/data01/pwg_tasks/upc02/Part6/18106062.list
+add_input  18106063  /star/data01/pwg_tasks/upc02/Part6/18106063.list
+add_input  18106065  /star/data01/pwg_tasks/upc02/Part6/18106065.list
+add_input  18106066  /star/data01/pwg_tasks/upc02/Part6/18106066.list
+add_input  18106067  /star/data01/pwg_tasks/upc02/Part6/18106067.list
+add_input  18106068  /star/data01/pwg_tasks/upc02/Part6/18106068.list
+add_input  18106069  /star/data01/pwg_tasks/upc02/Part6/18106069.list
+add_input  18107002  /star/data01/pwg_tasks/upc02/Part6/18107002.list
+add_input  18107003  /star/data01/pwg_tasks/upc02/Part6/18107003.list
+add_input  18107004  /star/data01/pwg_tasks/upc02/Part6/18107004.list
+add_input  18107005  /star/data01/pwg_tasks/upc02/Part6/18107005.list
+add_input  18107012  /star/data01/pwg_tasks/upc02/Part6/18107012.list
+add_input  18107018  /star/data01/pwg_tasks/upc02/Part6/18107018.list
+add_input  18107023  /star/data01/pwg_tasks/upc02/Part6/18107023.list
+add_input  18107024  /star/data01/pwg_tasks/upc02/Part6/18107024.list
+add_input  18107026  /star/data01/pwg_tasks/upc02/Part6/18107026.list
+add_input  18107027  /star/data01/pwg_tasks/upc02/Part6/18107027.list
+add_input  18107028  /star/data01/pwg_tasks/upc02/Part6/18107028.list
+add_input  18107030  /star/data01/pwg_tasks/upc02/Part6/18107030.list
+add_input  18107031  /star/data01/pwg_tasks/upc02/Part6/18107031.list
+add_input  18107040  /star/data01/pwg_tasks/upc02/Part6/18107040.list
+add_input  18107042  /star/data01/pwg_tasks/upc02/Part6/18107042.list
+add_input  18107043  /star/data01/pwg_tasks/upc02/Part6/18107043.list
+add_input  18107044  /star/data01/pwg_tasks/upc02/Part6/18107044.list
+add_input  18107102  /star/data01/pwg_tasks/upc02/Part6/18107102.list
+add_input  18108005  /star/data01/pwg_tasks/upc02/Part6/18108005.list
+add_input  18108006  /star/data01/pwg_tasks/upc02/Part6/18108006.list
+add_input  18108007  /star/data01/pwg_tasks/upc02/Part6/18108007.list
+add_input  18108010  /star/data01/pwg_tasks/upc02/Part6/18108010.list
+add_input  18108020  /star/data01/pwg_tasks/upc02/Part6/18108020.list
+add_input  18108022  /star/data01/pwg_tasks/upc02/Part6/18108022.list
+add_input  18108026  /star/data01/pwg_tasks/upc02/Part6/18108026.list
+add_input  18108028  /star/data01/pwg_tasks/upc02/Part6/18108028.list
+add_input  18108029  /star/data01/pwg_tasks/upc02/Part6/18108029.list
+add_input  18108031  /star/data01/pwg_tasks/upc02/Part6/18108031.list
+add_input  18108036  /star/data01/pwg_tasks/upc02/Part6/18108036.list
+add_input  18108037  /star/data01/pwg_tasks/upc02/Part6/18108037.list
+add_input  18108038  /star/data01/pwg_tasks/upc02/Part6/18108038.list
+add_input  18108039  /star/data01/pwg_tasks/upc02/Part6/18108039.list
+add_input  18108046  /star/data01/pwg_tasks/upc02/Part6/18108046.list
+add_input  18108051  /star/data01/pwg_tasks/upc02/Part6/18108051.list
+add_input  18108053  /star/data01/pwg_tasks/upc02/Part6/18108053.list
+add_input  18108080  /star/data01/pwg_tasks/upc02/Part6/18108080.list
+add_input  18108082  /star/data01/pwg_tasks/upc02/Part6/18108082.list
+add_input  18108083  /star/data01/pwg_tasks/upc02/Part6/18108083.list
+add_input  18108084  /star/data01/pwg_tasks/upc02/Part6/18108084.list
+add_input  18108085  /star/data01/pwg_tasks/upc02/Part6/18108085.list
+add_input  18108087  /star/data01/pwg_tasks/upc02/Part6/18108087.list
+add_input  18108088  /star/data01/pwg_tasks/upc02/Part6/18108088.list
+add_input  18108089  /star/data01/pwg_tasks/upc02/Part6/18108089.list
+add_input  18108090  /star/data01/pwg_tasks/upc02/Part6/18108090.list
+add_input  18108091  /star/data01/pwg_tasks/upc02/Part6/18108091.list
+add_input  18108092  /star/data01/pwg_tasks/upc02/Part6/18108092.list
+add_input  18108101  /star/data01/pwg_tasks/upc02/Part6/18108101.list
+add_input  18108102  /star/data01/pwg_tasks/upc02/Part6/18108102.list
+add_input  18109001  /star/data01/pwg_tasks/upc02/Part6/18109001.list
+add_input  18109002  /star/data01/pwg_tasks/upc02/Part6/18109002.list
+add_input  18109008  /star/data01/pwg_tasks/upc02/Part6/18109008.list
+add_input  18109009  /star/data01/pwg_tasks/upc02/Part6/18109009.list
+add_input  18109024  /star/data01/pwg_tasks/upc02/Part6/18109024.list
+add_input  18109025  /star/data01/pwg_tasks/upc02/Part6/18109025.list
+add_input  18109026  /star/data01/pwg_tasks/upc02/Part6/18109026.list
+add_input  18109027  /star/data01/pwg_tasks/upc02/Part6/18109027.list
+add_input  18109032  /star/data01/pwg_tasks/upc02/Part6/18109032.list
+add_input  18109037  /star/data01/pwg_tasks/upc02/Part6/18109037.list
+add_input  18109052  /star/data01/pwg_tasks/upc02/Part6/18109052.list
+add_input  18109053  /star/data01/pwg_tasks/upc02/Part6/18109053.list
+add_input  18109054  /star/data01/pwg_tasks/upc02/Part6/18109054.list
+add_input  18109056  /star/data01/pwg_tasks/upc02/Part6/18109056.list
+add_input  18109057  /star/data01/pwg_tasks/upc02/Part6/18109057.list
+add_input  18109058  /star/data01/pwg_tasks/upc02/Part6/18109058.list
+add_input  18110001  /star/data01/pwg_tasks/upc02/Part6/18110001.list
+add_input  18110002  /star/data01/pwg_tasks/upc02/Part6/18110002.list
+add_input  18110004  /star/data01/pwg_tasks/upc02/Part6/18110004.list
+add_input  18110005  /star/data01/pwg_tasks/upc02/Part6/18110005.list
+add_input  18110014  /star/data01/pwg_tasks/upc02/Part6/18110014.list
+add_input  18110015  /star/data01/pwg_tasks/upc02/Part6/18110015.list
+add_input  18110016  /star/data01/pwg_tasks/upc02/Part6/18110016.list
+add_input  18110017  /star/data01/pwg_tasks/upc02/Part6/18110017.list
+add_input  18110018  /star/data01/pwg_tasks/upc02/Part6/18110018.list
+add_input  18110019  /star/data01/pwg_tasks/upc02/Part6/18110019.list
+add_input  18110020  /star/data01/pwg_tasks/upc02/Part6/18110020.list
+add_input  18110021  /star/data01/pwg_tasks/upc02/Part6/18110021.list
+add_input  18111004  /star/data01/pwg_tasks/upc02/Part6/18111004.list
+add_input  18111005  /star/data01/pwg_tasks/upc02/Part6/18111005.list
+add_input  18111006  /star/data01/pwg_tasks/upc02/Part6/18111006.list
+add_input  18111007  /star/data01/pwg_tasks/upc02/Part6/18111007.list
+add_input  18111008  /star/data01/pwg_tasks/upc02/Part6/18111008.list
+add_input  18111009  /star/data01/pwg_tasks/upc02/Part6/18111009.list
+add_input  18111010  /star/data01/pwg_tasks/upc02/Part6/18111010.list
+add_input  18111011  /star/data01/pwg_tasks/upc02/Part6/18111011.list
+add_input  18111012  /star/data01/pwg_tasks/upc02/Part6/18111012.list
+add_input  18111013  /star/data01/pwg_tasks/upc02/Part6/18111013.list
+add_input  18111014  /star/data01/pwg_tasks/upc02/Part6/18111014.list
+add_input  18111015  /star/data01/pwg_tasks/upc02/Part6/18111015.list
+add_input  18111016  /star/data01/pwg_tasks/upc02/Part6/18111016.list
+add_input  18111019  /star/data01/pwg_tasks/upc02/Part6/18111019.list
+add_input  18111020  /star/data01/pwg_tasks/upc02/Part6/18111020.list
+add_input  18111021  /star/data01/pwg_tasks/upc02/Part6/18111021.list
+add_input  18111022  /star/data01/pwg_tasks/upc02/Part6/18111022.list
+add_input  18111030  /star/data01/pwg_tasks/upc02/Part6/18111030.list
+add_input  18111031  /star/data01/pwg_tasks/upc02/Part6/18111031.list
+add_input  18111032  /star/data01/pwg_tasks/upc02/Part6/18111032.list
+add_input  18111033  /star/data01/pwg_tasks/upc02/Part6/18111033.list
+add_input  18111034  /star/data01/pwg_tasks/upc02/Part6/18111034.list
+add_input  18111035  /star/data01/pwg_tasks/upc02/Part6/18111035.list
+add_input  18111036  /star/data01/pwg_tasks/upc02/Part6/18111036.list
+add_input  18111038  /star/data01/pwg_tasks/upc02/Part6/18111038.list
+add_input  18111039  /star/data01/pwg_tasks/upc02/Part6/18111039.list
+add_input  18111040  /star/data01/pwg_tasks/upc02/Part6/18111040.list
+add_input  18111041  /star/data01/pwg_tasks/upc02/Part6/18111041.list
+add_input  18111042  /star/data01/pwg_tasks/upc02/Part6/18111042.list
+add_input  18111044  /star/data01/pwg_tasks/upc02/Part6/18111044.list
+add_input  18111045  /star/data01/pwg_tasks/upc02/Part6/18111045.list
+add_input  18111047  /star/data01/pwg_tasks/upc02/Part6/18111047.list
+add_input  18111049  /star/data01/pwg_tasks/upc02/Part6/18111049.list
+add_input  18111050  /star/data01/pwg_tasks/upc02/Part6/18111050.list
+add_input  18111051  /star/data01/pwg_tasks/upc02/Part6/18111051.list
+add_input  18111053  /star/data01/pwg_tasks/upc02/Part6/18111053.list
+add_input  18111054  /star/data01/pwg_tasks/upc02/Part6/18111054.list
+add_input  18111055  /star/data01/pwg_tasks/upc02/Part6/18111055.list
+add_input  18112001  /star/data01/pwg_tasks/upc02/Part6/18112001.list
+add_input  18112002  /star/data01/pwg_tasks/upc02/Part6/18112002.list
+add_input  18112003  /star/data01/pwg_tasks/upc02/Part6/18112003.list
+add_input  18112005  /star/data01/pwg_tasks/upc02/Part6/18112005.list
+add_input  18112006  /star/data01/pwg_tasks/upc02/Part6/18112006.list
+add_input  18112007  /star/data01/pwg_tasks/upc02/Part6/18112007.list
+add_input  18112008  /star/data01/pwg_tasks/upc02/Part6/18112008.list
+add_input  18112009  /star/data01/pwg_tasks/upc02/Part6/18112009.list
+add_input  18112010  /star/data01/pwg_tasks/upc02/Part6/18112010.list
+add_input  18112019  /star/data01/pwg_tasks/upc02/Part6/18112019.list
+add_input  18112027  /star/data01/pwg_tasks/upc02/Part6/18112027.list
+add_input  18112028  /star/data01/pwg_tasks/upc02/Part6/18112028.list
+add_input  18112029  /star/data01/pwg_tasks/upc02/Part6/18112029.list
+add_input  18112030  /star/data01/pwg_tasks/upc02/Part6/18112030.list
+add_input  18112031  /star/data01/pwg_tasks/upc02/Part6/18112031.list
+add_input  18112032  /star/data01/pwg_tasks/upc02/Part6/18112032.list
+add_input  18112033  /star/data01/pwg_tasks/upc02/Part6/18112033.list
+add_input  18112034  /star/data01/pwg_tasks/upc02/Part6/18112034.list
+add_input  18112035  /star/data01/pwg_tasks/upc02/Part6/18112035.list
+add_input  18112036  /star/data01/pwg_tasks/upc02/Part6/18112036.list
+add_input  18112037  /star/data01/pwg_tasks/upc02/Part6/18112037.list
+add_input  18112038  /star/data01/pwg_tasks/upc02/Part6/18112038.list
+add_input  18112039  /star/data01/pwg_tasks/upc02/Part6/18112039.list
+add_input  18112040  /star/data01/pwg_tasks/upc02/Part6/18112040.list
+add_input  18112041  /star/data01/pwg_tasks/upc02/Part6/18112041.list
+add_input  18112042  /star/data01/pwg_tasks/upc02/Part6/18112042.list
+add_input  18112043  /star/data01/pwg_tasks/upc02/Part6/18112043.list
+add_input  18112047  /star/data01/pwg_tasks/upc02/Part6/18112047.list
+add_input  18112048  /star/data01/pwg_tasks/upc02/Part6/18112048.list
+add_input  18112049  /star/data01/pwg_tasks/upc02/Part6/18112049.list
+add_input  18113001  /star/data01/pwg_tasks/upc02/Part6/18113001.list
+add_input  18113002  /star/data01/pwg_tasks/upc02/Part6/18113002.list
+add_input  18113003  /star/data01/pwg_tasks/upc02/Part6/18113003.list
+add_input  18113004  /star/data01/pwg_tasks/upc02/Part6/18113004.list
+add_input  18113012  /star/data01/pwg_tasks/upc02/Part6/18113012.list
+add_input  18113013  /star/data01/pwg_tasks/upc02/Part6/18113013.list
+add_input  18113014  /star/data01/pwg_tasks/upc02/Part6/18113014.list
+add_input  18113015  /star/data01/pwg_tasks/upc02/Part6/18113015.list
+add_input  18113016  /star/data01/pwg_tasks/upc02/Part6/18113016.list
+add_input  18113017  /star/data01/pwg_tasks/upc02/Part6/18113017.list
+add_input  18113019  /star/data01/pwg_tasks/upc02/Part6/18113019.list
+add_input  18113025  /star/data01/pwg_tasks/upc02/Part6/18113025.list
+add_input  18113026  /star/data01/pwg_tasks/upc02/Part6/18113026.list
+add_input  18113027  /star/data01/pwg_tasks/upc02/Part6/18113027.list
+add_input  18113028  /star/data01/pwg_tasks/upc02/Part6/18113028.list
+add_input  18113029  /star/data01/pwg_tasks/upc02/Part6/18113029.list
+add_input  18113031  /star/data01/pwg_tasks/upc02/Part6/18113031.list
+add_input  18113032  /star/data01/pwg_tasks/upc02/Part6/18113032.list
+add_input  18113033  /star/data01/pwg_tasks/upc02/Part6/18113033.list
+add_input  18113034  /star/data01/pwg_tasks/upc02/Part6/18113034.list
+add_input  18113035  /star/data01/pwg_tasks/upc02/Part6/18113035.list
+add_input  18113037  /star/data01/pwg_tasks/upc02/Part6/18113037.list
+add_input  18113038  /star/data01/pwg_tasks/upc02/Part6/18113038.list
+add_input  18113040  /star/data01/pwg_tasks/upc02/Part6/18113040.list
+add_input  18113041  /star/data01/pwg_tasks/upc02/Part6/18113041.list
+add_input  18113048  /star/data01/pwg_tasks/upc02/Part6/18113048.list
+add_input  18113049  /star/data01/pwg_tasks/upc02/Part6/18113049.list
+add_input  18113051  /star/data01/pwg_tasks/upc02/Part6/18113051.list
+add_input  18113052  /star/data01/pwg_tasks/upc02/Part6/18113052.list
+add_input  18113053  /star/data01/pwg_tasks/upc02/Part6/18113053.list
+add_input  18113054  /star/data01/pwg_tasks/upc02/Part6/18113054.list
+add_input  18113055  /star/data01/pwg_tasks/upc02/Part6/18113055.list
+add_input  18113057  /star/data01/pwg_tasks/upc02/Part6/18113057.list
+add_input  18113058  /star/data01/pwg_tasks/upc02/Part6/18113058.list
+add_input  18113060  /star/data01/pwg_tasks/upc02/Part6/18113060.list
+add_input  18113061  /star/data01/pwg_tasks/upc02/Part6/18113061.list
+add_input  18114006  /star/data01/pwg_tasks/upc02/Part6/18114006.list
+add_input  18114008  /star/data01/pwg_tasks/upc02/Part6/18114008.list
+add_input  18114010  /star/data01/pwg_tasks/upc02/Part6/18114010.list
+add_input  18114011  /star/data01/pwg_tasks/upc02/Part6/18114011.list
+add_input  18114051  /star/data01/pwg_tasks/upc02/Part6/18114051.list
+
+is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
+
+#write RP data
+make_RP_event  1
+
+#RP triggers
+add_trigger   570702     18062044   18083025    # RP_UPC    rp #events = 10 M
+add_trigger   570712     18083026   18149030    # RP_UPC    rp #events = 39 M
+add_trigger   570703     18057084   18080040    # RP_SDT    rp #events = 31 M
+add_trigger   570709     18057012   18083025    # RP_ET rp #events = 99 M
+add_trigger   570719     18083026   18149030    # RP_ET rp #events = 91 M
+add_trigger   570701     18057074   18083025    # RP_CPT2   rp  #events = 233 M
+add_trigger   570711     18083026   18149030    # RP_CPT2   rp #events = 39 M
+add_trigger   570705     18083026   18149030    # RP_CPT2noBBCL rp #events = 666 M
+add_trigger   570704     18057084   18149030    # RP_Zerobias   rp #events = 10 M
+
+add_trigger  570209 18054071    18061078    # JPsi*HTTP #events = 8.4 M
+add_trigger  570219 18061087    18073046    # JPsi*HTTP #events = 17.6 M
+add_trigger  570229 18073056    18149069    # JPsi*HTTP #events = 114 M
+
+add_trigger   590703     18176013   18178017    # RP_SDT    RHICf #events = 14 M
+add_trigger   590709     18176013   18178017    # RP_ET RHICf #events = 56 M
+add_trigger   590701     18176013   18178017    # RP_CPT2   RHICf  #events = 806 K
+add_trigger   590705     18176013   18178017    # RP_CPT2noBBCL RHICf #events = 140 K
+add_trigger   590708     18176013   18178017    # RP_CPTnoBBCL  rRHICf #events = 23 M
+
+# add_trigger   1   18055033    18174055   # RP_CPT2    RHICf + rp #events = 1.62 M
+# add_trigger   2   18080048    18174055   # RP_CPT2noBBCL  RHICf + rp #events =  4 M
+# add_trigger   3   18055054    18174055   # RP_SDT RHICf + rp #events = 1 M
+# add_trigger   4   18174044    18174055   # RP_ET  RHICf #events = 5 M
+# add_trigger   5   18174044    18174055   # RP_CPTnoBBCL   RHICf #events = 130 K
+# add_trigger   8   18067073    18067086   # RP_IT_PREPOST  rp #events = 861 K
+# add_trigger   9   18055033    18055054   # RP_ET  rp #events =  874 K
+# add_trigger   9   18067073 18067086   # RP_JP2_PREPOST    rp #events = 393 K
+
+
+
+#BEMC clustering
+bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
+bemc_size_max             4
+bemc_energy_seed          0.3
+bemc_energy_add           0.001
+bemc_energy_threshold_all 0.1
+
+#directory for merged outputs, relative to top
+outdir   merge_files
+
+#name for merged outputs
+outfile  StUPCRP_production.root
+
+#list of output files
+outlist  Part6.list

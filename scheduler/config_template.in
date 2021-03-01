@@ -1,0 +1,54 @@
+# Roman Pots run 17, data by Tomas
+
+#common outputs
+top  #OUTPUT_PATH (e.g. /star/data01/pwg_tasks/upc02/productionRun17/Part1)
+
+#list staged by Tomas
+
+add_input   #RUNNUMBER   #PATH_TO_RUNNUMBER_LIST
+(e.g. add_input   18053098    /star/data01/pwg_tasks/upc02/productionRun17/Part1/18053098.list)
+
+is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
+
+#write RP data
+make_RP_event  1
+
+#RP triggers
+add_trigger   570703     18057084   18080040    # RP_SDT    
+add_trigger   570709     18057012   18083025    # RP_ET 
+add_trigger   570719     18083026   18149030    # RP_ET 
+add_trigger   570701     18057074   18083025    # RP_CPT2  
+add_trigger   570711     18083026   18149030    # RP_CPT2   
+add_trigger   570705     18083026   18149030    # RP_CPT2noBBCL 
+add_trigger   570704     18057084   18149030    # RP_Zerobias   
+
+add_trigger   570702     18062044   18083025    # RP_UPC
+add_trigger   570712     18083026   18149030    # RP_UPC
+add_trigger   570209     18054071   18061078    # JPsi*HTTP 
+add_trigger   570219     18061087   18073046    # JPsi*HTTP 
+add_trigger   570229     18073056   18149069    # JPsi*HTTP 
+
+add_trigger   590703     18176013   18178017    # RP_SDT    RHICf 
+add_trigger   590709     18176013   18178017    # RP_ET RHICf 
+add_trigger   590701     18176013   18178017    # RP_CPT2   RHICf  
+add_trigger   590705     18176013   18178017    # RP_CPT2noBBCL RHICf 
+add_trigger   590708     18176013   18178017    # RP_CPTnoBBCL  RHICf 
+
+
+#BEMC clustering
+bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
+bemc_size_max             4
+bemc_energy_seed          0.3
+bemc_energy_add           0.001
+bemc_energy_threshold_all 0.1
+
+tof_start_zero  1
+
+#directory for merged outputs, relative to top (not used)
+outdir   merge_files
+
+#name for merged outputs (not used)
+outfile  StUPCRP_production.root
+
+#list of output files
+outlist  output.list

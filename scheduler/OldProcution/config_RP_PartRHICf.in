@@ -1,0 +1,130 @@
+# Roman Pots run 17, data by Tomas
+
+
+#common outputs
+top  /star/data01/pwg_tasks/upc02/PartRHICfNew3/
+
+#list staged by Tomas
+
+add_input   18174051    /star/data01/pwg_tasks/upc02/PartRHICf/18174051.list
+add_input   18174052    /star/data01/pwg_tasks/upc02/PartRHICf/18174052.list
+add_input   18174053    /star/data01/pwg_tasks/upc02/PartRHICf/18174053.list
+add_input   18174054    /star/data01/pwg_tasks/upc02/PartRHICf/18174054.list
+add_input   18174055    /star/data01/pwg_tasks/upc02/PartRHICf/18174055.list
+add_input   18176013    /star/data01/pwg_tasks/upc02/PartRHICf/18176013.list
+add_input   18176014    /star/data01/pwg_tasks/upc02/PartRHICf/18176014.list
+add_input   18176015    /star/data01/pwg_tasks/upc02/PartRHICf/18176015.list
+add_input   18176016    /star/data01/pwg_tasks/upc02/PartRHICf/18176016.list
+add_input   18176017    /star/data01/pwg_tasks/upc02/PartRHICf/18176017.list
+add_input   18176018    /star/data01/pwg_tasks/upc02/PartRHICf/18176018.list
+add_input   18176019    /star/data01/pwg_tasks/upc02/PartRHICf/18176019.list
+add_input   18176020    /star/data01/pwg_tasks/upc02/PartRHICf/18176020.list
+add_input   18176021    /star/data01/pwg_tasks/upc02/PartRHICf/18176021.list
+add_input   18176023    /star/data01/pwg_tasks/upc02/PartRHICf/18176023.list
+add_input   18176024    /star/data01/pwg_tasks/upc02/PartRHICf/18176024.list
+add_input   18176034    /star/data01/pwg_tasks/upc02/PartRHICf/18176034.list
+add_input   18176035    /star/data01/pwg_tasks/upc02/PartRHICf/18176035.list
+add_input   18176042    /star/data01/pwg_tasks/upc02/PartRHICf/18176042.list
+add_input   18176043    /star/data01/pwg_tasks/upc02/PartRHICf/18176043.list
+add_input   18177001    /star/data01/pwg_tasks/upc02/PartRHICf/18177001.list
+add_input   18177003    /star/data01/pwg_tasks/upc02/PartRHICf/18177003.list
+add_input   18177005    /star/data01/pwg_tasks/upc02/PartRHICf/18177005.list
+add_input   18177012    /star/data01/pwg_tasks/upc02/PartRHICf/18177012.list
+add_input   18177013    /star/data01/pwg_tasks/upc02/PartRHICf/18177013.list
+add_input   18177014    /star/data01/pwg_tasks/upc02/PartRHICf/18177014.list
+add_input   18177015    /star/data01/pwg_tasks/upc02/PartRHICf/18177015.list
+add_input   18177016    /star/data01/pwg_tasks/upc02/PartRHICf/18177016.list
+add_input   18177017    /star/data01/pwg_tasks/upc02/PartRHICf/18177017.list
+add_input   18177018    /star/data01/pwg_tasks/upc02/PartRHICf/18177018.list
+add_input   18177019    /star/data01/pwg_tasks/upc02/PartRHICf/18177019.list
+add_input   18177020    /star/data01/pwg_tasks/upc02/PartRHICf/18177020.list
+add_input   18177024    /star/data01/pwg_tasks/upc02/PartRHICf/18177024.list
+add_input   18177025    /star/data01/pwg_tasks/upc02/PartRHICf/18177025.list
+add_input   18177026    /star/data01/pwg_tasks/upc02/PartRHICf/18177026.list
+add_input   18177027    /star/data01/pwg_tasks/upc02/PartRHICf/18177027.list
+add_input   18177028    /star/data01/pwg_tasks/upc02/PartRHICf/18177028.list
+add_input   18177029    /star/data01/pwg_tasks/upc02/PartRHICf/18177029.list
+add_input   18177030    /star/data01/pwg_tasks/upc02/PartRHICf/18177030.list
+add_input   18177031    /star/data01/pwg_tasks/upc02/PartRHICf/18177031.list
+add_input   18177032    /star/data01/pwg_tasks/upc02/PartRHICf/18177032.list
+add_input   18177034    /star/data01/pwg_tasks/upc02/PartRHICf/18177034.list
+add_input   18177035    /star/data01/pwg_tasks/upc02/PartRHICf/18177035.list
+add_input   18177036    /star/data01/pwg_tasks/upc02/PartRHICf/18177036.list
+add_input   18177037    /star/data01/pwg_tasks/upc02/PartRHICf/18177037.list
+add_input   18177045    /star/data01/pwg_tasks/upc02/PartRHICf/18177045.list
+add_input   18177046    /star/data01/pwg_tasks/upc02/PartRHICf/18177046.list
+add_input   18177047    /star/data01/pwg_tasks/upc02/PartRHICf/18177047.list
+add_input   18177048    /star/data01/pwg_tasks/upc02/PartRHICf/18177048.list
+add_input   18177049    /star/data01/pwg_tasks/upc02/PartRHICf/18177049.list
+add_input   18177050    /star/data01/pwg_tasks/upc02/PartRHICf/18177050.list
+add_input   18177051    /star/data01/pwg_tasks/upc02/PartRHICf/18177051.list
+add_input   18177052    /star/data01/pwg_tasks/upc02/PartRHICf/18177052.list
+add_input   18178002    /star/data01/pwg_tasks/upc02/PartRHICf/18178002.list
+add_input   18178003    /star/data01/pwg_tasks/upc02/PartRHICf/18178003.list
+add_input   18178004    /star/data01/pwg_tasks/upc02/PartRHICf/18178004.list
+add_input   18178005    /star/data01/pwg_tasks/upc02/PartRHICf/18178005.list
+add_input   18178006    /star/data01/pwg_tasks/upc02/PartRHICf/18178006.list
+add_input   18178007    /star/data01/pwg_tasks/upc02/PartRHICf/18178007.list
+add_input   18178008    /star/data01/pwg_tasks/upc02/PartRHICf/18178008.list
+add_input   18178009    /star/data01/pwg_tasks/upc02/PartRHICf/18178009.list
+add_input   18178011    /star/data01/pwg_tasks/upc02/PartRHICf/18178011.list
+add_input   18178012    /star/data01/pwg_tasks/upc02/PartRHICf/18178012.list
+add_input   18178015    /star/data01/pwg_tasks/upc02/PartRHICf/18178015.list
+add_input   18178016    /star/data01/pwg_tasks/upc02/PartRHICf/18178016.list
+add_input   18178017    /star/data01/pwg_tasks/upc02/PartRHICf/18178017.list
+
+
+is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
+
+#write RP data
+make_RP_event  1
+
+#RP triggers
+add_trigger   570702     18062044   18083025    # RP_UPC    rp #events = 10 M
+add_trigger   570712     18083026   18149030    # RP_UPC    rp #events = 39 M
+add_trigger   570703     18057084   18080040    # RP_SDT    rp #events = 31 M
+add_trigger   570709     18057012   18083025    # RP_ET rp #events = 99 M
+add_trigger   570719     18083026   18149030    # RP_ET rp #events = 91 M
+add_trigger   570701     18057074   18083025    # RP_CPT2   rp  #events = 233 M
+add_trigger   570711     18083026   18149030    # RP_CPT2   rp #events = 39 M
+add_trigger   570705     18083026   18149030    # RP_CPT2noBBCL rp #events = 666 M
+add_trigger   570704     18057084   18149030    # RP_Zerobias   rp #events = 10 M
+
+add_trigger  570209 18054071    18061078    # JPsi*HTTP #events = 8.4 M
+add_trigger  570219 18061087    18073046    # JPsi*HTTP #events = 17.6 M
+add_trigger  570229 18073056    18149069    # JPsi*HTTP #events = 114 M
+
+add_trigger   590703     18176013   18178017    # RP_SDT    RHICf #events = 14 M
+add_trigger   590709     18176013   18178017    # RP_ET RHICf #events = 56 M
+add_trigger   590701     18176013   18178017    # RP_CPT2   RHICf  #events = 806 K
+add_trigger   590705     18176013   18178017    # RP_CPT2noBBCL RHICf #events = 140 K
+add_trigger   590708     18176013   18178017    # RP_CPTnoBBCL  rRHICf #events = 23 M
+
+# add_trigger   1   18055033    18174055   # RP_CPT2    RHICf + rp #events = 1.62 M
+# add_trigger   2   18080048    18174055   # RP_CPT2noBBCL  RHICf + rp #events =  4 M
+# add_trigger   3   18055054    18174055   # RP_SDT RHICf + rp #events = 1 M
+# add_trigger   4   18174044    18174055   # RP_ET  RHICf #events = 5 M
+# add_trigger   5   18174044    18174055   # RP_CPTnoBBCL   RHICf #events = 130 K
+# add_trigger   8   18067073    18067086   # RP_IT_PREPOST  rp #events = 861 K
+# add_trigger   9   18055033    18055054   # RP_ET  rp #events =  874 K
+# add_trigger   9   18067073    18067086   # RP_JP2_PREPOST    rp #events = 393 K
+
+
+
+#BEMC clustering
+bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
+bemc_size_max             4
+bemc_energy_seed          0.3
+bemc_energy_add           0.001
+bemc_energy_threshold_all 0.1
+
+tof_start_zero  1
+
+#directory for merged outputs, relative to top
+outdir   merge_files
+
+#name for merged outputs
+outfile  StUPCRP_production.root
+
+#list of output files
+outlist  PartRHICf.list

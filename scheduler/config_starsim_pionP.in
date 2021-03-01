@@ -1,0 +1,37 @@
+# Roman Pots run 17, data by Tomas
+
+#set for local running
+#submit  local
+
+#common outputs
+top  /star/data01/pwg_tasks/upc02/Starsim
+
+#list staged by Tomas
+
+add_input  singlePionP    /star/u/truhlar/starsim/singlePionP/sim_singlePionP.list
+
+is_mc  1  # 0 - data,  1 - starsim MC,  2 - embedding MC
+
+#write RP data
+make_RP_event  0
+
+# triggers not applied with MC
+
+
+#BEMC clustering
+bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
+bemc_size_max             4
+bemc_energy_seed          0.3
+bemc_energy_add           0.001
+bemc_energy_threshold_all 0.1
+
+tof_start_zero  1
+
+#directory for merged outputs, relative to top
+outdir   merge_files
+
+#name for merged outputs
+outfile  StUPCRP_production.root
+
+#list of output files
+outlist  output.list

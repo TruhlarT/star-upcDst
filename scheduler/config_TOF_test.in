@@ -1,0 +1,109 @@
+# Roman Pots run 17, data by Tomas
+
+#common outputs
+top  /star/data01/pwg_tasks/upc02/TOFcalibRefernce
+
+#list staged by Tomas
+
+
+add_input   Test    /star/data01/pwg_tasks/upc02/StPhysicsTest/StPhysicsTestSample.list
+
+
+is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
+
+#write RP data
+make_RP_event  0
+
+
+add_trigger     9300
+add_trigger     570006
+add_trigger     570007
+add_trigger     570204
+add_trigger     570214
+add_trigger     570205
+add_trigger     570215
+add_trigger     570201
+add_trigger     570202
+add_trigger     570602
+add_trigger     570203
+add_trigger     570206
+add_trigger     570807
+add_trigger     570827
+add_trigger     570847
+add_trigger     570867
+add_trigger     570811
+add_trigger     570831
+add_trigger     570810
+add_trigger     570830
+add_trigger     570850
+add_trigger     570870
+add_trigger     570809
+add_trigger     570829
+add_trigger     570849
+add_trigger     570808
+add_trigger     570828
+add_trigger     570848
+add_trigger     570813
+add_trigger     570833
+add_trigger     570853
+add_trigger     570804
+add_trigger     570824
+add_trigger     570844
+add_trigger     570864
+add_trigger     570805
+add_trigger     570825
+add_trigger     570845
+add_trigger     570806
+add_trigger     570826
+add_trigger     570846
+add_trigger     570801
+add_trigger     570821
+add_trigger     570841
+add_trigger     570861
+add_trigger     570802
+add_trigger     570822
+add_trigger     570842
+add_trigger     570803
+add_trigger     570823
+add_trigger     570843
+add_trigger     570404
+add_trigger     570403
+add_trigger     570401
+add_trigger     570402
+add_trigger     570209
+add_trigger     570219
+add_trigger     570229
+add_trigger     9201
+add_trigger     570603
+add_trigger     570701
+add_trigger     570711
+add_trigger     570705
+add_trigger     570709
+add_trigger     570719
+add_trigger     570703
+add_trigger     570702
+add_trigger     570712
+add_trigger     570704
+add_trigger     570008
+add_trigger     570001
+add_trigger     570004
+add_trigger     570015
+add_trigger     570005
+
+#BEMC clustering
+bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
+bemc_size_max             4
+bemc_energy_seed          0.3
+bemc_energy_add           0.001
+bemc_energy_threshold_all 0.1
+
+tof_start_zero  1
+
+#directory for merged outputs, relative to top
+outdir   merge_files
+
+#name for merged outputs
+outfile  StUPCRP_production.root
+
+#list of output files
+outlist  upcPicoDst.list

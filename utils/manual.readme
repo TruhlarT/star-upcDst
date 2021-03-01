@@ -1,0 +1,9 @@
+make a list: 
+
+get_file_list.pl -delim "/" -keys node,path,filename -cond production=P18ih,trgsetupname=pp500_production_2017,filetype=daq_reco_MuDst,filename~st_rp,storage!=hpss -limit 0 > newMuDst.list
+
+xrootdMakeList.sh file.list
+
+
+show size of first 12000 muDst files
+get_file_list.pl -keys size -cond production=P18ih,trgsetupname=pp500_production_2017,filetype=daq_reco_MuDst,filename~st_rp,storage=nfs -limit 12000 | paste -sd+ - | bc

@@ -1,0 +1,109 @@
+# Roman Pots run 17, data by Tomas
+
+#common outputs
+#OUTPUT_PATH (e.g. /star/data01/pwg_tasks/upc02/productionRun17/Part1)
+top /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1
+
+#list staged by Tomas
+#add_input   #RUNNUMBER   #PATH_TO_RUNNUMBER_LIST
+add_input   18090001    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090001.list
+add_input   18090003    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090003.list
+add_input   18090004    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090004.list
+add_input   18090005    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090005.list
+add_input   18090006    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090006.list
+add_input   18090007    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090007.list
+add_input   18090008    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090008.list
+add_input   18090009    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090009.list
+add_input   18090010    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090010.list
+add_input   18090011    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090011.list
+add_input   18090012    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090012.list
+add_input   18090013    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090013.list
+add_input   18090014    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090014.list
+add_input   18090017    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090017.list
+add_input   18090018    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090018.list
+add_input   18090019    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090019.list
+add_input   18090020    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090020.list
+add_input   18090021    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090021.list
+add_input   18090022    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090022.list
+add_input   18090023    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090023.list
+add_input   18090024    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090024.list
+add_input   18090025    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090025.list
+add_input   18090026    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090026.list
+add_input   18090027    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090027.list
+add_input   18090046    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090046.list
+add_input   18090047    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090047.list
+add_input   18090055    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090055.list
+add_input   18090056    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090056.list
+add_input   18090057    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090057.list
+add_input   18090058    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090058.list
+add_input   18090059    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090059.list
+add_input   18090060    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090060.list
+add_input   18090061    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090061.list
+add_input   18090062    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090062.list
+add_input   18090063    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090063.list
+add_input   18090064    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090064.list
+add_input   18090066    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090066.list
+add_input   18090070    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090070.list
+add_input   18090071    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090071.list
+add_input   18090072    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090072.list
+add_input   18090073    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18090073.list
+add_input   18091002    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091002.list
+add_input   18091003    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091003.list
+add_input   18091004    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091004.list
+add_input   18091005    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091005.list
+add_input   18091006    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091006.list
+add_input   18091007    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091007.list
+add_input   18091009    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091009.list
+add_input   18091010    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091010.list
+add_input   18091011    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091011.list
+add_input   18091012    /star/data01/pwg_tasks/upc02/Run17_P20ic/Part1/18091012.list
+
+#(e.g. add_input   18053098    /star/data01/pwg_tasks/upc02/productionRun17/Part1/18053098.list)
+
+is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
+
+#write RP data
+make_RP_event  1
+
+#RP triggers
+add_trigger   570703     18057084   18080040    # RP_SDT    
+add_trigger   570709     18057012   18083025    # RP_ET 
+add_trigger   570719     18083026   18149030    # RP_ET 
+add_trigger   570701     18057074   18083025    # RP_CPT2  
+add_trigger   570711     18083026   18149030    # RP_CPT2   
+add_trigger   570705     18083026   18149030    # RP_CPT2noBBCL 
+add_trigger   570704     18057084   18149030    # RP_Zerobias   
+
+add_trigger   570702     18062044   18083025    # RP_UPC
+add_trigger   570712     18083026   18149030    # RP_UPC
+add_trigger   570209     18054071   18061078    # JPsi*HTTP 
+add_trigger   570219     18061087   18073046    # JPsi*HTTP 
+add_trigger   570229     18073056   18149069    # JPsi*HTTP 
+
+add_trigger   590703     18176013   18178017    # RP_SDT    RHICf 
+add_trigger   590709     18176013   18178017    # RP_ET RHICf 
+add_trigger   590701     18176013   18178017    # RP_CPT2   RHICf  
+add_trigger   590705     18176013   18178017    # RP_CPT2noBBCL RHICf 
+add_trigger   590708     18176013   18178017    # RP_CPTnoBBCL  RHICf 
+
+
+#BEMC clustering
+bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
+bemc_size_max             4
+bemc_energy_seed          0.3
+bemc_energy_add           0.001
+bemc_energy_threshold_all 0.1
+
+tof_start_zero  1
+
+#directory for merged outputs, relative to top (not used)
+outdir   merge_files
+
+#name for merged outputs (not used)
+outfile  StUPCRP_production.root
+
+#list of output files
+outlist  output.list
+
+
+
