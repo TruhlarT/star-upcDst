@@ -1,3 +1,6 @@
+!*/*.py
+!*/*.C
+!*/*.sh
 build/
 StRoot/
 .sl73_gcc485/
