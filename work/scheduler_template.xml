@@ -31,8 +31,6 @@
   <SandBox installer="ZIP">
     <Package>
       <File>file:__SRCDIR__/work/__EXE__</File>
-      <File>file:__SRCDIR__/work/OffSetsRun17.list</File>
-      <File>file:__SRCDIR__/work/OffSetsCorrectionsRun17.list</File>
       <File>file:__SRCDIR__/build/libstar-upc.so</File>
       <File>file:__SRCDIR__/work/libupc-reader.so</File>
     </Package>
