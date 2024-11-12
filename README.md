@@ -4,7 +4,7 @@ This repository contains code for performing Central Exclusive Production (CEP) 
 
 The code consists of two parts:
 - [*star-upcDst*](https://github.com/adamjaro/star-upcDst): Use MuDst and PicoDst files of one's interest as input, run so-called upcDstMaker to produce a upcDst file with information that are needed for one's analysis only. 
-- work directory: Use the result of step 1, the upcDst, to build your personal analysis tree or histograms
+- work directory: Use the result of part 1, the upcDst, to build your personal analysis tree or histograms
 
 ## [*star-upcDst*](https://github.com/adamjaro/star-upcDst):
 
@@ -40,11 +40,11 @@ The code consists of two parts:
 
 ### Run the code locally:
 - To run the code locally on a single file: 
-<pre><code> ./AnalysisManager path_to_upcDst_root_file </code></pre>
+<pre><code> AnalysisManager path_to_upcDst_root_file </code></pre>
 - To run the code locally on a list of files: 
-<pre><code> ./AnalysisManager path_to_list_of_upcDst_root_files </code></pre>
+<pre><code> AnalysisManager path_to_list_of_upcDst_root_files </code></pre>
 - Or to run on the i-th file from list of files: 
-<pre><code> ./AnalysisManager path_to_list_of_upcDst_root_files index </code></pre>
+<pre><code> AnalysisManager path_to_list_of_upcDst_root_files index </code></pre>
 - The output will be stored in the work dir as "AnalysisOutput.root"
 
 ### Submitting jobs on condor:

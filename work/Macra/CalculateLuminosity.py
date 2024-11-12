@@ -15,8 +15,8 @@ import os
 import ROOT
 import numpy as np
 
-lumi_path = os.getcwd() + "/lists/lumForCPT2noBBCL.list"  
-file_path = os.getcwd() + "/lists/lumPerRun.list" 
+lumi_path = "/gpfs01/star/pwg_tasks/upc02/CEP_input_files/lists/lumForCPT2noBBCL.list"  
+file_path = "/gpfs01/star/pwg_tasks/upc02/CEP_input_files/lists/lumPerRun.list" 
 #From the table: https://www.star.bnl.gov/protected/common/common2017/trigger2017/lumipp500GeV/lum_pertriggerid_pp2017_500GeV.html
 #Get total integrated lumi for RP_CPT2noBBCL = 142.006 Lum [pb-1]
 total_lumi_from_Jaime = 142.006

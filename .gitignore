@@ -16,7 +16,9 @@ work/lists/Backup1109/
 work/src/Backup/
 work/submit.xml
 work/os
+work/sched/*
 work/rootinit.sh
+work/init.sh
 temp_gccflags.c
 *.dataset
 *.dataset.tmp

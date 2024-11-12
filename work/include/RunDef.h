@@ -3,11 +3,11 @@
 #include <vector>
 
 
-const bool runMAINANA = false; // true
+const bool runMAINANA = true; // true
 const bool runEMBEDDING = false; // central embedding study
 const bool runVERTEXSTUDY = false; // take quite long
 const bool runTOFQA = false; // true Designed to be run on single run i.e. 1 job for 1 run
-const bool runTOFEFF= true;
+const bool runTOFEFF= false;
 const bool runTRIGEFF = false; //true
 const bool runFULLZB = false; // true
 const bool runELASTICANA = false;

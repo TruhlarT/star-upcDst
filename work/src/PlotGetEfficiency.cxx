@@ -38,7 +38,7 @@ double PlotManager::getPIDEff()
     //cout<<"MAX: "<< max(mCurrentTree->getPtInGev(PLUS),mCurrentTree->getPtInGev(MINUS))<<" MIN: "<<min(mCurrentTree->getPtInGev(PLUS),mCurrentTree->getPtInGev(MINUS))<<endl;
     int id = mCurrentTree->getPairID();
     if(hPIDEff[id] == nullptr){
-            cerr<<"Error: PlotManager::getPIDEff() the hist for "<<mUtil->particleName(id) <<"is not set..."<<endl;
+            cerr<<"Error: PlotManager::getPIDEff() the hist for "<<mUtil->particleName(id) <<" is not set..."<<endl;
             return 1.0;
     }
     double x = max(mCurrentTree->getPtInGev(PLUS),mCurrentTree->getPtInGev(MINUS));

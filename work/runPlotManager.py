@@ -64,6 +64,6 @@ if __name__ == "__main__":
     root = Popen(root_cmd.split(), stdout=PIPE, stderr=PIPE).communicate()
 
     print root[0], root[1]
-    if tag != "l" and not filecmp.cmp(src_file, backup_file, shallow=False):
+    if tag != "l" and not filecmp.cmp(src_file, new_file, shallow=False):
         shutil.copyfile(currDir + "/include/RunDef_backup.h", currDir + "/include/RunDef.h")
     print "All done."

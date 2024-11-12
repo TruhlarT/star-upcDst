@@ -10,13 +10,13 @@ void PlotManager::runMainAnaPlots()
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots() going to runM2Plots"<<endl;
    changeDir(kMAINANA, "PIDplots");
-   //runM2Plots();
+   runM2Plots();
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots() going to drawMissIdProbability"<<endl;
-   //drawMissIdProbability();
+   drawMissIdProbability();
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots() going to runAnaPlots"<<endl;
-   //runAnaPlots(); 
+   runAnaPlots(); 
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots() going to runMissingPt"<<endl;
    runMissingPt();
