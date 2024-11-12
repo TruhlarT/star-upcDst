@@ -15,6 +15,8 @@ void RunFilterMaker(string filelist, Int_t nFiles, string outfile, string config
   gROOT->Macro("loadMuDst.C");
 
   // Load St_db_Maker and co
+  gSystem->Load("St_Tables");
+  gSystem->Load("StDbLib");
   gSystem->Load("StDbLib.so");
   gSystem->Load("StDbBroker.so");
   gSystem->Load("St_db_Maker");
@@ -25,6 +27,7 @@ void RunFilterMaker(string filelist, Int_t nFiles, string outfile, string config
   gSystem->Load("StEmcADCtoEMaker");
   gSystem->Load("StPreEclMaker");
   gSystem->Load("StEpcMaker");
+  gSystem->Load("StPicoEvent");
 
   //load the analysis maker compiled before with cons
   gSystem->Load("StUPCFilterMaker.so");

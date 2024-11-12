@@ -35,6 +35,10 @@
 #include "StEvent/StRunInfo.h"
 #include "StEvent/StEventSummary.h"
 
+#include "St_db_Maker/St_db_Maker.h"
+#include "tables/St_vertexSeed_Table.h"
+#include "tables/St_vertexSeedTriggers_Table.h"
+
 //local headers
 #include "StUPCEvent.h"
 #include "StUPCTrack.h"
@@ -56,7 +60,7 @@ StUPCFilterMaker::StUPCFilterMaker(StMuDstMaker *maker, string outnam) : StMaker
   mMaker(maker), mMuDst(0x0), mIsMC(0), mOutName(outnam), mOutFile(0x0),
   mHistList(0x0), mCounter(0x0), mErrCounter(0x0),
   mUPCEvent(0x0), mUPCTree(0x0),  mTrgUtil(0x0), mBemcUtil(0x0),
-  mMakeRP(0), mRPUtil(0x0), mRPEvent(0x0)
+  mMakeRP(0), mRPUtil(0x0), mRPEvent(0x0), mDbMk(0x0)
 {
   //constructor
 
@@ -148,6 +152,11 @@ Int_t StUPCFilterMaker::Init() {
   mErrCounter = new TH1I("mErrCounter", "mErrCounter", kMaxErrCnt-1, 1, kMaxErrCnt);
   mHistList->Add(mErrCounter);
 
+  //init database to read beam-line parameters
+  mDbMk = new St_db_Maker("db", "MySQL:StarDb", "$STAR/StarDb");
+  //mDbMk->SetDebug();
+  mDbMk->Init();
+
   return kStOk;
 
 }//Init
@@ -230,6 +239,9 @@ Int_t StUPCFilterMaker::Make()
   const StL0Trigger &l0trig = evt->l0Trigger();
   mUPCEvent->setBunchCrossId( l0trig.bunchCrossingId() );
   mUPCEvent->setBunchCrossId7bit( l0trig.bunchCrossingId7bit(runnum) );
+
+  //beamline parameters
+  readBeamLine();
 
   //magnetic field in UPC event
   const StEventSummary &evtSummary = evt->eventSummary();
@@ -374,7 +386,10 @@ Int_t StUPCFilterMaker::Make()
         upcTrack->setTofTime( tofPid.timeOfFlight() );
         upcTrack->setTofPathLength( tofPid.pathLength() );
       }
-
+      if( mUPCEvent->getIsMC() ) {
+        upcTrack->setIdTruth( track->idTruth() );
+        upcTrack->setQaTruth( track->qaTruth() );
+      }
     }//tracks loop
 
     //if( nSelTracks <= 0 ) continue; //no selected tracks for this vertex
@@ -473,6 +488,77 @@ Bool_t StUPCFilterMaker::runMC() {
 
   }//mc tracks loop
 
+  //get array of global tracks
+  TObjArray *trkArray = mMuDst->globalTracks();
+  if( !trkArray ) return kFALSE;
+
+  //tracks loop
+  for(Int_t itrk=0; itrk<trkArray->GetEntriesFast(); itrk++) {
+    StMuTrack *track = dynamic_cast<StMuTrack*>( trkArray->At(itrk) );
+    if( !track ) continue;
+    //if( !track->idTruth() <= 20) continue;
+    if( !track->qaTruth() > 90) continue;
+    if( TMath::Abs( track->charge() ) != 1) continue;
+    //matching to BEMC cluster
+    UInt_t clsId=0;
+    Double_t emcPhi=-999., emcEta=-999., emcPt=-999.;
+    Bool_t emcProj=kFALSE;
+    Float_t hitE=-999.;
+    Short_t nhitsBemc = mBemcUtil->matchBEMC(track, emcPhi, emcEta, emcPt, emcProj, clsId, hitE);
+    Bool_t matchBemc = nhitsBemc > 0 ? kTRUE : kFALSE;
+
+    //TOF matching
+    const StMuBTofPidTraits &tofPid = track->btofPidTraits();
+    Bool_t matchTof = tofPid.matchFlag() != 0 ? kTRUE : kFALSE;
+
+    //UPC track
+    StUPCTrack *upcTrack = mUPCEvent->addTrack();
+    upcTrack->setPtEtaPhi(track->pt(), track->eta(), track->phi());
+    TVector3 origin(0.0,0.0,0.0);
+    origin.SetX(track->helix().origin().x());
+    origin.SetY(track->helix().origin().y());
+    origin.SetZ(track->helix().origin().z());
+    upcTrack->setCurvatureDipAnglePhase(track->helix().curvature(), track->helix().dipAngle(), track->helix().phase() );
+    //if( track->helix().curvature() != 0 )
+    //  LOG_INFO << "XXYYZZ: Curvature has non zero value = "<< track->helix().curvature() << endm;
+    /*
+    if( track->globalTrack()){
+      origin.SetX(track->globalTrack()->helix().origin().x());
+      origin.SetY(track->globalTrack()->helix().origin().y());
+      origin.SetZ(track->globalTrack()->helix().origin().z());
+      upcTrack->setCurvatureDipAnglePhase(track->globalTrack()->helix().curvature(), track->globalTrack()->helix().dipAngle(), track->globalTrack()->helix().phase() );
+    }*/
+    upcTrack->setOrigin(origin);
+    upcTrack->setCharge( track->charge() );
+    upcTrack->setNhits( track->nHits() );
+    upcTrack->setNhitsFit( track->nHitsFit() );
+    upcTrack->setChi2( track->chi2() );
+    upcTrack->setNhitsDEdx( track->nHitsDedx() );
+    upcTrack->setDEdxSignal( track->dEdx() );
+    upcTrack->setNSigmasTPC( StUPCTrack::kElectron, track->nSigmaElectron() );
+    upcTrack->setNSigmasTPC( StUPCTrack::kPion, track->nSigmaPion() );
+    upcTrack->setNSigmasTPC( StUPCTrack::kKaon, track->nSigmaKaon() );
+    upcTrack->setNSigmasTPC( StUPCTrack::kProton, track->nSigmaProton() );
+    upcTrack->setFlag( StUPCTrack::kCEP );
+    if( emcProj ) {
+      upcTrack->setFlag( StUPCTrack::kBemcProj );
+      upcTrack->setBemcPtEtaPhi(emcPt, emcEta, emcPhi);
+    }
+    if( matchBemc ) {
+      upcTrack->setFlag( StUPCTrack::kBemc );
+      upcTrack->setBemcPtEtaPhi(emcPt, emcEta, emcPhi);
+      upcTrack->setBemcClusterId(clsId);
+      upcTrack->setBemcHitE(hitE);
+    }
+    if( matchTof ) {
+      upcTrack->setFlag( StUPCTrack::kTof );
+      upcTrack->setTofTime( tofPid.timeOfFlight() );
+      upcTrack->setTofPathLength( tofPid.pathLength() );
+    }
+    upcTrack->setIdTruth( track->idTruth() );
+    upcTrack->setQaTruth( track->qaTruth() );
+  }//tracks loop
+
   return kTRUE;
 
 }//runMC
@@ -494,7 +580,48 @@ Int_t StUPCFilterMaker::Finish()
 
 }//Finish
 
+//_____________________________________________________________________________
+void StUPCFilterMaker::readBeamLine() {
 
+  //mDbMk->SetDateTime(20170305,0); // event or run start time, set to your liking
+  //mDbMk->SetFlavor("ofl");
+  if ( mUPCEvent->getRunNumber() / 1000000 > 25 || mUPCEvent->getRunNumber() / 1000000 < 1)
+    return;
+
+  mDbMk->InitRun(mUPCEvent->getRunNumber());
+  mDbMk->Make();
+
+  TDataSet *DB = 0;
+  DB = mDbMk->GetDataBase("Calibrations/rhic/vertexSeed");
+  if (!DB) {
+    LOG_INFO << "StUPCMakerFromPicoDst::readBeamLine: no table found in db, or malformed local db config" << endm;
+    return;
+  }
+
+  St_vertexSeed *dataset = (St_vertexSeed*) DB->Find("vertexSeed");
+
+  if (!dataset) {
+    LOG_INFO << "StUPCMakerFromPicoDst::readBeamLine: dataset does not contain requested table" << endm;
+    return;
+  } 
+
+  Int_t rows = dataset->GetNRows();
+  if (rows != 1) {
+    LOG_INFO << "StUPCMakerFromPicoDst::readBeamLine:: found INDEXED table with inconsistent number of rows = " << rows << endm;
+    if( rows == 0)
+      return;
+  }
+
+  //TDatime val[2];
+  //mDbMk->GetValidity((TTable*)dataset,val);
+  //LOG_INFO << "Dataset validity range: [ " << val[0].GetDate() << "." << val[0].GetTime() << " - " << val[1].GetDate() << "." << val[1].GetTime() << " ] "<< endm;
+
+  vertexSeed_st *table = dataset->GetTable();
+  mUPCEvent->setBeamXPosition( table[0].x0 );
+  mUPCEvent->setBeamXSlope( table[0].dxdz );
+  mUPCEvent->setBeamYPosition( table[0].y0 );
+  mUPCEvent->setBeamYSlope( table[0].dydz );
+}//readBeamLine
 
 
 

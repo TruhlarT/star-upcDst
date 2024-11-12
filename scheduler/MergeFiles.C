@@ -8,7 +8,7 @@ void MergeFiles(const string tmpnam, const string outfile) {
   gSystem->Load("../build/libstar-upc.so");
 
   //load files to the merger
-  TFileMerger *merg = new TFileMerger();
+  TFileMerger *merg = new TFileMerger(kFALSE, kTRUE);
   cout << "Loading files for merging" << endl;
   ifstream in1(tmpnam.c_str());
   string line;

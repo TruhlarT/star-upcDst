@@ -1,0 +1,143 @@
+
+#example configuration for reading picoDst
+
+macro RunFrom2upcDst.C
+
+top /gpfs01/star/pwg_tasks/upc02/newUPC/upc/part2
+
+add_input 18053093 /direct/star+u/truhlar/star-upcDst/utils/lists/18053093.list
+add_input 18053098 /direct/star+u/truhlar/star-upcDst/utils/lists/18053098.list
+add_input 18053099 /direct/star+u/truhlar/star-upcDst/utils/lists/18053099.list
+add_input 18053100 /direct/star+u/truhlar/star-upcDst/utils/lists/18053100.list
+add_input 18053101 /direct/star+u/truhlar/star-upcDst/utils/lists/18053101.list
+add_input 18053102 /direct/star+u/truhlar/star-upcDst/utils/lists/18053102.list
+add_input 18053103 /direct/star+u/truhlar/star-upcDst/utils/lists/18053103.list
+add_input 18053104 /direct/star+u/truhlar/star-upcDst/utils/lists/18053104.list
+add_input 18053105 /direct/star+u/truhlar/star-upcDst/utils/lists/18053105.list
+add_input 18053110 /direct/star+u/truhlar/star-upcDst/utils/lists/18053110.list
+add_input 18053117 /direct/star+u/truhlar/star-upcDst/utils/lists/18053117.list
+add_input 18053120 /direct/star+u/truhlar/star-upcDst/utils/lists/18053120.list
+add_input 18053121 /direct/star+u/truhlar/star-upcDst/utils/lists/18053121.list
+add_input 18053122 /direct/star+u/truhlar/star-upcDst/utils/lists/18053122.list
+add_input 18053124 /direct/star+u/truhlar/star-upcDst/utils/lists/18053124.list
+add_input 18053128 /direct/star+u/truhlar/star-upcDst/utils/lists/18053128.list
+add_input 18054003 /direct/star+u/truhlar/star-upcDst/utils/lists/18054003.list
+add_input 18054004 /direct/star+u/truhlar/star-upcDst/utils/lists/18054004.list
+add_input 18054005 /direct/star+u/truhlar/star-upcDst/utils/lists/18054005.list
+add_input 18054006 /direct/star+u/truhlar/star-upcDst/utils/lists/18054006.list
+add_input 18054009 /direct/star+u/truhlar/star-upcDst/utils/lists/18054009.list
+add_input 18054010 /direct/star+u/truhlar/star-upcDst/utils/lists/18054010.list
+add_input 18054011 /direct/star+u/truhlar/star-upcDst/utils/lists/18054011.list
+add_input 18054012 /direct/star+u/truhlar/star-upcDst/utils/lists/18054012.list
+add_input 18054013 /direct/star+u/truhlar/star-upcDst/utils/lists/18054013.list
+add_input 18054014 /direct/star+u/truhlar/star-upcDst/utils/lists/18054014.list
+add_input 18054017 /direct/star+u/truhlar/star-upcDst/utils/lists/18054017.list
+add_input 18054019 /direct/star+u/truhlar/star-upcDst/utils/lists/18054019.list
+add_input 18054020 /direct/star+u/truhlar/star-upcDst/utils/lists/18054020.list
+add_input 18054042 /direct/star+u/truhlar/star-upcDst/utils/lists/18054042.list
+add_input 18054043 /direct/star+u/truhlar/star-upcDst/utils/lists/18054043.list
+add_input 18054044 /direct/star+u/truhlar/star-upcDst/utils/lists/18054044.list
+add_input 18054045 /direct/star+u/truhlar/star-upcDst/utils/lists/18054045.list
+add_input 18054046 /direct/star+u/truhlar/star-upcDst/utils/lists/18054046.list
+add_input 18054071 /direct/star+u/truhlar/star-upcDst/utils/lists/18054071.list
+add_input 18055033 /direct/star+u/truhlar/star-upcDst/utils/lists/18055033.list
+add_input 18055034 /direct/star+u/truhlar/star-upcDst/utils/lists/18055034.list
+add_input 18055038 /direct/star+u/truhlar/star-upcDst/utils/lists/18055038.list
+add_input 18055039 /direct/star+u/truhlar/star-upcDst/utils/lists/18055039.list
+add_input 18055040 /direct/star+u/truhlar/star-upcDst/utils/lists/18055040.list
+add_input 18055041 /direct/star+u/truhlar/star-upcDst/utils/lists/18055041.list
+add_input 18055042 /direct/star+u/truhlar/star-upcDst/utils/lists/18055042.list
+add_input 18055043 /direct/star+u/truhlar/star-upcDst/utils/lists/18055043.list
+add_input 18055046 /direct/star+u/truhlar/star-upcDst/utils/lists/18055046.list
+add_input 18055048 /direct/star+u/truhlar/star-upcDst/utils/lists/18055048.list
+add_input 18055049 /direct/star+u/truhlar/star-upcDst/utils/lists/18055049.list
+add_input 18055050 /direct/star+u/truhlar/star-upcDst/utils/lists/18055050.list
+add_input 18055051 /direct/star+u/truhlar/star-upcDst/utils/lists/18055051.list
+add_input 18055052 /direct/star+u/truhlar/star-upcDst/utils/lists/18055052.list
+add_input 18055054 /direct/star+u/truhlar/star-upcDst/utils/lists/18055054.list
+add_input 18055070 /direct/star+u/truhlar/star-upcDst/utils/lists/18055070.list
+add_input 18055071 /direct/star+u/truhlar/star-upcDst/utils/lists/18055071.list
+add_input 18056034 /direct/star+u/truhlar/star-upcDst/utils/lists/18056034.list
+add_input 18056036 /direct/star+u/truhlar/star-upcDst/utils/lists/18056036.list
+add_input 18056087 /direct/star+u/truhlar/star-upcDst/utils/lists/18056087.list
+add_input 18056088 /direct/star+u/truhlar/star-upcDst/utils/lists/18056088.list
+add_input 18056111 /direct/star+u/truhlar/star-upcDst/utils/lists/18056111.list
+add_input 18056115 /direct/star+u/truhlar/star-upcDst/utils/lists/18056115.list
+add_input 18056117 /direct/star+u/truhlar/star-upcDst/utils/lists/18056117.list
+add_input 18056122 /direct/star+u/truhlar/star-upcDst/utils/lists/18056122.list
+add_input 18057012 /direct/star+u/truhlar/star-upcDst/utils/lists/18057012.list
+add_input 18057013 /direct/star+u/truhlar/star-upcDst/utils/lists/18057013.list
+add_input 18057014 /direct/star+u/truhlar/star-upcDst/utils/lists/18057014.list
+add_input 18057015 /direct/star+u/truhlar/star-upcDst/utils/lists/18057015.list
+add_input 18057016 /direct/star+u/truhlar/star-upcDst/utils/lists/18057016.list
+add_input 18057017 /direct/star+u/truhlar/star-upcDst/utils/lists/18057017.list
+add_input 18057021 /direct/star+u/truhlar/star-upcDst/utils/lists/18057021.list
+add_input 18057022 /direct/star+u/truhlar/star-upcDst/utils/lists/18057022.list
+add_input 18057023 /direct/star+u/truhlar/star-upcDst/utils/lists/18057023.list
+add_input 18057024 /direct/star+u/truhlar/star-upcDst/utils/lists/18057024.list
+add_input 18057025 /direct/star+u/truhlar/star-upcDst/utils/lists/18057025.list
+add_input 18057026 /direct/star+u/truhlar/star-upcDst/utils/lists/18057026.list
+add_input 18057030 /direct/star+u/truhlar/star-upcDst/utils/lists/18057030.list
+add_input 18057031 /direct/star+u/truhlar/star-upcDst/utils/lists/18057031.list
+add_input 18057032 /direct/star+u/truhlar/star-upcDst/utils/lists/18057032.list
+add_input 18057033 /direct/star+u/truhlar/star-upcDst/utils/lists/18057033.list
+add_input 18057034 /direct/star+u/truhlar/star-upcDst/utils/lists/18057034.list
+add_input 18057061 /direct/star+u/truhlar/star-upcDst/utils/lists/18057061.list
+add_input 18057072 /direct/star+u/truhlar/star-upcDst/utils/lists/18057072.list
+add_input 18057074 /direct/star+u/truhlar/star-upcDst/utils/lists/18057074.list
+add_input 18057084 /direct/star+u/truhlar/star-upcDst/utils/lists/18057084.list
+add_input 18057087 /direct/star+u/truhlar/star-upcDst/utils/lists/18057087.list
+add_input 18057088 /direct/star+u/truhlar/star-upcDst/utils/lists/18057088.list
+add_input 18057089 /direct/star+u/truhlar/star-upcDst/utils/lists/18057089.list
+add_input 18057090 /direct/star+u/truhlar/star-upcDst/utils/lists/18057090.list
+add_input 18057091 /direct/star+u/truhlar/star-upcDst/utils/lists/18057091.list
+add_input 18057092 /direct/star+u/truhlar/star-upcDst/utils/lists/18057092.list
+add_input 18057101 /direct/star+u/truhlar/star-upcDst/utils/lists/18057101.list
+add_input 18057102 /direct/star+u/truhlar/star-upcDst/utils/lists/18057102.list
+add_input 18057106 /direct/star+u/truhlar/star-upcDst/utils/lists/18057106.list
+add_input 18058007 /direct/star+u/truhlar/star-upcDst/utils/lists/18058007.list
+add_input 18058008 /direct/star+u/truhlar/star-upcDst/utils/lists/18058008.list
+add_input 18058011 /direct/star+u/truhlar/star-upcDst/utils/lists/18058011.list
+add_input 18058012 /direct/star+u/truhlar/star-upcDst/utils/lists/18058012.list
+add_input 18058013 /direct/star+u/truhlar/star-upcDst/utils/lists/18058013.list
+add_input 18058014 /direct/star+u/truhlar/star-upcDst/utils/lists/18058014.list
+add_input 18058015 /direct/star+u/truhlar/star-upcDst/utils/lists/18058015.list
+add_input 18058016 /direct/star+u/truhlar/star-upcDst/utils/lists/18058016.list
+add_input 18058018 /direct/star+u/truhlar/star-upcDst/utils/lists/18058018.list
+add_input 18058025 /direct/star+u/truhlar/star-upcDst/utils/lists/18058025.list
+add_input 18058027 /direct/star+u/truhlar/star-upcDst/utils/lists/18058027.list
+add_input 18058028 /direct/star+u/truhlar/star-upcDst/utils/lists/18058028.list
+add_input 18058029 /direct/star+u/truhlar/star-upcDst/utils/lists/18058029.list
+add_input 18058031 /direct/star+u/truhlar/star-upcDst/utils/lists/18058031.list
+add_input 18058032 /direct/star+u/truhlar/star-upcDst/utils/lists/18058032.list
+add_input 18059006 /direct/star+u/truhlar/star-upcDst/utils/lists/18059006.list
+add_input 18059008 /direct/star+u/truhlar/star-upcDst/utils/lists/18059008.list
+add_input 18059009 /direct/star+u/truhlar/star-upcDst/utils/lists/18059009.list
+add_input 18059010 /direct/star+u/truhlar/star-upcDst/utils/lists/18059010.list
+add_input 18059013 /direct/star+u/truhlar/star-upcDst/utils/lists/18059013.list
+add_input 18059015 /direct/star+u/truhlar/star-upcDst/utils/lists/18059015.list
+add_input 18059016 /direct/star+u/truhlar/star-upcDst/utils/lists/18059016.list
+add_input 18059017 /direct/star+u/truhlar/star-upcDst/utils/lists/18059017.list
+add_input 18059018 /direct/star+u/truhlar/star-upcDst/utils/lists/18059018.list
+add_input 18059021 /direct/star+u/truhlar/star-upcDst/utils/lists/18059021.list
+add_input 18059024 /direct/star+u/truhlar/star-upcDst/utils/lists/18059024.list
+add_input 18059026 /direct/star+u/truhlar/star-upcDst/utils/lists/18059026.list
+add_input 18059053 /direct/star+u/truhlar/star-upcDst/utils/lists/18059053.list
+add_input 18059054 /direct/star+u/truhlar/star-upcDst/utils/lists/18059054.list
+add_input 18059055 /direct/star+u/truhlar/star-upcDst/utils/lists/18059055.list
+add_input 18059056 /direct/star+u/truhlar/star-upcDst/utils/lists/18059056.list
+add_input 18059061 /direct/star+u/truhlar/star-upcDst/utils/lists/18059061.list
+add_input 18059062 /direct/star+u/truhlar/star-upcDst/utils/lists/18059062.list
+add_input 18059063 /direct/star+u/truhlar/star-upcDst/utils/lists/18059063.list
+add_input 18059064 /direct/star+u/truhlar/star-upcDst/utils/lists/18059064.list
+add_input 18059065 /direct/star+u/truhlar/star-upcDst/utils/lists/18059065.list
+add_input 18059066 /direct/star+u/truhlar/star-upcDst/utils/lists/18059066.list
+add_input 18059067 /direct/star+u/truhlar/star-upcDst/utils/lists/18059067.list
+add_input 18059068 /direct/star+u/truhlar/star-upcDst/utils/lists/18059068.list
+
+#submit local
+
+outfile out.root
+
+outdir out
+

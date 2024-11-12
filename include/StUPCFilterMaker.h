@@ -14,6 +14,7 @@ class StUPCFilterTrgUtil;
 class StUPCFilterBemcUtil;
 class StUPCFilterRPUtil;
 class StRPEvent;
+class St_db_Maker;
 
 class StUPCFilterMaker: public StMaker {
 
@@ -37,6 +38,7 @@ private:
   StUPCFilterMaker &operator=(const StUPCFilterMaker &o); // not implemented
 
   Bool_t runMC();
+  void readBeamLine();
 
   StMuDstMaker *mMaker;  //StMuDstMaker provided to the constructor
   StMuDst *mMuDst; // input muDst data
@@ -68,7 +70,9 @@ private:
   StUPCFilterRPUtil *mRPUtil; // utility class for Roman Pots
   StRPEvent *mRPEvent; // output RP event
 
-  ClassDef(StUPCFilterMaker, 3);
+  St_db_Maker *mDbMk; // database to read beam-line position
+
+  ClassDef(StUPCFilterMaker, 4);
 
 };
 

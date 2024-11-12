@@ -65,6 +65,7 @@ if __name__ == "__main__":
                 print "Size:", totsiz
                 chunkout = merge_path+"/"+ q[0]+suffix
                 merge_cmd = "root -l -b -q MergeFiles.C(\"" + tmpnam + "\",\"" + chunkout + "\")"
+                print merge_cmd
                 merg = Popen(merge_cmd.split(), stdout=PIPE, stderr=PIPE).communicate()
                 print merg[0], merg[1]
                 chunk_list.write(chunkout+"\n")
@@ -74,9 +75,9 @@ if __name__ == "__main__":
                 #reset the temporary and indices
                 tmp = open(tmpnam, "r")
                 for f in tmp:
-						fname = f.rstrip()
-						if os.path.isfile(fname): # this makes the code more robust
-					  		os.remove(fname)
+					fname = f.rstrip()
+					if os.path.isfile(fname): # this makes the code more robust
+				  		os.remove(fname)
                 totsiz = 0
         #list loop end
 

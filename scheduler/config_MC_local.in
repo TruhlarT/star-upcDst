@@ -2,31 +2,24 @@
 #upcDst local test production without scheduler
 
 #main directory for production outputs
-top  /gpfs01/star/pwg/jaroslav/test/star-upcDst/trees/MC
+top  /gpfs01/star/pwg/truhlar/Embedding/test
 
 #set for local running
 submit  local
 
 #input from local filelist
-add_input  slight14e4x1  /star/u/jaroslav/star-upc/txt/sim_slight14e4x1.list  #  coherent J/psi embedding
+add_input  test  /star/u/truhlar/star-upcDst/scheduler/PiplusPiminus_203_20222901.list
 
 #number of files to process from the list of files, comment-out to process all
-#nfiles  1
+nfiles  1
 
 #data/MC
 is_mc  2  # 0 - data,  1 - starsim MC,  2 - embedding MC
 
 #TOF start time override to zero, 1 - on,  0 - off (default)
-tof_start_zero  1
-
-#name for output file
-outfile  StUPC_slight14e4x1_v5.root
+tof_start_zero  0
 
 #set trigger IDs and run range for each ID (not applied with MC)
-add_trigger   450705  15084051  15167014    # UPCJpsiB, Run14 AuAu, 1st id
-add_trigger   450725  15153036  15167007    # UPCJpsiB, Run14 AuAu, 2nd id
-#add_trigger   450705  # run range is not compulsory
-#add_trigger   450725
 
 #BEMC clustering
 bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
@@ -35,7 +28,14 @@ bemc_energy_seed          0.3
 bemc_energy_add           0.001
 bemc_energy_threshold_all 0.1
 
+#directory for merged outputs, relative to top (not used)
+outdir   merge_files
 
+#name for merged outputs (not used)
+outfile  StUPC_embedding.root
+
+#list of output files
+outlist  output.list
 
 
 
