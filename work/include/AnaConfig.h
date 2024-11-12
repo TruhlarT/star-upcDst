@@ -18,12 +18,12 @@ const bitset<8> treeBits[] = { bitset<8>(string("11111111")), bitset<8>(string("
             bitset<8>(string("00000000")), bitset<8>(string("01111011")), bitset<8>(string("01100001")), bitset<8>(string("01110001")), 
             bitset<8>(string("00000000")), bitset<8>(string("00000000"))};
 
-const TString anaDir = "/star/u/truhlar/star-upcDst/work/";
-const TString pathToOfLumiFile = anaDir + "lists/luminosityForZB.list";
-const TString pathToOfIntegLumiFile = anaDir + "lists/lumPerRun.list";
-const TString pathToEffRootFile = anaDir + "eff.root";
-const TString nameOfOffSetFile = "OffSetsRun17.list";
-const TString nameOfOffSetCorrectionFile = "OffSetsCorrectionsRun17.list";
+const TString inputDir = "/gpfs01/star/pwg_tasks/upc02/CEP_input_files/";
+const TString pathToLumiFile = inputDir + "lists/luminosityForZB.list";
+const TString pathToIntegLumiFile = inputDir + "lists/lumPerRun.list";
+const TString pathToEffRootFile = inputDir + "eff.root";
+const TString pathToOffSetFile = inputDir + "OffSetsRun17.list";
+const TString pathToOffSetCorrectionFile = inputDir + "OffSetsCorrectionsRun17.list";
 
 
 const TString embedPathPrefix = "/gpfs01/star/pwg/truhlar/Run17_P20ic/";

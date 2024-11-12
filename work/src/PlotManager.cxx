@@ -211,10 +211,10 @@ bool PlotManager::Init(int argc, char** argv)
 bool PlotManager::readLumiFile()
 {
    ifstream lumiFile;
-   lumiFile.open( pathToOfLumiFile );
+   lumiFile.open( pathToLumiFile );
    if (!lumiFile.is_open() )
    {
-      cerr << "\nERROR in PlotManager::readLumiFile(): Problems with opening a file: " + pathToOfLumiFile << endl;
+      cerr << "\nERROR in PlotManager::readLumiFile(): Problems with opening a file: " + pathToLumiFile << endl;
       return false;
    }   
 
@@ -223,7 +223,7 @@ bool PlotManager::readLumiFile()
    unsigned int timeDiff;
    string line;
    if( DEBUG )
-      cerr<<"PlotManager::readLumiFile() going to readi lumi file: "<<pathToOfLumiFile<<endl;
+      cerr<<"PlotManager::readLumiFile() going to readi lumi file: "<<pathToLumiFile<<endl;
    while ( getline(lumiFile, line) )
    {
       stringstream ss(line);
@@ -239,13 +239,13 @@ bool PlotManager::readLumiFile()
       mTimeOfRun[runNumber] = timeDiff;
    }
    if( DEBUG )
-      cerr<<"File "<<pathToOfLumiFile<<" was read"<<endl;
+      cerr<<"File "<<pathToLumiFile<<" was read"<<endl;
    lumiFile.close();
 
-   lumiFile.open( pathToOfIntegLumiFile );
+   lumiFile.open( pathToIntegLumiFile );
    if (!lumiFile.is_open() )
    {
-      cerr << "\nERROR in PlotManager::readLumiFile(): Problems with opening a file: " + pathToOfIntegLumiFile << endl;
+      cerr << "\nERROR in PlotManager::readLumiFile(): Problems with opening a file: " + pathToIntegLumiFile << endl;
       return false;
    }   
 

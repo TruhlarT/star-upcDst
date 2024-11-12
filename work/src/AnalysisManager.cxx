@@ -64,10 +64,10 @@ int main(int argc, char** argv)
    if( runRP )
    {     
       // Load RP off-sets with off-set corrections
-      if( !LoadOffsetFile(nameOfOffSetFile, mOffSet) )
+      if( !LoadOffsetFile(pathToOffSetFile, mOffSet) )
          return 3;
       #if !defined ALIGNMENT
-         if( !LoadOffsetFile(nameOfOffSetCorrectionFile, mCorrection) )
+         if( !LoadOffsetFile(pathToOffSetCorrectionFile, mCorrection) )
             return 3;
       #endif
       cout<<"RP offset loaded..."<<endl;

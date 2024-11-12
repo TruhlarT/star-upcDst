@@ -7,6 +7,7 @@ work/CMakeCache.txt
 work/CMakeFiles/
 work/Makefile
 work/PlotManager
+work/AnalysisManager
 work/backup/
 work/cmake_install.cmake
 work/dEdx.png
@@ -15,6 +16,7 @@ work/lists/Backup1109/
 work/src/Backup/
 work/submit.xml
 work/os
+work/rootinit.sh
 temp_gccflags.c
 *.dataset
 *.dataset.tmp

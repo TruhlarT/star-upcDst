@@ -15,14 +15,14 @@ if __name__ == "__main__":
     args = sys.argv
     args.pop(0) # cut first input from terminal = ./runPlotManager.py
             
-    #currDir = os.getcwd()
+    currDir = os.getcwd()
     
     basedir = "/gpfs01/star/pwg/truhlar/Run17_P20ic/"
     if len(args) == 1:
         tag = str(args.pop(0))
         if tag == "l":
             infile = "AnalysisOutput.root"
-            location = "/star/u/truhlar/star-upcDst/work/"
+            location = currDir + "/"
         else:
             infile = "StRP_production_0000.root"
             location = basedir + tag + "/merged/"
@@ -36,14 +36,14 @@ if __name__ == "__main__":
         location = basedir + "/merged/"
 
     #Copy libstar-upc.so
-    shutil.copyfile("/star/u/truhlar/star-upcDst/build/libstar-upc.so", "libstar-upc.so")
+    shutil.copyfile(currDir + "/../build/libstar-upc.so", "libstar-upc.so")
 
     print "  Input file:     ", infile
     print "  File location:     ", location
     #print "  Tag :      ", tag
-    src_file = "/star/u/truhlar/star-upcDst/work/include/RunDef.h"
-    backup_file = "/star/u/truhlar/star-upcDst/work/include/RunDef_backup.h"
-    new_file = "/star/u/truhlar/star-upcDst/work/config/" + tag + ".h"
+    src_file = currDir + "/include/RunDef.h"
+    backup_file = currDir + "/include/RunDef_backup.h"
+    new_file = currDir + "/config/" + tag + ".h"
 
     # Check if the source file and new file are different
     if tag != "l" and not filecmp.cmp(src_file, new_file, shallow=False):
@@ -65,5 +65,5 @@ if __name__ == "__main__":
 
     print root[0], root[1]
     if tag != "l" and not filecmp.cmp(src_file, backup_file, shallow=False):
-        shutil.copyfile("/star/u/truhlar/star-upcDst/work/include/RunDef_backup.h", "/star/u/truhlar/star-upcDst/work/include/RunDef.h")
+        shutil.copyfile(currDir + "/include/RunDef_backup.h", currDir + "/include/RunDef.h")
     print "All done."

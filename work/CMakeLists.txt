@@ -44,8 +44,8 @@ set (LIB_READER upc-reader)
 set (BIN AnalysisManager PlotManager)
 
 #UPC picoDsts library
-set (UPC_LIB /star/u/truhlar/star-upcDst/build/libstar-upc.so)
-set (UPC_INC /star/u/truhlar/star-upcDst/include)
+set (UPC_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../build/libstar-upc.so")
+set (UPC_INC "${CMAKE_CURRENT_SOURCE_DIR}/../include")
 
 #general compiler options
 set (CMAKE_CXX_COMPILER /usr/bin/g++)

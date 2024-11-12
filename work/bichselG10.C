@@ -1,6 +1,6 @@
 //
 //root4star [0] .L bichselG10.C 
-//root4star [1] .x bichselG10.C("/gpfs01/star/pwg/truhlar/Run17_P20ic/mainAna0304/merged/StRP_production_0000.root") 
+//root4star [1] .x bichselG10.C("tag") 
 //
 
 //________________________________________________________________________________
