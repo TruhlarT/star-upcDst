@@ -73,7 +73,7 @@ if __name__ == "__main__":
             print "Size:", totsiz
             iform = "_{0:04d}".format(ichunk)
             chunkout = merge_path+"/"+outfile.split(".root")[0]+iform+".root"
-            merge_cmd = "root -l -b -q MergeFiles.C(\"" + tmpnam + "\",\"" + chunkout + "\")"
+            merge_cmd = "root -l -b -q Macros/MergeFiles.C(\"" + tmpnam + "\",\"" + chunkout + "\")"
             merg = Popen(merge_cmd.split(), stdout=PIPE, stderr=PIPE).communicate()
             print merg[0], merg[1]
             chunk_list.write(chunkout+"\n")
