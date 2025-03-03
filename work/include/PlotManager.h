@@ -21,6 +21,7 @@ class PlotManager{
         void runEmbeddingQA();
         void runTofQA();
         void runDsmEffStudy(int study);
+        void runElasticStudy();
         void runTofTrigStudy();
         void runRpTrigStudy();
         void runProbOfRetainEvent();
@@ -59,7 +60,7 @@ class PlotManager{
         double tofEff[nParticles*nSigns]; 
 
         // PID efficiency
-        TH2F* hPIDEff[nParticles];
+        TH2F* hPIDEff[nParticles][nPidVariation+1];
         // size of non-exclusive background
         double mBcgFraction[nParticles][nRpConfigurations+1];
         double mBcgFracError[nParticles][nRpConfigurations+1];
@@ -87,12 +88,13 @@ class PlotManager{
 ///////// MainAnaPlots /////////
         TGraphAsymmErrors *systUncertainty;
         //histograms
-        TH2F *hMissingPtVsInvMass[nParticles][nRpConfigurations+1][nTotalTPCSysStudies+1];
-        TH1F *hInvMassCorr[nParticles][nRpConfigurations+1][nTotalTPCSysStudies+1];
+        static constexpr unsigned int nTotalTPCTOFSysStudies = nTPCAppSysStudies + nTOFAppSysStudies + nTPCnHitsStudies + nPidVariation + nDcaVariation;
+        TH2F *hMissingPtVsInvMass[nParticles][nRpConfigurations+1][nTotalTPCTOFSysStudies+1];
+        TH1F *hInvMassCorr[nParticles][nRpConfigurations+1][nTotalTPCTOFSysStudies+1];
         TH1F *hBcgSysStudy[nParticles][nRpConfigurations+1];
 
-        TH1F *hDeltaPhi[nParticles][nRpConfigurations+1][nTotalTPCSysStudies+1]; 
-        TH2F *hMissingPtVsDeltaPhi[nParticles][nRpConfigurations+1][nTotalTPCSysStudies+1];      
+        TH1F *hDeltaPhi[nParticles][nRpConfigurations+1][nTotalTPCTOFSysStudies+1]; 
+        TH2F *hMissingPtVsDeltaPhi[nParticles][nRpConfigurations+1][nTotalTPCTOFSysStudies+1];      
 
         struct hGroup {
             TH1F** hMain;
@@ -117,11 +119,16 @@ class PlotManager{
         TH1D *hTPCPtEff[nParticles][nSigns];
         TH2D *hTPCEtaPhiEff[nParticles][nSigns];
 
+        TH1D *hTOFPhiEff[nParticles][nSigns];
+        TH2D *hTOFEtaZEff[nParticles][nSigns];
+        TH1D *hTOFPtEff[nParticles][nSigns];
+        TH2D *hTOFEtaPhiEff[nParticles][nSigns];
+
 ///////// PlotMainAna /////////
         void runAnaPlots();
         void initMainAnaPlots();
         void PlotMainAnaPlots();
-        void loopThroughTree(int nHitVar = -1);
+        void loopThroughTree(UInt_t tpcAppMethod, UInt_t tofAppMethod, UInt_t nHitsFit, UInt_t nHitsDeDx, UInt_t pidMethod, UInt_t dcaMethod, int id);
         void correctMainPlotsForBinWidth();
         void subtractBackgroundFromMainPlots();
         void integrateCrossSection(hGroup mainHists, TString hName);
@@ -144,26 +151,28 @@ class PlotManager{
         inline double getRetainCorrection() { return 1.39 * exp(-0.01468*mInstLumiPerRun[ mCurrentTree->getRunNumber() ]); }; // not use
         inline double getRpEff() { return rpEff[ mCurrentTree->getBranch(E) ]*rpEff[ mCurrentTree->getBranch(W) ]; };
         inline double getVertexCutEff() { return mVertexEffPerFill[mCurrentTree->getFillNumber()]; };
-        inline double getVertexReconstructionEff() { return vertexRecoEff; };
+        inline double getVertexReconstructionEff(UInt_t dca = NOMINAL) { return vertexRecoEff[dca]; };
         inline double getPtMissEff() { return mPtMissEff[mCurrentTree->getPairID()][getRpCombination()]; };
-        inline double getTofEff() { return tofEff[ 2*mCurrentTree->getPairID() ]*tofEff[ 2*mCurrentTree->getPairID() + 1 ]; };
         inline double getLuminosity() { return correctedIntegLum; };
 
-        double getPIDEff();
-        double getTpcEff(int sysStudy = 0);
+        double getPIDEff(UInt_t var);
+        double getTpcEff(UInt_t varApp, UInt_t nHitsFit, UInt_t nHitsDeDx);
+        double getTofEff(UInt_t varApp); 
 ///////// PlotSysStudy /////////
         void PlotSysStudy();
         void DrawSysUncertainty(hGroup mainHists, bool drawCanvas = false);
         void PlotVariation(TH1* hist, const char* outputFileName); 
-        void runNHitsVarStudy();
+        void runSysStudy();
 
 ///////// PlotGraniitti /////////
         double graniittiScaleFactor[nParticles][nRpConfigurations];
 
         TH1F *hInvMassGran[nParticles][nRpConfigurations];
-        TH1F *hDeltaPhiGran[nParticles][nRpConfigurations]; 
+        TH1F *hDeltaPhiGran[nParticles][nRpConfigurations];
+        TH1F *hInvMassGranCon[nParticles][nRpConfigurations];
+        TH1F *hDeltaPhiGranCon[nParticles][nRpConfigurations]; 
         void initGraniittiPlots();
-        TH1F* GetGraniittiPlot(int part, int rpCon, TString hName, double dataIntegral, bool scale);
+        TH1F* GetGraniittiPlot(int part, int rpCon, TString hName, double dataIntegral, bool scale, bool continuum = false);
         double getGraniittiSF(int part, int rpCon);
 ///////// PlotProbOfRetainEvent /////////
         std::map< int, int> mTotal;
@@ -203,7 +212,9 @@ class PlotManager{
         void runRPEff();
         void plotGradientAndFindStableRegions(TH2D *hist, TString hName, int side);
         void runRPEffStudy();
-
+///////// Elastic ana //////////////
+        void vertexStudy();
+        void elasticStudy();
 ///////// Trigger efficiency /////////
 
         // Efficiency plots
@@ -216,8 +227,8 @@ class PlotManager{
         void CalculateEfficiency(TString effString, unsigned int nPassed, unsigned int nTotal);
 
 ///////// Usefull plotting functions /////////
-        void CreateCanvas(TCanvas **can, TString canName);
-        void WriteCanvas(TString canName, TCanvas *can = nullptr);
+        void CreateCanvas(TCanvas **can, TString canName, double width = 1920.0, double heigth = 1080.0);
+        void WriteCanvas(TString canName = "", TCanvas *can = nullptr);
         void SetAxisStyle(TAxis *axis);
         void SetAxisStyle(TGaxis *axis);
         void SetHistStyle(TH1* hist, Int_t color = mainColor, Int_t markStyle = mainMarker);
@@ -235,7 +246,7 @@ class PlotManager{
         void DrawMainText(int part, int rpCon);            
         void DrawSystemDescription(int part = -1, double xl = 0.35, double yl = 0.88, double xr = 0.88, double yr = 0.95);
         //void DrawForwardProtonKin(double xl = 0.64, double yl = 0.63, double xr = 0.9, double yr = 0.84);
-        void DrawForwardProtonKin(int rpCon = nRpConfigurations, double xl = 0.64, double yl = 0.68, double xr = 0.9, double yr = 0.84);
+        void DrawForwardProtonKin(int rpCon = nRpConfigurations, double xl = 0.6, double yl = 0.68, double xr = 0.9, double yr = 0.84);
         void DrawCentralKin(int part, double xl = 0.47, double yl = 0.63, double xr = 0.62, double yr = 0.84);
         void SetPalletRange(TH1* hist, double min = 0.88, double max = 0.9);
 

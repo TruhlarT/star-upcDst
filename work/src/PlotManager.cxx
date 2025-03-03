@@ -27,7 +27,7 @@ int main(int argc, char** argv)
    {
       if( DEBUG )
          cerr<<"PlotManager::main() going to run runEmbeddingStudy()"<<endl;
-      for (int i = 0; i < nParticles; ++i)
+      for (int i = 0; i < nParticles; ++i) 
       {
          pm->initEmbeddingStudy(i);
          pm->runEmbeddingStudy();
@@ -43,26 +43,33 @@ int main(int argc, char** argv)
       pm->runTofQA();
    }
 
-   if( runTRIGEFF )
+   if( runTRIGEFF)
    {
       if( DEBUG )
          cerr<<"PlotManager::main() going to run runDsmEffStudy()"<<endl;
       pm->runDsmEffStudy( kTRIGEFF );
+      /*
       if( DEBUG )
          cerr<<"PlotManager::main() going to run runTofTrigStudy()"<<endl;
       pm->runTofTrigStudy();
       if( DEBUG )
          cerr<<"PlotManager::main() going to run runRpTrigStudy()"<<endl;
-      pm->runRpTrigStudy();
+      pm->runRpTrigStudy();*/
    }
 
-   if( runFULLZB ){
-      if( DEBUG )
+   if( runFULLZB){
+      /*if( DEBUG )
          cerr<<"PlotManager::main() going to run runProbOfRetainEvent()"<<endl;
-      pm->runProbOfRetainEvent();
+      pm->runProbOfRetainEvent();*/
       if( DEBUG )
          cerr<<"PlotManager::main() going to run runDsmEffStudy()"<<endl;
       pm->runDsmEffStudy( kFULLZB );
+   }
+
+   if( runELASTICANA ){
+      if( DEBUG )
+         cerr<<"PlotManager::main() going to run runElasticStudy()"<<endl;
+      pm->runElasticStudy();      
    }
 
    if( runRPMCANA )
@@ -295,13 +302,13 @@ bool PlotManager::loadEfficiencies()
       mVertexEffPerFill[fill] = 0.5*(eff + dataEff);
       mVertexEffErrorPerFill[fill] = abs(eff - dataEff);
    }
-   // load TPC plots and calulcate eff hist 
-   auto effhist = [&](TString dir, TString val, int part)
+   // load TPC or TOF plots and calulcate eff hist 
+   auto effhist = [&](TString dir, TString val, TString suffixTotal, TString suffixPassed, int part)
    {
       // Retrieve the canvas from the file
       TH1D* hist = nullptr;
       
-      TCanvas *canvas = (TCanvas*)effFile->Get(dir + "/" + val);
+      TCanvas *canvas = (TCanvas*)effFile->Get(dir + "/" + val + suffixPassed);
       if (!canvas) {
          std::cerr << "Error in PlotManager::loadEfficiencies() while retrieving first canvas!" << std::endl;
          return hist;
@@ -313,7 +320,7 @@ bool PlotManager::loadEfficiencies()
          return hist;
       }
 
-      canvas = (TCanvas*)effFile->Get(dir + "/" + val  + "_TrueMc");
+      canvas = (TCanvas*)effFile->Get(dir + "/" + val  + suffixTotal);
       if (!canvas) {
          std::cerr << "Error in PlotManager::loadEfficiencies() while retrieving second canvas!" << std::endl;
          return hist;
@@ -330,20 +337,20 @@ bool PlotManager::loadEfficiencies()
    };
 
 
-   // load TPC eff 2D plots 
+   // load TPC or TOF eff 2D plots 
    auto effhist2D = [&](TString dir, TString val, int part)
    {
       // Retrieve the canvas from the file
       TH2D* hist = nullptr;
-      TCanvas *canvas = (TCanvas*)effFile->Get(dir + "/" + val  + "_Eff");
+      TCanvas *canvas = (TCanvas*)effFile->Get(dir + "/" + val);
       if (!canvas) {
-         std::cerr << "Error in PlotManager::loadEfficiencies() while retrieving first canvas!" << std::endl;
+         std::cerr << "Error in PlotManager::loadEfficiencies() while retrieving canvas: "<< dir + "/" + val << std::endl;
          return hist;
       }
 
       TH2D *hEff = (TH2D*)canvas->GetPrimitive("hPassed");
       if (!hEff) {
-         std::cerr << "Error in PlotManager::loadEfficiencies() while retrieving first histogram!" << std::endl;
+         std::cerr << "Error in PlotManager::loadEfficiencies() while retrieving histogram: hPassed" << std::endl;
          return hist;
       }
 
@@ -384,10 +391,16 @@ bool PlotManager::loadEfficiencies()
    {
       for (unsigned int iCharge = 0; iCharge < nSigns; ++iCharge)
       {
-         hTPCPhiEff[iPart][iCharge] = effhist("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "phi", iCharge);
-         hTPCEtaZEff[iPart][iCharge] = effhist2D("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "VertexEta", iCharge);
-         hTPCPtEff[iPart][iCharge] = effhist("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "pTInGev", iCharge);
-         hTPCEtaPhiEff[iPart][iCharge] = effhist2D("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "PhiEta", iCharge);
+         hTPCPhiEff[iPart][iCharge] = effhist("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "phi", "_TrueMc", "", iCharge);
+         hTPCEtaZEff[iPart][iCharge] = effhist2D("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "VertexEta_Eff", iCharge);
+         hTPCPtEff[iPart][iCharge] = effhist("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "pTInGev", "_TrueMc", "", iCharge);
+         hTPCEtaPhiEff[iPart][iCharge] = effhist2D("Embedding/TpcEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "PhiEta_Eff", iCharge);
+
+         hTOFPhiEff[iPart][iCharge] = effhist("Embedding/TofEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "phi", "", "_Tof", iCharge);
+         hTOFEtaZEff[iPart][iCharge] = effhist2D("Embedding/TofEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "VertexEta_TofEff", iCharge);
+         hTOFPtEff[iPart][iCharge] = effhist("Embedding/TofEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "pTInGev", "", "_Tof", iCharge);
+         hTOFEtaPhiEff[iPart][iCharge] = effhist2D("Embedding/TofEff/" + mUtil->particleName(iPart) + mUtil->signName(iCharge), "PhiEta_TofEff", iCharge);
+
 
          for (unsigned int i = 0; i < nTPCnHitsStudies+1; ++i){
             tpcEff[i][2*iPart + iCharge] = getEff( mUtil->particleName(iPart) + mUtil->signName(iCharge), i);

@@ -39,10 +39,14 @@ int main(int argc, char** argv)
       mAnaVector.push_back(new TofEff(outFile));
       runRP = true;
    }
-   if( runTRIGEFF )
+   if( runTRIGEFF ){
       mAnaVector.push_back(new TrigEff(outFile));
-   if( runFULLZB )
+      runRP = true;
+   }
+   if( runFULLZB ){
       mAnaVector.push_back(new FullZB(outFile));
+      runRP = true;
+   }
    if( runELASTICANA ){
       mAnaVector.push_back(new ElasticAna(outFile));
       runRP = true;
@@ -177,7 +181,7 @@ void RunRpMcAna(Long64_t iev)
 
       mcTree->GetEntry(iMcEvnt++);
       mRpMCAna->SetEvent(upcEvt, rpEvt, mcEvt);
-      mRpMCAna->SetMCInfo( mc_vrtx, mc_p);
+      mRpMCAna->SetMCInfo( mc_vtx, mc_p);
       if(!mRpMCAna->AreTracksInRp())
          continue;
 
@@ -479,9 +483,9 @@ bool ConnectInput(int argc, char** argv)
    
    if( runRPMCANA ){
       mcTree->SetBranchAddress("StRPEvent", &mcEvt); 
-      mcTree->SetBranchAddress("mX_IP", &mc_vrtx[0]); 
-      mcTree->SetBranchAddress("mY_IP", &mc_vrtx[1]); 
-      mcTree->SetBranchAddress("mZ_IP", &mc_vrtx[2]); 
+      mcTree->SetBranchAddress("mX_IP", &mc_vtx[0]); 
+      mcTree->SetBranchAddress("mY_IP", &mc_vtx[1]); 
+      mcTree->SetBranchAddress("mZ_IP", &mc_vtx[2]); 
       mcTree->SetBranchAddress("mPx_RPE", &mc_p[0][E]); 
       mcTree->SetBranchAddress("mPy_RPE", &mc_p[1][E]); 
       mcTree->SetBranchAddress("mPz_RPE", &mc_p[2][E]); 

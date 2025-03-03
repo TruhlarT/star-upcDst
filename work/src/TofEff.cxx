@@ -100,6 +100,9 @@ void TofEff::Make(){
       if(!IsGoodTrack(trk))
          continue; 
 
+      if( abs(trk->getNSigmasTPC(StUPCTrack::kPion)) > 3 )
+         continue;
+
       hadronId.push_back(trackID);
       totalCharge += static_cast<int>( trk->getCharge() );
    } 

@@ -11,22 +11,24 @@ void PlotManager::runDsmEffStudy(int study)
    hDSMEff[0] = new TH1D("hDSMEff_total_"+dataSetName, "hDSMEff_total", nDSMEFF-1, 1, nDSMEFF);
    hDSMEff[1] = new TH1D("hDSMEff_passed_"+dataSetName, "hDSMEff_passed", nDSMEFF-1, 1, nDSMEFF);
 
+
    CheckDSMEff( mRecTree[study] );
    if(!TEfficiency::CheckConsistency(*hDSMEff[1],*hDSMEff[0])){
       cout<<"Error in printEfficiencies: CheckConsistency()"<<endl;
       return;
    }
 
-   TEfficiency* pEff = new TEfficiency(*hDSMEff[1],*hDSMEff[0]);
 
+   TEfficiency* pEff = new TEfficiency(*hDSMEff[1],*hDSMEff[0]);
    CreateCanvas(&canvas,"DSMEff_"+dataSetName);
    gPad->SetMargin(0.13,0.03,0.23,0.02); // (Float_t left, Float_t right, Float_t bottom, Float_t top)
    TGraphAsymmErrors *gr = pEff->CreateGraph();
    SetGraphStyle(gr);
    gr->SetTitle(";;DSM bit eff");
-   gr->GetYaxis()->SetTitleOffset(2.1);
+   gr->GetYaxis()->SetTitleOffset(2.1); 
+
    for(int tb=1; tb<=nDSMEFF; ++tb)
-      gr->GetXaxis()->SetBinLabel(gr->GetXaxis()->FindBin(tb+0.5) , dsmEffName[tb-1]);
+      gr->GetXaxis()->SetBinLabel(round(7.05*tb) + 4, dsmEffName[tb-1]);
 
    gr->Draw("ap");
 
@@ -49,7 +51,7 @@ void PlotManager::DrawDataSetInfo( TString dataSet )
    if( dataSet == studyName[kFULLZB]){
       CreateText(0.17,0.64,0.4,0.79);
       text -> AddText("Zero-bias data");   
-      text -> AddText("1 TOF prim. vrtx");
+      text -> AddText("1 TOF prim. vtx");
       text -> AddText("2 TOF prim. trks");
       text -> Draw("same");
    }

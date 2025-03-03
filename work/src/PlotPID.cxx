@@ -3,12 +3,13 @@
      
 void PlotManager::runM2Plots()
 {
-   vector<TString> stratName = { TString("noM2noPt"), TString("noM2"), TString("StrictDEdx"), TString("FullPID") };
-   vector<TString> setName = { TString("BeforeTotCharge"), TString("AfterTotCharge"), TString("Exclusive") };
+   vector<TString> stratName =  { TString("noM2") }; //{ TString("noM2noPt"), TString("noM2"), TString("StrictDEdx"), TString("FullPID") };
+   vector<TString> setName = { TString("Exclusive") }; //{ TString("BeforeTotCharge"), TString("AfterTotCharge"), TString("Exclusive") };
    vector<TString> partName = { TString("All pairs"), TString("#pi^{+}#pi^{-} (dE/dx)"),
                            TString("K^{+}K^{-} (dE/dx)"), TString("p#bar{p} (dE/dx)") };
 
    vector<int> colorSet = { 4, 209, 2, 1};
+   short lineStyles[] = {1, 2, 5, 6}; 
    changeSubDir("m2plots");
 
    TH1D *hist[ partName.size() ];
@@ -16,7 +17,8 @@ void PlotManager::runM2Plots()
    {
       for (unsigned int stat = 0; stat < setName.size(); ++stat)
       {
-         CreateCanvas(&canvas, stratName[pid] + "_" + setName[stat]);
+         CreateCanvas(&canvas, stratName[pid] + "_" + setName[stat], 1165.0, 980.0);
+         gPad->SetMargin( 0.11, 0.03, 0.11, 0.01);
          canvas->SetLogy();
          CreateLegend( 0.7, 0.65, 0.97, 0.89);
 
@@ -29,6 +31,7 @@ void PlotManager::runM2Plots()
                continue;
             } 
             SetHistStyle(hist[part], colorSet[part], 20);
+            hist[part]->SetLineStyle(lineStyles[part]);
             hist[part]->SetTitle(";m^{2}_{TOF} [GeV^{2}];Number of events");
             if( part == 0)
                hist[part]->Draw("");
@@ -39,18 +42,18 @@ void PlotManager::runM2Plots()
          }
          legend->Draw("same");
 
-         CreateLine(m2minKaons,0,m2minKaons,hist[0]->GetMaximum()/2);
+         CreateLine(m2minKaons[NOMINAL],0,m2minKaons[NOMINAL],hist[0]->GetMaximum()/2);
          line->SetLineStyle(10);
          line->SetLineColor(2);
          line->SetLineWidth(4);
          line->Draw("same");
 
-         CreateLine(m2minProtons,0,m2minProtons,hist[0]->GetMaximum()/2);
+         CreateLine(m2minProtons[NOMINAL],0,m2minProtons[NOMINAL],hist[0]->GetMaximum()/2);
          line->SetLineStyle(10);
          line->SetLineColor(1);
          line->SetLineWidth(4);
          line->Draw("same");
-
+         
          mCurrDir->cd();
          //canvas->Update();
          WriteCanvas(stratName[pid] + "_" + setName[stat]);
@@ -61,11 +64,69 @@ void PlotManager::runM2Plots()
 
 void PlotManager::drawMissIdProbability() 
 {
-   const char* histNames[4] = {"hUndefined", "hPions", "hKaons", "hProtons"};
-   const char* labels[3][4] = {
+   
+
+   TString histNames[4] = {"hUndefined", "hPions", "hKaons", "hProtons"};
+   TString labels[3][4] = {
      {"#pi^{+}#pi^{-} #rightarrow not identified", "#pi^{+}#pi^{-} #rightarrow #pi^{+}#pi^{-}", "#pi^{+}#pi^{-} #rightarrow K^{+}K^{-}", "#pi^{+}#pi^{-} #rightarrow p#bar{p}"},
      {"K^{+}K^{-} #rightarrow not identified", "K^{+}K^{-} #rightarrow #pi^{+}#pi^{-}", "K^{+}K^{-} #rightarrow K^{+}K^{-}", "K^{+}K^{-} #rightarrow p#bar{p}"},
      {"p#bar{p} #rightarrow not identified", "p#bar{p} #rightarrow #pi^{+}#pi^{-}", "p#bar{p} #rightarrow K^{+}K^{-}", "p#bar{p} #rightarrow p#bar{p}"}
+   };
+
+   auto DrawAveragePIDEff = [&](TH2F* hist, unsigned int ID)
+   {
+      
+      TH1D *hAverageEff = new TH1D(TString(hist->GetName()) + "_AverageEff",";Eff;",100,0.0,1.0);
+      TCanvas *canvasEff;
+      CreateCanvas(&canvasEff,TString(hist->GetName()) + "_AverageEff"); 
+      SetHistStyle(hAverageEff); 
+      // Loop through the bins and get the bin content
+      for (int i = 1; i <= hist->GetNbinsY(); ++i) { 
+         double ptMin = hist->GetYaxis()->GetBinCenter(i);
+         if( ptMin < minPt[ID] ) continue;
+         if( ptMin > minPtPair[ID] && ID > PION ) continue;
+
+         for (int j = 1; j <= hist->GetNbinsX(); ++j){
+            double eff = hist->GetBinContent(j, i);
+            if( eff != 0.0)
+               hAverageEff->Fill( eff);
+         }
+      }
+
+      hAverageEff->SetStats(true);
+      hAverageEff->Draw("");
+      /*
+      cout<<"A"<<endl;
+      TFitResultPtr fitResult = hAverageEff->Fit("gaus", "S");
+      cout<<"A"<<endl;
+      CreateText(0.1, 0.85, 0.4, 0.95);
+      text->AddText( Form("#mu = %0.3f #pm %0.3f",fitResult->Parameter(1),fitResult->Error(1)) );
+      text->AddText( Form("#sigma = %0.3f #pm %0.3f",fitResult->Parameter(2),fitResult->Error(2)) );   
+      text->Draw("same");
+      */
+      changeSubDir("MissID");
+      WriteCanvas("", canvasEff);
+      canvasEff->Close();
+   };
+
+   auto CalculateContamination = [&](TH2F* hist, TH2F* hist2, unsigned int trueID, unsigned int recoID)
+   {
+      recoID -= 1;
+      double nPairs = 0;
+      double nPairsOrig = 0;
+      for (int i = 1; i <= hist->GetNbinsY(); ++i) { 
+         double ptMin = hist->GetYaxis()->GetBinCenter(i);
+         if( ptMin < minPt[recoID] ) continue;
+
+         for (int j = 1; j <= hist->GetNbinsX(); ++j){
+            double eff = hist->GetBinContent(j, i);
+            double nTruePairs = hist2->GetBinContent(j, i);
+            nPairsOrig += hist2->GetBinContent(j, i);
+            if( eff != 0.0)
+               nPairs +=  nTruePairs*eff;
+         }
+      }
+      cout<<Form("For %ss I have identified %f pairs of %ss out of %f: %f",mUtil->particleName(trueID).Data(), nPairs,mUtil->particleName(recoID).Data(), nPairsOrig, nPairs/nPairsOrig)<<endl;
    };
      
    // Number of PADS
@@ -81,32 +142,47 @@ void PlotManager::drawMissIdProbability()
 
    TPad *pad[Nx][Ny];
    const double textSize = 20; 
+   TString binning = "(26,0.2,2.8,26,0.2,2.8)";
    for (Int_t i = 0; i < Ny; i++) {
       tmpCanvas->cd();
       mTree[kEMBEDING] = dynamic_cast<TTree*>( embFile[i]->Get( nameOfTree[kEMBEDING] ) );
-
-      const char* histName = "histTot";
+      TString histName = "histTot"+mUtil->particleName(i);
       //const char* cuts = Form("pTInGev0 > %f && pTInGev1 > %f",minPt[i],minPt[i]);
-      const char* cuts = Form("treeState == 3 && pTInGev0 > %f && pTInGev1 > %f",minPt[i],minPt[i]);
-      const char* binning = "(26,0.2,2.8,26,0.2,2.8)";
-      const char* var = "TMath::Min(pTInGev0,pTInGev1):TMath::Max(pTInGev0,pTInGev1)";
+      TString cuts = Form("treeState == 3 && pTInGev0 > %f && pTInGev1 > %f",minPt[i],minPt[i]);
+      TString var = "TMath::Min(pTInGev0,pTInGev1):TMath::Max(pTInGev0,pTInGev1)";
       tmpCanvas->cd();
-      mTree[kEMBEDING]->Draw(Form("%s>>%s%s", var, histName, binning), cuts, "colz");
+      mTree[kEMBEDING]->Draw(Form("%s>>%s%s", var.Data(), histName.Data(), binning.Data()), cuts, "colz");
       TH2F* histTot = (TH2F*)gPad->GetPrimitive(histName);
+      
+      TString histName2 = "histTot2"+mUtil->particleName(i);
+      TString cuts2 = Form("pTMissing < %f && pairID == %i && pTInGev0 > %f && pTInGev1 > %f",exclusivityCut, i, minPt[i],minPt[i]);
+      mTree[kMAINANA]->Draw(Form("%s>>%s%s", var.Data(), histName2.Data(), binning.Data()), cuts2, "colz");
+      TH2F* histTot2 = (TH2F*)gPad->GetPrimitive(histName2);
+
       for (Int_t j = 0; j < Nx; j++) {
-         histName = histNames[j];
+         histName = TString(histNames[j]) + "From" + +mUtil->particleName(i);
 
          tmpCanvas->cd();
-         mTree[kEMBEDING]->Draw(Form("%s>>%s%s", var, histName, binning), Form("pairID == %i && %s", -1 + j, cuts), "colz");
+         mTree[kEMBEDING]->Draw(Form("%s>>%s%s", var.Data(), histName.Data(), binning.Data()), Form("pairID == %i && %s", j-1, cuts.Data()), "colz");
          TH2F* hist = (TH2F*)gPad->GetPrimitive(histName);
+
          hist->Divide(histTot);
          SetHistStyle(hist);
          
          if( i == j-1 ){ // true partile == reconstructed one
-            hPIDEff[i] = (TH2F*)hist->Clone(Form("pidEff_%s",histNames[j]));
-            hPIDEff[i]->SetDirectory(0);
+            hPIDEff[i][NOMINAL] = (TH2F*)hist->Clone(Form("pidEff_%s",mUtil->particleName(i).Data()));
+            hPIDEff[i][NOMINAL]->SetDirectory(0);
+            for (unsigned int iPid = LOOSE; iPid <= nPidVariation; ++iPid)
+            {
+               hPIDEff[i][iPid] = (TH2F*)histTot->Clone(Form("pidEffTot_%s_%s",mUtil->particleName(i).Data(), mUtil->pidVaryName(iPid-1).Data()));
+               hPIDEff[i][iPid]->SetDirectory(0);
+            }
          }
       
+         if( j > 0){
+            //DrawAveragePIDEff(hist, j-1);
+            CalculateContamination(hist, histTot2, i, j);
+         }
          canvas->cd(0);
 
          // Get the pads previously created.
@@ -138,20 +214,19 @@ void PlotManager::drawMissIdProbability()
          }else
             hist->Draw("colz"); 
 
-         CreateLine(0.2,minPt[i],2.7,minPt[i]);
-         line->SetLineColor(1);
-         line->SetLineWidth(3);
-         line->Draw("same");
-
-         if( i > 0)
-         {
-            double cut = minPtPair[i]; 
-            CreateLine(0.5,cut,2.7,cut);
+         if( j > 0){
+            CreateLine(0.2,minPt[j-1],2.7,minPt[j-1]);
             line->SetLineColor(1);
             line->SetLineWidth(3);
             line->Draw("same");
+            if( j > PION)
+            {
+               CreateLine(0.5,minPtPair[j-1],2.7,minPtPair[j-1]);
+               line->SetLineColor(1);
+               line->SetLineWidth(3);
+               line->Draw("same");
+            }
          }
-
          TLatex latex;
          latex.SetTextSize(textSize*1.5); // Make text larger
          latex.SetTextFont(fontStyle); // Set to bold text
@@ -159,12 +234,64 @@ void PlotManager::drawMissIdProbability()
          latex.DrawLatex(XtoPad(0.1), YtoPad(0.8), labels[i][j]);
       }
    }
-   tmpCanvas->Close();
-   // Optionally save the canvas to a file        
-   changeSubDir("MissID");
+   tmpCanvas->Close();  
+   changeSubDir("MissID");     
    WriteCanvas("missIdProbability");
    canvas->Close();
-}
+
+
+   //load efficiencies for PID sys study
+   for (int iPar = 0; iPar < nParticles; ++iPar)
+   {
+      mTree[kEMBEDING] = dynamic_cast<TTree*>( embFile[iPar]->Get( nameOfTree[kEMBEDING] ) );
+      mCurrentTree = new RecTree(mTree[kEMBEDING], treeBits[kEMBEDING] );
+      if (!mCurrentTree){ 
+         cerr<<"Error: cannot loaded recTree in PlotPID::drawMissIdProbability"<<endl; 
+         return;
+      }
+      int treeState;
+      mTree[kEMBEDING]->SetBranchAddress("treeState", &treeState);
+
+      TH2F* hist[nPidVariation];
+      for (unsigned int iPid = LOOSE; iPid <= nPidVariation; ++iPid)
+      {
+         hist[iPid-1] = (TH2F*)hPIDEff[iPar][iPid]->Clone(Form("pidEffPassed_%s_%s",mUtil->particleName(iPar).Data(),mUtil->pidVaryName(iPid-1).Data()));
+         hist[iPid-1]->Reset("ICESM");
+         hist[iPid-1]->SetDirectory(0);
+      }
+
+      for(Long64_t iev=0; iev<mTree[kEMBEDING]->GetEntries(); ++iev)
+      { //get the event
+         mTree[kEMBEDING]->GetEntry(iev); 
+
+         if( treeState != 3)
+            continue;
+
+         if( mCurrentTree->getPtInGev(PLUS) < minPt[iPar] || mCurrentTree->getPtInGev(MINUS) < minPt[iPar])
+            continue;
+
+         for (unsigned int iPid = 1; iPid <= nPidVariation; ++iPid)
+         {
+            mCurrentTree->CalculatePID(false, true, iPar, iPid); 
+
+            if( mCurrentTree->getPairID() == iPar)
+               hist[iPid-1]->Fill(TMath::Max(mCurrentTree->getPtInGev(PLUS),mCurrentTree->getPtInGev(MINUS)), TMath::Min(mCurrentTree->getPtInGev(PLUS),mCurrentTree->getPtInGev(MINUS)));
+         }
+      } 
+      
+      //changeSubDir("MissID");
+      for (unsigned int iPid = 1; iPid <= nPidVariation; ++iPid)
+      {
+         //hPIDEff[iPar][iPid]->Write(Form("pidEffTot_%s_%s",mUtil->particleName(iPar).Data(),mUtil->pidVaryName(iPid-1).Data()));
+         //hist[iPid-1]->Write(Form("pidEffPassed_%s_%s",mUtil->particleName(iPar).Data(),mUtil->pidVaryName(iPid-1).Data()));
+
+         hist[iPid-1]->Divide(hPIDEff[iPar][iPid]);
+         hPIDEff[iPar][iPid] = hist[iPid-1];
+         //hPIDEff[iPar][iPid]->Write(Form("pidEff_%s_%s",mUtil->particleName(iPar).Data(),mUtil->pidVaryName(iPid-1).Data()));
+      }
+   }
+}//drawMissIdProbability
+
 
 void PlotManager::CanvasPartition(TCanvas *C,const Int_t Nx,const Int_t Ny,
                      Float_t lMargin, Float_t rMargin,

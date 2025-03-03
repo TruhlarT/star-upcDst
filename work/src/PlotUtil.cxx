@@ -2,10 +2,10 @@
 
 //////// Plotting functions
 
-void PlotManager::CreateCanvas(TCanvas **can, TString canName)
+void PlotManager::CreateCanvas(TCanvas **can, TString canName, double width, double heigth)
 {
-   *can = new TCanvas(canName,canName,1920,1080); // 1920/2 = 960
-   gPad->SetMargin(0.07,0.02,0.105,0.03); // (Float_t left, Float_t right, Float_t bottom, Float_t top)
+   *can = new TCanvas(canName,canName,width,heigth); // 1920/2 = 960
+   gPad->SetMargin(0.08,0.02,0.11,0.03); // (Float_t left, Float_t right, Float_t bottom, Float_t top)
    gPad->SetTickx();
    gPad->SetTicky(); 
    //gPad->SetLogy(0);
@@ -32,6 +32,8 @@ void PlotManager::WriteCanvas(TString canName, TCanvas *can)
 {
    if( can == nullptr )
       can = canvas;
+   if( canName == "")
+      canName = can->GetName();
    can->SetName(canName);
    can->Write(canName);
 }//WriteCanvas
@@ -67,7 +69,7 @@ void PlotManager::SetHistStyle(TH1* hist, Int_t color, Int_t markStyle)
    SetAxisStyle(hist->GetXaxis());
    SetAxisStyle(hist->GetYaxis());
    SetAxisStyle(hist->GetZaxis());
-   hist->GetXaxis()->SetTitleOffset(0.9);
+   hist->GetXaxis()->SetTitleOffset(1.0);
    hist->GetYaxis()->SetTitleOffset(1.3);
    hist->GetZaxis()->SetTitleOffset(1.0);
    hist->SetLineColor(color);
@@ -129,7 +131,8 @@ void PlotManager::DrawSTARInternal(double xl, double yl, double xr, double yr)
 {
    CreateText(xl, yl, xr, yr);
    text -> SetTextFont(capitalStyle);
-   text->AddText("STAR Internal");
+   text->AddText("STAR");
+//   text->AddText("STAR Internal");
    text -> Draw("same");
 }
 
@@ -293,8 +296,8 @@ void PlotManager::DrawForwardProtonKin(int rpCon, double xl, double yl, double x
       return;
    CreateText(xl, yl, xr, yr);
    text -> SetTextAlign(12);
-   text -> AddText("Forward proton kinematics:");
-   text -> AddText("  " + mUtil->rpConfigTag(rpCon));
+   text -> AddText("Forward proton kinematics:   " + mUtil->rpConfigTag(rpCon));
+   //text -> AddText(mUtil->rpConfigTag(rpCon));
    //text -> AddText("described in text");
    //text -> AddText(Form("(p_{x} + %.1f)^{2} + p_{y}^{2} < %.2f GeV^{2}",fpPxCenter,fpPRadius));
    //text -> AddText(Form("%.1f GeV < |p_{y}| < %.1f GeV",fpPyMin,fpPyMax));

@@ -5,25 +5,43 @@ MainAna::MainAna(TFile *outFile): Ana(outFile){}
 
 void MainAna::Make()
 {
-   runMainAna(mRecTree, 0, 0); // run standard annalysis
-
+   runMainAna(mRecTree, NOMINAL, NOMINAL); // run standard annalysis
+   
    // Vary nHits fit and dEdx cuts
-   int nHitFitStatus[] = { 1, 2, 0, 0};
-   int nHitDEdxStatus[] = { 0, 0, 1, 2};
-   for (int i = 0; i < nHitsVariation; ++i)
-      runMainAna(mHitsTree[i], nHitFitStatus[i], nHitDEdxStatus[i]);
+   for (unsigned int i = 0; i < nTPCnHitsStudies; ++i){
+      std::pair<VARIATION, VARIATION> nHitsVar = mUtil->varyNHits(i);  
+      runMainAna(mHitsTree[i], nHitsVar.first, nHitsVar.second);
+   }
+
+   // Vary pid cuts
+   VARIATION pidStatus[] = { LOOSE, TIGHT};
+   for (unsigned int i = 0; i < nPidVariation; ++i)
+      runMainAna(mPidTree[i], NOMINAL, NOMINAL, pidStatus[i]);
+
+   for (unsigned int i = 1; i <= nDcaVariation; ++i)
+      runMainAna(mDcaTree[i-1], NOMINAL, NOMINAL, NOMINAL, i);
 
 }//Make
 
-void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus)
+void MainAna::runMainAna(RecTree* recTree, VARIATION nHitFitStatus, VARIATION nHitDEdxStatus, VARIATION pid, unsigned int dca)
 {
+   const VARIATION dcaZStatus[] = { NOMINAL, LOOSE, TIGHT, NOMINAL, NOMINAL};
+   const VARIATION dcaXYStatus[] = { NOMINAL, NOMINAL, NOMINAL, LOOSE, TIGHT};
+
+   VARIATION dcaZ = dcaZStatus[dca]; 
+   VARIATION dcaXY = dcaXYStatus[dca];
+
+
+
    mCurrentTree = recTree;
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+   bool fillPlots = nHitFitStatus == NOMINAL && nHitDEdxStatus == NOMINAL && pid == NOMINAL && dca == NOMINAL;
+
+   if( fillPlots ) 
       hAnalysisFlow->Fill(ALL);
    if(!CheckTriggers(&CEPtriggers, mUpcEvt, hTriggerBits))
       return;
 
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+   if( fillPlots ) 
       hAnalysisFlow->Fill(TRIG);
 /*
    for (int iRp = 0; iRp < nRomanPots; ++iRp)
@@ -39,6 +57,7 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
 
    vector<unsigned int> mRpTrackPerSide[nSides];
    unsigned int nRpTracksInFV[] = {0,0,0,0};
+   unsigned int nRpTracksTotal[] = {0,0,0,0};
    for (unsigned int iSide = 0; iSide < nSides; ++iSide)
    {
       for (unsigned int iTrck = 0; iTrck < mRpTrackIdVec_perSide[iSide].size(); ++iTrck)
@@ -46,8 +65,7 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
          StUPCRpsTrack* trackRP = mRpEvt->getTrack(mRpTrackIdVec_perSide[iSide][iTrck]);
          if(!trackRP) 
             return;
-         if(mRpTrackIdVec_perSide[iSide].size() == 1)
-            hRPFV[trackRP->branch()]->Fill(trackRP->pVec().X(), trackRP->pVec().Y());
+         nRpTracksTotal[trackRP->branch()]++;
          if( !RPInFidRange(trackRP->pVec().X(), trackRP->pVec().Y(), trackRP->branch()) )
             continue;
          nRpTracksInFV[trackRP->branch()]++;
@@ -56,12 +74,14 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
       }
    }
 
-   for (int i = 0; i < nBranches; ++i)
+   for (int i = 0; i < nBranches; ++i){
       hNRPTracksInFV[i]->Fill( nRpTracksInFV[i] );
+      recTree->setNRpTracksPerBranch(nRpTracksTotal[i], i);
+   }
 
    if( !(mRpTrackPerSide[E].size()==1 && mRpTrackPerSide[W].size()==1))
       return;
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) hAnalysisFlow->Fill(TWOINFID);
+   if( fillPlots ) hAnalysisFlow->Fill(TWOINFID);
 
    mRPpTBalance = mRpEvt->getTrack( mRpTrackPerSide[E][0] )->pVec() + mRpEvt->getTrack( mRpTrackPerSide[W][0] )->pVec();
 
@@ -69,7 +89,7 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
    hNTOFVerticies->Fill( mUpcEvt->getNumberOfVertices() );
    if( mUpcEvt->getNumberOfVertices() != 1) 
       return;
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+   if( fillPlots ) 
       hAnalysisFlow->Fill(ONETOFVX);
 
    // save event info
@@ -80,7 +100,7 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
    hZVertex->Fill( mCurrentTree->getVertexZInCm() );
    if( abs(mCurrentTree->getVertexZInCm()) > vertexRange ) 
       return;
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+   if( fillPlots ) 
       hAnalysisFlow->Fill(ZVERTEX);
 
    unsigned int vertexID = mUpcEvt->getVertex(0)->getId();
@@ -98,7 +118,7 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
          continue;
 
       // count number of good quality TPC tracks in the vertex
-      if(IsGoodTrack(trk, nHitFitStatus, nHitDEdxStatus))
+      if(IsGoodTrack(trk, nHitFitStatus, nHitDEdxStatus, dcaZ, dcaXY))
          nTpcGoodTracks++;
 
       if( !trk->getFlag(StUPCTrack::kTof) || !IsGoodTofTrack(trk)) 
@@ -152,7 +172,7 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
    if(hadronId.size() != nSigns)
       return;
 
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+   if( fillPlots ) 
       hAnalysisFlow->Fill(TWOTOFTRKS);
 
    TLorentzVector hadron[nParticles], state[nParticles];
@@ -176,11 +196,11 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
    if( !inEtaRange[PLUS] || !inEtaRange[MINUS])
       return;
 
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+   if( fillPlots ) 
       hAnalysisFlow->Fill(ETA);
 
    mCurrentTree->SaveTriggerInfo(mUpcEvt, mRpEvt);
-   mCurrentTree->CalculatePID();
+   mCurrentTree->CalculatePID(true, true, -1, pid);
 
    hPIDStats[0]->Fill(mCurrentTree->getPairID());
 
@@ -188,8 +208,9 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
    SaveMissingMomenta(missingMomenta);
    mCurrentTree->SaveRPConfigInfo();
 
-   FillMSquared();
-   mCurrentTree->CalculatePID();
+   if( pid == NOMINAL)
+      FillMSquared();
+   mCurrentTree->CalculatePID(true, true, -1, pid);
    if( mCurrentTree->getPairID() == -1)
       return;
 
@@ -197,13 +218,13 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
    mCurrentTree->SaveStateInfo(state[mCurrentTree->getPairID()]);
    if(totalCharge) // Total charge is not zero => background event
    {
-      if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+      if( fillPlots ) 
          mCurrentTree->FillBcgTree(); // Fill background Tree
 
       return;
    }
 
-   if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+   if( fillPlots ) 
       hAnalysisFlow->Fill(OPPOSITE);
 
    hPIDStats[1]->Fill(mCurrentTree->getPairID());
@@ -212,7 +233,7 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
    if( missingMomenta.Pt() < exclusivityCut)
    {
       exclusive = true;
-      if( nHitFitStatus == 0 && nHitDEdxStatus == 0) 
+      if( fillPlots ) 
          hAnalysisFlow->Fill(EXCLUSIVE);
    }
    if( !keepNonExclusive && !exclusive )
@@ -224,12 +245,22 @@ void MainAna::runMainAna(RecTree* recTree, int nHitFitStatus, int nHitDEdxStatus
 
    mCurrentTree->FillRecTree(); // Fill analysis (reco) Tree
 
-   if( mCurrentTree->getPairID() == PION && exclusive && nHitFitStatus == 0 && nHitDEdxStatus == 0)
+   if( mCurrentTree->getPairID() == PION && exclusive && fillPlots )
       hAnalysisFlow->Fill(PIPI);
-   if( mCurrentTree->getPairID() == KAON && exclusive && nHitFitStatus == 0 && nHitDEdxStatus == 0)
+   if( mCurrentTree->getPairID() == KAON && exclusive && fillPlots )
       hAnalysisFlow->Fill(KK);
-   if( mCurrentTree->getPairID() == PROTON && exclusive && nHitFitStatus == 0 && nHitDEdxStatus == 0)
+   if( mCurrentTree->getPairID() == PROTON && exclusive && fillPlots )
       hAnalysisFlow->Fill(PPBAR);
+
+   if( !fillPlots || !exclusive)
+      return;
+
+   for (unsigned int iSide = 0; iSide < nSides; ++iSide)
+   {
+      StUPCRpsTrack* trackRP = mRpEvt->getTrack(mRpTrackPerSide[iSide][0]);
+      hRPFV[trackRP->branch()]->Fill(trackRP->pVec().X(), trackRP->pVec().Y());
+   }
+
 }//runMainAna
 
 void MainAna::Init()
@@ -253,8 +284,12 @@ void MainAna::Init()
       hTriggerBits->GetXaxis()->SetBinLabel(tb+1, label);
    }
    mRecTree = new RecTree(nameOfTree[kMAINANA] , treeBits[kMAINANA], true); 
-   for (int i = 0; i < nHitsVariation; ++i)
+   for (unsigned int i = 0; i < nTPCnHitsStudies; ++i)
       mHitsTree[i] = new RecTree(nameOfTree[kMAINANA] +"_"+mUtil->nHitVaryName(i), treeBits[kMAINANA], false); 
+   for (unsigned int i = 0; i < nPidVariation; ++i)
+      mPidTree[i] = new RecTree(nameOfTree[kMAINANA] +"_"+mUtil->pidVaryName(i), treeBits[kMAINANA], false);
+   for (unsigned int i = 0; i < nDcaVariation; ++i)
+      mDcaTree[i] = new RecTree(nameOfTree[kMAINANA] +"_"+mUtil->dcaVaryName(i), treeBits[kMAINANA], false);
 
    mOutFile->mkdir("CPT2noBBCL")->cd();
    for (int iRp = 0; iRp < 2*nRomanPots; ++iRp)
@@ -279,8 +314,8 @@ void MainAna::Init()
    hNTOFVerticies = new TH1D("hNTOFVerticies","", 10,-0.5,9.5);
    hZVertex = new TH1D("hZVertex","", 80,-200,200);
    hNTOFGoodTracks = new TH1D("hNTOFGoodTracks","", 15,-0.5,14.5);
-   hNHitFit = new TH1D("hNHitFit","", 50, 0, 50.5);
-   hNHitDedx = new TH1D("hNHitDedx","", 50, 0, 50.5);
+   hNHitFit = new TH1D("hNHitFit","", 50, -0.5, 49.5);
+   hNHitDedx = new TH1D("hNHitDedx","", 50, -0.5, 49.5);
    hDcaXY = new TH1D("hDcaXY","", 60,0,3);
    hDCAZ = new TH1D("hDCAZ","", 120,-3.0,3.0);
 

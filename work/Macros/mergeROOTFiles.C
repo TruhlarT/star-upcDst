@@ -12,12 +12,12 @@ void mergeROOTFiles() {
 
     // List of filenames (stored in the nHitsStudy system directory)
     std::vector<std::string> filenames;
-    filenames.push_back("nDedxLoose.root");
-    filenames.push_back("nFitLoose.root");
-    filenames.push_back("nDedxTight.root");
-    filenames.push_back("nFitTight.root");
-    filenames.push_back("nLoose.root");
-    filenames.push_back("nTight.root");
+    filenames.push_back("nHitsDedxLoose.root");
+    filenames.push_back("nHitsFitLoose.root");
+    filenames.push_back("nHitsDedxTight.root");
+    filenames.push_back("nHitsFitTight.root");
+    //filenames.push_back("nLoose.root");
+    //filenames.push_back("nTight.root");
 
     // Create the output ROOT file named "nHitsStudy.root"
     TFile* outputFile = new TFile("nHitsStudy.root", "RECREATE");

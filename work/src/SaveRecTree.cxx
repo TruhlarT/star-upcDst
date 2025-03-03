@@ -88,12 +88,12 @@ void RecTree::SaveStateInfo(TLorentzVector state){
    this->setRap( state.Rapidity() );
 }
 
-void RecTree::SaveVertexInfo(const StUPCVertex *vrtx)
+void RecTree::SaveVertexInfo(const StUPCVertex *vtx)
 {
    mVertexIsSet = true;
-   this->setVertexZInCm( vrtx->getPosZ() );
-   this->setVertexYInCm( vrtx->getPosY() );
-   this->setVertexXInCm( vrtx->getPosX() );
+   this->setVertexZInCm( vtx->getPosZ() );
+   this->setVertexYInCm( vtx->getPosY() );
+   this->setVertexXInCm( vtx->getPosX() );
 }
 
 

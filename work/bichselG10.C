@@ -83,34 +83,34 @@ void bichselG10(TString input) {
    TH2D* hdEdx = (TH2D*)gPad->GetPrimitive("hDEdx");
 
 
-   TCanvas *cCanvas2D = new TCanvas("hDEdx","hDEdx",800,700);
-   gPad->SetMargin(0.12,0.12,0.12,0.02); // (Float_t left, Float_t right, Float_t bottom, Float_t top)
+   TCanvas *cCanvas2D = new TCanvas("hDEdx","hDEdx", 1165.0, 980.0);
+   gPad->SetMargin(0.11,0.12,0.125,0.01); // (Float_t left, Float_t right, Float_t bottom, Float_t top)
    gStyle->SetPalette(1);
    gStyle->SetOptTitle(0);
    gStyle->SetOptDate(0);
-   gStyle->SetLineWidth(2);      //axis line
+   gStyle->SetLineWidth(4);      //axis line
    gStyle->SetFrameLineWidth(2); //frame line
    gPad->SetTickx();
    gPad->SetTicky(); 
    gStyle->SetOptStat("");
    cCanvas2D->SetGridx(0);
    cCanvas2D->SetGridy(0);
-   hdEdx->GetXaxis()->SetTitleFont(42);
-   hdEdx->GetYaxis()->SetTitleFont(42);
-   hdEdx->GetZaxis()->SetTitleFont(42);
-   hdEdx->GetXaxis()->SetLabelFont(42);
-   hdEdx->GetYaxis()->SetLabelFont(42);
-   hdEdx->GetZaxis()->SetLabelFont(42);
+   hdEdx->GetXaxis()->SetTitleFont(43);
+   hdEdx->GetYaxis()->SetTitleFont(43);
+   hdEdx->GetZaxis()->SetTitleFont(43);
+   hdEdx->GetXaxis()->SetLabelFont(43);
+   hdEdx->GetYaxis()->SetLabelFont(43);
+   hdEdx->GetZaxis()->SetLabelFont(43);
    hdEdx->GetYaxis()->SetRangeUser(0.1,1.7);
    hdEdx->GetXaxis()->SetRangeUser(-0.8,1.0);
-   hdEdx->GetXaxis()->SetLabelSize(0.05);
-   hdEdx->GetYaxis()->SetLabelSize(0.05);
-   hdEdx->GetZaxis()->SetLabelSize(0.05);
-   hdEdx->GetXaxis()->SetTitleSize(0.05);
-   hdEdx->GetYaxis()->SetTitleSize(0.05);
-   hdEdx->GetZaxis()->SetTitleSize(0.05);
+   hdEdx->GetXaxis()->SetLabelSize(45);
+   hdEdx->GetYaxis()->SetLabelSize(45);
+   hdEdx->GetZaxis()->SetLabelSize(45);
+   hdEdx->GetXaxis()->SetTitleSize(50);
+   hdEdx->GetYaxis()->SetTitleSize(50);
+   hdEdx->GetZaxis()->SetTitleSize(50);
    hdEdx->GetXaxis()->SetTitleOffset(1.07);
-   hdEdx->GetYaxis()->SetTitleOffset(1.0);
+   hdEdx->GetYaxis()->SetTitleOffset(0.90);
    hdEdx->GetZaxis()->SetTitleOffset(0.50);
    hdEdx->SetStats(0); 
    hdEdx->SetTitle(" ; log_{10} p [GeV] ;log_{10} dE/dx [keV/cm] ");
@@ -118,9 +118,9 @@ void bichselG10(TString input) {
    cCanvas2D->SetLogz(1);
    
    TPaveText *textPub = new TPaveText(0.15,0.88,0.7,0.95,"brNDC");
-   textPub -> SetTextSize(0.05);
+   textPub -> SetTextSize(45);
    textPub -> SetFillColor(0);
-   textPub -> SetTextFont(42);
+   textPub -> SetTextFont(43);
    textPub -> SetTextAlign(12);
    textPub -> AddText("p + p #rightarrow p + h^{+}h^{-} + p     #sqrt{s} = 510 GeV");
    textPub -> Draw("same");
@@ -130,10 +130,11 @@ void bichselG10(TString input) {
    TLegend *leg = new TLegend(0.65,0.55,0.8,0.8);
    leg->SetFillStyle(0);
    leg->SetBorderSize(0);
-   leg->SetTextSize(0.05);
-   leg->SetTextFont(42);
+   leg->SetTextSize(45);
+   leg->SetTextFont(43);
    Double_t xmax = 0.9;
    //  for (int h = 0; h < NMasses; h++) { // Masses
+   short lineStyles[] = {1, 2, 5, 6}; 
    for (int h = 0; h < NF; h++) 
    { // Masses
       Int_t f = 1;
@@ -152,7 +153,7 @@ void bichselG10(TString input) {
       Int_t color = Colors[h];
       func->SetLineColor(color);
       func->SetMarkerColor(color);
-      func->SetLineStyle(1);
+      func->SetLineStyle(lineStyles[h]);
       func->SetLineWidth(4);
       func->Draw("same");
       leg->AddEntry(func,Names[h]);

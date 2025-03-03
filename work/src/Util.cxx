@@ -99,8 +99,8 @@ Util::Util(): mSpeedOfLight(299792458), mBeamMomentum(254.867), mPi(3.1415926535
    mCutName.push_back( TString("All") );
    mCutName.push_back( TString("CPT") );
    mCutName.push_back( TString("2 RP trks in FV") );
-   mCutName.push_back( TString("1 TOF vrtx") );
-   mCutName.push_back( TString(Form("|z_{vrtx}| < %.f",vertexRange)) );
+   mCutName.push_back( TString("1 TOF vtx") );
+   mCutName.push_back( TString(Form("|z_{vtx}| < %.f",vertexRange)) );
    mCutName.push_back( TString("2 good TOF trks") );
    mCutName.push_back( TString("#eta cut") );
    mCutName.push_back( TString("Opposite-sign") );
@@ -120,6 +120,14 @@ Util::Util(): mSpeedOfLight(299792458), mBeamMomentum(254.867), mPi(3.1415926535
    mNHitVaryName.push_back( TString("nHitsFitLoose") );
    mNHitVaryName.push_back( TString("nHitsDEdxTight") );
    mNHitVaryName.push_back( TString("nHitsFitTight") );
+
+   mPidName.push_back( TString("pidLoose") );
+   mPidName.push_back( TString("pidTight") );
+
+   mDcaName.push_back( TString("dcaZLoose") );
+   mDcaName.push_back( TString("dcaZTight") );
+   mDcaName.push_back( TString("dcaXYLoose") );
+   mDcaName.push_back( TString("dcaXYTight") );
 
    mParticleMass[PION] = 0.13957018;
    mParticleMass[KAON] = 0.493667;
@@ -311,3 +319,39 @@ pair<double, double> Util::CalculateMeanAndError(const vector<double>& values)
    // Return a pair containing the mean and the error on the mean
    return make_pair(mean, errorOnMean);
 }//CalculateMeanAndError
+
+
+std::pair<VARIATION, VARIATION> Util::varyNHits(UInt_t var) const
+{
+   const VARIATION nHitFitStatus[] = { LOOSE, TIGHT, NOMINAL, NOMINAL};
+   const VARIATION nHitDEdxStatus[] = { NOMINAL, NOMINAL, LOOSE, TIGHT};
+
+   if( var >= nTPCnHitsStudies){
+      std::cerr << "WARNING in Util::varyNHits(UInt_t var): var out of range, nominal values used" << std::endl;
+      return std::make_pair(NOMINAL, NOMINAL);
+   }
+
+   return std::make_pair(nHitFitStatus[var], nHitDEdxStatus[var]);
+}
+
+unsigned int Util::varyNHits(UInt_t nHitFit, UInt_t nHitDEdx) const
+{
+   if( (nHitFit == NOMINAL && nHitDEdx == NOMINAL) || (nHitFit != NOMINAL && nHitDEdx != NOMINAL) )
+      return 0;
+
+   if( nHitDEdx == NOMINAL)
+      return nHitFit;
+   
+   return nHitDEdx + 2;
+}
+
+
+Double_t Util::smearPt(Double_t pt, UInt_t id)
+{
+   if( id >= nParticles*nSigns)
+      return pt;
+
+   TF1 smearing = TF1("smearing", "[0] + [1]/x + [2]/(x*x) + [3]*x + [4]*x*x", 0.1, 2.5);
+   smearing.SetParameters(smearParam[id]); 
+   return gRandom->Gaus(pt, pt * smearing.Eval(pt));
+}//smearPt

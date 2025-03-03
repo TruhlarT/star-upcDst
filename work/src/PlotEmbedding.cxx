@@ -48,14 +48,14 @@ void PlotManager::runTpcEff()
 
    const unsigned int nVal = 4;
    const char* valName[] = {"pTInGev", "phi", "eta", "vertexZInCm"};
-   TString valLabel[] = {"p_{T} [GeV]", "#phi", "#eta", "true z_{vrtx}"};
+   TString valLabel[] = {"p_{T} [GeV]", "#phi", "#eta", "true z_{vtx}"};
    bool pairFlag[] = {1,1,1,0};
 
    unsigned int nBins[] = { 80, 40, 40, 20 };
    double min[] = { 0.0, -TMath::Pi(), -1.0,-100 }; 
    double max[] = { 3.0, TMath::Pi(), 1.0,100 }; 
 
-   TString cutLabel[] = { Form("|z_{vrtx}| < %.f cm", vertexRange), Form("|#eta| < %.1f", maxEta), Form("p_{T} > %.1f GeV", minPt[embedParticle])};
+   TString cutLabel[] = { Form("|z_{vtx}| < %.f cm", vertexRange), Form("|#eta| < %.1f", maxEta), Form("p_{T} > %.1f GeV", minPt[embedParticle])};
 
 
    const unsigned int nCuts = 3;
@@ -89,7 +89,9 @@ void PlotManager::runTpcEff()
          valCuts.Resize(valCuts.Length() - 4);
          valCutLabel.Resize(valCutLabel.Length() - 2);
 
-         finalCuts = valCuts;
+         finalCuts = valCuts ;
+         //if( finalCuts != "")
+         //   finalCuts+=" && treeState == 2";
          if( pairFlag[iVal] )
             mTree[kEMBEDING]->Draw(Form("%s%i_TrueMc>>h2(%i,%f,%f)",valName[iVal], iPi, nBins[iVal], min[iVal], max[iVal]),finalCuts);
          else
@@ -193,15 +195,23 @@ void PlotManager::runTofEff()
 
    const unsigned int nVal = 4;
    const char* valName[] = {"pTInGev", "phi", "eta", "vertexZInCm"};
-   TString valLabel[] = {"p_{T} [GeV]", "#phi", "#eta", "true z_{vrtx}"};
+   TString valLabel[] = {"p_{T} [GeV]", "#phi", "#eta", "true z_{vtx}"};
    bool pairFlag[] = {1,1,1,0};
 
-   unsigned int nBins[] = { 80, 40, 40, 20 };
+   double scalingFactor[] = { 1.0, 1.0, 1.0, 1.0};
+   unsigned int nBins[] = { 60, 20, 20, 20 };
    double min[] = { 0.0, -TMath::Pi(), -1.0,-100 }; 
    double max[] = { 3.0, TMath::Pi(), 1.0,100 }; 
 
+/*
+    // Binning for comparison with data driven tag-probe method
+   double scalingFactor[] = { 1.0, convertToDegree, 1.0, 1.0};
+   unsigned int nBins[] = { 4, 6, 9, 10 };
+   double min[] = { 0.2, -180, -0.9,-100 }; 
+   double max[] = { 1.0, 180, 0.9,100 }; 
+*/
 
-   TString cutLabel[] = { Form("|z_{vrtx}| < %.f cm", vertexRange), Form("|#eta| < %.1f", maxEta), Form("p_{T} > %.1f GeV", minPt[embedParticle])};
+   TString cutLabel[] = { Form("|z_{vtx}| < %.f cm", vertexRange), Form("|#eta| < %.1f", maxEta), Form("p_{T} > %.1f GeV", minPt[embedParticle])};
 
    const unsigned int nCuts = 3;
    TString cuts[nCuts];
@@ -234,12 +244,11 @@ void PlotManager::runTofEff()
          }
          valCuts.Resize(valCuts.Length() - 4);
          valCutLabel.Resize(valCutLabel.Length() - 2);
-
-         finalCuts = assosiationCuts + " && " + valCuts;
+         finalCuts = assosiationCuts + " && " + valCuts + " && treeState == 3";
          if( pairFlag[iVal] )
-            mTree[kEMBEDING]->Draw(Form("%s%i>>h2(%i,%f,%f)",valName[iVal], iPi, nBins[iVal], min[iVal], max[iVal]),finalCuts);
+            mTree[kEMBEDING]->Draw(Form("%s%i*%f>>h2(%i,%f,%f)",valName[iVal], iPi, scalingFactor[iVal], nBins[iVal], min[iVal], max[iVal]),finalCuts);
          else
-            mTree[kEMBEDING]->Draw(Form("%s_TrueMc>>h2(%i,%f,%f)",valName[iVal], nBins[iVal], min[iVal], max[iVal]),finalCuts);
+            mTree[kEMBEDING]->Draw(Form("%s_TrueMc*%f>>h2(%i,%f,%f)",valName[iVal], scalingFactor[iVal], nBins[iVal], min[iVal], max[iVal]),finalCuts);
          histGenerated = (TH1F*)gPad->GetPrimitive("h2");
          SetHistStyle(histGenerated);
          histGenerated->SetTitle(";" + valLabel[iVal] + ";counts");
@@ -251,9 +260,9 @@ void PlotManager::runTofEff()
 
          finalCuts += Form(" && tofMatched%i", iPi);
          if( pairFlag[iVal] )
-            mTree[kEMBEDING]->Draw(Form("%s%i>>h(%i,%f,%f)",valName[iVal], iPi, nBins[iVal], min[iVal], max[iVal]),finalCuts);
+            mTree[kEMBEDING]->Draw(Form("%s%i*%f>>h(%i,%f,%f)",valName[iVal], iPi, scalingFactor[iVal], nBins[iVal], min[iVal], max[iVal]),finalCuts);
          else
-            mTree[kEMBEDING]->Draw(Form("%s_TrueMc>>h(%i,%f,%f)",valName[iVal], nBins[iVal], min[iVal], max[iVal]),finalCuts);
+            mTree[kEMBEDING]->Draw(Form("%s_TrueMc*%f>>h(%i,%f,%f)",valName[iVal], scalingFactor[iVal], nBins[iVal], min[iVal], max[iVal]),finalCuts);
          histReco = (TH1F*)gPad->GetPrimitive("h");
          SetHistStyle(histReco);
          histReco->SetTitle(";" + valLabel[iVal] + ";counts"); 
@@ -373,10 +382,10 @@ void PlotManager::runEmbedVarDiff()
    TString valLabel[3] = {"p_{T} [GeV]", "#phi", "#eta"};
    double range[3] = {1.0,0.1,0.1};
 
-   for (int iPi = 0; iPi < 2; ++iPi)
+   for (int iPi = 0; iPi < nSigns; ++iPi)
    {
       changeSubDir(piName[iPi]);
-      TString cuts = Form("idTruth%i != -1", iPi); 
+      TString cuts = Form("idTruth%i != -1 && ",iPi) + assosiationCut(iPi) + " && treeState == 3";
       for (int iVal = 0; iVal < 3; ++iVal)
       {
          mTree[kEMBEDING]->Draw(Form("%s%i-%s%i_TrueMc>>h(200,%f,%f)",valName[iVal], iPi,valName[iVal], iPi, -range[iVal], range[iVal]),cuts);
@@ -399,7 +408,7 @@ void PlotManager::runEmbedVarDiff()
    CreateLegend(0.84, 0.74, 0.97, 0.89);
    for (int iPi = 0; iPi < nSigns; ++iPi)
    {
-      TString cuts = Form("idTruth%i != -1", iPi); 
+      TString cuts = Form("idTruth%i != -1 && treeState == 3", iPi); 
       tmpCanvas->cd();
       mTree[kEMBEDING]->Draw(Form("TMath::Sqrt( TMath::Power(eta%i_TrueMc-eta%i, 2) + TMath::Power(phi%i_TrueMc-phi%i, 2))>>htemp%i(100,0.0,0.5)",iPi,iPi,iPi,iPi,iPi),cuts);
       
@@ -421,9 +430,72 @@ void PlotManager::runEmbedVarDiff()
    line->SetLineWidth(4);
    line->Draw("same");
    WriteCanvas("deltaEtaPhi"+mUtil->particleName(embedParticle));
+   canvas->Close();
+
+
+
+   // plot resolution for pT, eta, phi
+   changeDir(kEMBEDING, "Resolution");
+   CreateCanvas(&canvas,"Resolution");
+   gPad->SetMargin(0.09,0.02,0.105,0.03); // (Float_t left, Float_t right, Float_t bottom, Float_t top)
+   canvas->cd();
+/*
+   vector<float> bins;
+   for (int i = 0; i < 8; ++i) bins.push_back(0.2 + i*0.1);
+   for (int i = 0; i <= 10; ++i) bins.push_back(1.0 + i*0.15);
+   for (int iBin = 0; iBin < bins.size() ; ++iBin) cout<<bins[iBin]<<", ";
+*/ 
+   constexpr size_t arraySize = 19; // Specify the size
+   const float bins[arraySize] = {0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.15, 1.3, 1.45, 1.6, 1.75, 1.9, 2.05, 2.2, 2.35, 2.5};
+   TH1F* hSigmas = new TH1F("hSigmas", ";" + valLabel[0] +";#sigma_{p_{T}}", arraySize-1, bins);
+
+   // Define the function to fit
+   TF1 *fitFunc = new TF1("fitFunc", "[0] + [1]/x + [2]/(x*x) + [3]*x + [4]*x*x", 0.1, 2.5); // Fit starts from 0.1 to avoid division by zero
+   fitFunc->SetParameters(0.008, -0.000015, 0.01196, -0.0001, 0.000146); // Initial parameter guesses
+   const char* parLabels[5] = {"a", "b", "c", "d", "e"};
+
+
+   for (int iPi = 0; iPi < nSigns; ++iPi)
+   {
+      changeSubDir(piName[iPi]);
+      TString cuts = Form("idTruth%i != -1 && ",iPi) + assosiationCut(iPi) + " && treeState == 3";
+      for (unsigned int iBin = 0; iBin < arraySize - 1; ++iBin)
+      {
+         tmpCanvas->cd();
+         TString finalCuts = cuts + Form(" && %s%i_TrueMc > %f && %s%i_TrueMc < %f", valName[0], iPi, bins[iBin],valName[0], iPi, bins[iBin+1]);
+         mTree[kEMBEDING]->Draw(Form("(%s%i_TrueMc-%s%i)/%s%i_TrueMc>>h(250,-0.5,.05)",valName[0], iPi,valName[0], iPi, valName[0], iPi),finalCuts);
+         hist = (TH1F*)gPad->GetPrimitive("h");
+         hist->Fit("gaus", "Q");
+         TF1 *gaus = (TF1*)hist->GetListOfFunctions()->FindObject("gaus");
+         hSigmas->SetBinContent(iBin+1, gaus->GetParameter(2));
+         hSigmas->SetBinError(iBin+1, gaus->GetParError(2));
+      }
+      canvas->cd();
+      SetHistStyle(hSigmas);
+      hSigmas->GetYaxis()->SetTitleOffset(1.4);
+      hSigmas->Fit("fitFunc","Q");
+      hSigmas->GetYaxis()->SetRangeUser(0, 2.0*hSigmas->GetMaximum());
+      hSigmas->Draw("");
+      fitFunc->Draw("same");
+
+      CreateLegend(0.15, 0.85, 0.5, 0.95);
+      legend->AddEntry(hSigmas, Form("Data (%s)",  mUtil->particleTag(embedParticle, iPi).Data()), "l");
+      legend->AddEntry(fitFunc, "#sigma_{p_{T}} = a + b/p_{T} + c/p_{T}^{2} + d*p_{T} + e*p_{T}^{2}", "l");
+      legend->Draw();
+
+      CreateText(0.15, 0.55, 0.35, 0.85);
+      // Add the fit parameters and their errors
+      for (int i = 0; i < 5; i++)
+        text->AddText(Form("%s = %.5f #pm %.5f", parLabels[i], fitFunc->GetParameter(i), fitFunc->GetParError(i)));  
+      text->Draw("same");
+
+      WriteCanvas(TString(valName[0]) + "_resolution");
+   }
 
    canvas->Close();
    tmpCanvas->Close();
+
+
 }//runEmbedVarDiff
 
 
@@ -452,12 +524,12 @@ void PlotManager::runEmbeddingQA()
    vector<double> binLow; 
    vector<double> binMax; 
 
-   //AddHist("vertexYInCm","y_{vrtx} [cm]",100,-0.3,0.3,0,histList,labelList,nBins,binLow,binMax,flags);
-   //AddHist("vertexXInCm","x_{vrtx} [cm]",100,-0.3,0.3,0,histList,labelList,nBins,binLow,binMax,flags);
+   //AddHist("vertexYInCm","y_{vtx} [cm]",100,-0.3,0.3,0,histList,labelList,nBins,binLow,binMax,flags);
+   //AddHist("vertexXInCm","x_{vtx} [cm]",100,-0.3,0.3,0,histList,labelList,nBins,binLow,binMax,flags);
 
-   AddHist("vertexZInCm","z_{vrtx} [cm]",100,-100,100,1,histList,labelList,nBins,binLow,binMax,flags);
-   AddHist("vertexYInCm","y_{vrtx} [cm]",100,-0.3,0.3,1,histList,labelList,nBins,binLow,binMax,flags);
-   AddHist("vertexXInCm","x_{vrtx} [cm]",100,-0.3,0.3,1,histList,labelList,nBins,binLow,binMax,flags);
+   AddHist("vertexZInCm","z_{vtx} [cm]",100,-100,100,1,histList,labelList,nBins,binLow,binMax,flags);
+   AddHist("vertexYInCm","y_{vtx} [cm]",100,-0.3,0.3,1,histList,labelList,nBins,binLow,binMax,flags);
+   AddHist("vertexXInCm","x_{vtx} [cm]",100,-0.3,0.3,1,histList,labelList,nBins,binLow,binMax,flags);
 
    int minBin[nParticles] = {-10, -30,-45};
    int maxBin[nParticles] = {25, 25, 25};
@@ -504,12 +576,12 @@ void PlotManager::runEmbeddingQA()
             TString flagTag = flags[iHist] > 3 ? Form("%i",i) : "";
             TString name = histList[iHist] + flagTag + setTag;
 
-            TString cut = Form("TMath::Abs(eta%i) < %f && pTInGev%i > %f && nHitsDEdx%i >= %i && nHitsFit%i >= %i", i, maxEta, i, minPt[embedParticle], i, minNHitsDEdx[0], i, minNHitsFit[0]);
+            TString cut = Form("TMath::Abs(eta%i) < %f && pTInGev%i > %f && nHitsDEdx%i >= %i && nHitsFit%i >= %i", i, maxEta, i, minPt[embedParticle], i, minNHitsDEdx[NOMINAL], i, minNHitsFit[NOMINAL]);
             if( flags[iHist] <= 3 )
-               cut += Form(" && TMath::Abs(eta1) < %f && pTInGev1 > %f && nHitsDEdx1 >= %i && nHitsFit1 >= %i", maxEta, minPt[embedParticle], minNHitsDEdx[0], minNHitsFit[0]);
+               cut += Form(" && TMath::Abs(eta1) < %f && pTInGev1 > %f && nHitsDEdx1 >= %i && nHitsFit1 >= %i", maxEta, minPt[embedParticle], minNHitsDEdx[NOMINAL], minNHitsFit[NOMINAL]);
             
             if( set == DATA){
-               cut += Form(" && pairID==%i && TMath::Abs(vertexZInCm) < %f && dcaXYInCm0 < %f && dcaXYInCm1 < %f && TMath::Abs(dcaZInCm0) < %f && TMath::Abs(dcaZInCm1) < %f", embedParticle, vertexRange, maxDcaXY, maxDcaXY, maxDcaZ, maxDcaZ);
+               cut += Form(" && pairID==%i && TMath::Abs(vertexZInCm) < %f && dcaXYInCm0 < %f && dcaXYInCm1 < %f && TMath::Abs(dcaZInCm0) < %f && TMath::Abs(dcaZInCm1) < %f", embedParticle, vertexRange, maxDcaXY[NOMINAL], maxDcaXY[NOMINAL], maxDcaZ[NOMINAL], maxDcaZ[NOMINAL]);
             }else if( set == MCZB){
                cut += Form("&& TMath::Abs(vertexZInCm_TrueMc) < %f && TMath::Abs(eta%i_TrueMc) < %f",vertexRange,i,maxEta);
                cut += flags[iHist] > 3 ? Form(" && idTruth%i != -1 && ",i) + assosiationCut(i) : " && idTruth0 != -1 && idTruth1 != -1 && " + assosiationCut(PLUS) + " && " + assosiationCut(MINUS);
@@ -586,7 +658,7 @@ void PlotManager::m2FromEmbedding()
          for (int iPi = 0; iPi < nSigns; ++iPi)
             cut += Form(" && TMath::Abs(eta%i_TrueMc) < %f && eta%i_TrueMc > %f*vertexZInCm_TrueMc - %f && eta%i_TrueMc < %f*vertexZInCm_TrueMc + %f", iPi, maxEta, iPi, etaVertexSlope, etaVertexShift, iPi, etaVertexSlope, etaVertexShift);
       }else{
-         cut += Form(" && TMath::Abs(vertexZInCm) < %f && dcaXYInCm0 < %f && dcaXYInCm1 < %f && TMath::Abs(dcaZInCm0) < %f && TMath::Abs(dcaZInCm1) < %f", vertexRange, maxDcaXY, maxDcaXY, maxDcaZ, maxDcaZ);
+         cut += Form(" && TMath::Abs(vertexZInCm) < %f && dcaXYInCm0 < %f && dcaXYInCm1 < %f && TMath::Abs(dcaZInCm0) < %f && TMath::Abs(dcaZInCm1) < %f", vertexRange, maxDcaXY[NOMINAL], maxDcaXY[NOMINAL], maxDcaZ[NOMINAL], maxDcaZ[NOMINAL]);
          for (int iPi = 0; iPi < nSigns; ++iPi)
             cut += Form(" && TMath::Abs(eta%i) < %f && eta%i > %f*vertexZInCm - %f && eta%i < %f*vertexZInCm + %f", iPi, maxEta, iPi, etaVertexSlope, etaVertexShift, iPi, etaVertexSlope, etaVertexShift);
       }
@@ -617,7 +689,7 @@ void PlotManager::m2FromEmbedding()
 void PlotManager::drawVertexEtaSpace()
 {
    double etaIntercept = etaVertexSlope*vertexRange + etaVertexShift;
-   double vrtxIntercept = (maxEta - etaVertexShift)/etaVertexSlope;
+   double vtxIntercept = (maxEta - etaVertexShift)/etaVertexSlope;
 
 
    CreateLine(-maxEta,vertexRange,etaIntercept,vertexRange);
@@ -628,19 +700,19 @@ void PlotManager::drawVertexEtaSpace()
    line->SetLineWidth( 2*lineWidth );
    line->Draw("same");
 
-   CreateLine(-maxEta,-vrtxIntercept,-maxEta,vertexRange);
+   CreateLine(-maxEta,-vtxIntercept,-maxEta,vertexRange);
    line->SetLineWidth( 2*lineWidth );
    line->Draw("same");
 
-   CreateLine(maxEta,vrtxIntercept,maxEta,-vertexRange);
+   CreateLine(maxEta,vtxIntercept,maxEta,-vertexRange);
    line->SetLineWidth( 2*lineWidth );
    line->Draw("same");
 
-   CreateLine(-maxEta,-vrtxIntercept,-etaIntercept,-vertexRange);
+   CreateLine(-maxEta,-vtxIntercept,-etaIntercept,-vertexRange);
    line->SetLineWidth( 2*lineWidth );
    line->Draw("same");
 
-   CreateLine(etaIntercept,vertexRange,maxEta,vrtxIntercept);
+   CreateLine(etaIntercept,vertexRange,maxEta,vtxIntercept);
    line->SetLineWidth( 2*lineWidth );
    line->Draw("same");
 

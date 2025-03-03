@@ -18,9 +18,9 @@ class Ana{
       bool RPInFidRange(double x, double y, int br) const;
       inline bool RPInElFidRange(double x, double y) const { return (abs(y) < fpElPyMax && abs(y) > fpElPyMin && x > fpElPxMin && x < fpElPxMax) ? true : false;}
       inline bool IsInRpRange(double x, double y, int rpId, TVector3 offSet) const { return (abs(y) < abs(offSet[Y]) || abs(y) > abs(offSet[Y]) + 0.03 || x < -0.02 || x > 0.02) ? false : true; };
-      inline bool IsGoodGlobalTrack(const StUPCTrack *trk, unsigned int fit = 0, unsigned int dEdx = 0) const { return (trk->getNhitsFit() >= minNHitsFit[fit] && trk->getNhitsDEdx() >= minNHitsDEdx[dEdx]);}
+      inline bool IsGoodGlobalTrack(const StUPCTrack *trk, VARIATION fit = NOMINAL, VARIATION dEdx = NOMINAL) const { return (trk->getNhitsFit() >= minNHitsFit[fit] && trk->getNhitsDEdx() >= minNHitsDEdx[dEdx]);}
       inline bool IsGoodEtaTrack(const StUPCTrack *trk) const { return (abs(trk->getEta()) < maxEta && trk->getEta() > vertexEtaRange(0) && trk->getEta() < vertexEtaRange(1) );}
-      inline bool IsGoodTrack(const StUPCTrack *trk, unsigned int fit = 0, unsigned int dEdx = 0) const { return ( IsGoodGlobalTrack(trk,fit,dEdx) && trk->getDcaXY() < maxDcaXY && trk->getDcaZ() < maxDcaZ && trk->getDcaZ() > minDcaZ && trk->getPt() > minPt[PION]);}
+      inline bool IsGoodTrack(const StUPCTrack *trk, VARIATION fit = NOMINAL, VARIATION dEdx = NOMINAL, VARIATION dcaZ = NOMINAL, VARIATION dcaXY = NOMINAL) const { return ( IsGoodGlobalTrack(trk,fit,dEdx) && trk->getDcaXY() < maxDcaXY[dcaXY] && trk->getDcaZ() < maxDcaZ[dcaZ] && trk->getDcaZ() > minDcaZ[dcaZ] && trk->getPt() > minPt[PION]);}
       inline bool IsGoodTofTrack(const StUPCTrack *trk) const {return (trk->getTofTime() > 0 && trk->getTofPathLength() > 0);}
       bool CheckTriggers(const vector<int> *triggerArray, StUPCEvent *mUpcEvt, TH1D *hTriggerBits) const;
 

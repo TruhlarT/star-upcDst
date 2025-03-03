@@ -43,7 +43,7 @@ void PlotManager::runRPMCComparison(){
    AddHist("hNClusterPerRP","N_{Clusters} per RP",0,0.0,25.0,1,histList,labelList,nBins,binLow,binMax,flags);
 
    for (int iCoor = 0; iCoor < nCoordinates-1; ++iCoor)
-      AddHist("hDeltaFitProj_"+mUtil->coordinateName(iCoor),"#Delta d [mm]",0,-0.8,0.8,1,histList,labelList,nBins,binLow,binMax,flags);
+      AddHist("hDeltaFitProj_"+mUtil->coordinateName(iCoor),"#Delta d_{" + mUtil->coordinateName(iCoor) +"} [mm]",0,-0.8,0.8,1,histList,labelList,nBins,binLow,binMax,flags);
 
    for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
       AddHist("hClusterPerPlain_"+mUtil->planeName(iPlane),"N_{Clusters}",0,0.0,10.0,1,histList,labelList,nBins,binLow,binMax,flags);
@@ -80,8 +80,12 @@ void PlotManager::runRPMCComparison(){
       }
       for (unsigned int i = 0; i < nDiv[flags[iHist]]; ++i)
       {
-         if( i == 0)
-            CreateLegend(0.7,0.7,0.97,0.9);
+         if( i == 0){
+            if( histList[iHist] == TString("hClusterEnergy") )
+               CreateLegend(0.7,0.2,0.97,0.4);
+            else
+               CreateLegend(0.7,0.7,0.97,0.9);
+         }
          if(nDiv[flags[iHist]] > 1)
             canvas->cd(i+1);
          gPad->SetLogy();
@@ -152,6 +156,7 @@ void PlotManager::runRPMCComparison(){
       WriteCanvas("pXpYAcceptance"+mUtil->dataSetName(iSet));
    }
    // Plot x,y accatpance
+   /*
    for (int iSet = 0; iSet < nDataSets; ++iSet)
    {
       CreateCanvas(&canvas,"xyAcceptance"+mUtil->dataSetName(iSet));
@@ -177,6 +182,7 @@ void PlotManager::runRPMCComparison(){
       }
       WriteCanvas("xyAcceptance"+mUtil->dataSetName(iSet));
    }
+   */
    setTextSize();
 }//runRPMCComparison
 

@@ -9,6 +9,7 @@ void VertexStudy::Make()
       cout<<"VertexStudy::Make() called"<<endl;
    studyVertexRecoEff(); 
 
+   return;
    if(!CheckTriggers(&CEPtriggers, mUpcEvt, nullptr))
       return;
    studyVertexZDistibution();  
@@ -26,8 +27,9 @@ void VertexStudy::Init()
    mVertexTree->InitVertexRecoStudy();
 
    hDca = new TH2D("hDca", ";dcaPart;dcaBeam", 200, 0, 40, 200, 0, 40);
+   hDcaVertex = new TH1D("hDcaVertex", ";dcaVertex", 400, 0, 200);
    hAnaFlow = new TH1D("AnaFlow_VertexRecoStudy", "CutsFlow for VertexRecoStudy", kMax-1, 1, kMax);
-   const TString CutsName[kMax] = { TString("All"), TString("2 TOF Tracks"), TString("Same Sign"),
+   const TString CutsName[kMax] = { TString("All"), TString("2 TOF Tracks"), TString("Same Sign"), TString("Eta cut"),
                TString("DcaPart"), TString("DcaBeam"), TString("PrimAll"), TString("Prim 2 TOF Trks"), 
                TString("Prim Same Sign"), TString("Prim vertex") };
 
@@ -48,10 +50,14 @@ void VertexStudy::studyVertexRecoEff()
       // Skip all tracks that are not for vertex reco study
       if( !trk->getFlag(StUPCTrack::kCEP) )
          continue;
-      if( !IsGoodGlobalTrack(trk) ) 
+      
+      if( !IsGoodGlobalTrack(trk) ) // already implemented in CEP picoDst preselection 
          continue;
 
       if( !trk->getFlag(StUPCTrack::kTof) || trk->getTofPathLength() < 0) 
+         continue;
+
+      if( trk->getPt() < minPt[PION])
          continue;
 
       globalTracksId.push_back(trackID);
@@ -78,6 +84,28 @@ void VertexStudy::studyVertexRecoEff()
    dcaPart = mVertexTree->getVertexStudyDcaParticles();
    dcaBeam = mVertexTree->getVertexStudyDcaBeamline();
    vertexZhypo = mVertexTree->getVertexStudyHypoZ();
+
+   auto IsGoodEtaTrack = [vertexZhypo](const StUPCTrack *trk) {
+      if( abs(trk->getEta()) >= maxEta )
+         return false;
+      if( trk->getEta() < etaVertexSlope*vertexZhypo - etaVertexShift ) 
+         return false;
+      if( trk->getEta() > etaVertexSlope*vertexZhypo + etaVertexShift )
+         return false;
+
+      return true;
+   };
+
+   for (unsigned int i = 0; i < globalTracksId.size(); ++i)
+   {
+      const StUPCTrack* trk = mUpcEvt->getTrack( globalTracksId[i] );
+      if( !IsGoodEtaTrack(trk) )
+         return;
+   }
+
+   hAnaFlow->Fill(kGoodEta);
+
+
    hDca->Fill(dcaPart,dcaBeam);
    if( dcaPart > 3)
       return;
@@ -88,9 +116,7 @@ void VertexStudy::studyVertexRecoEff()
    hAnaFlow->Fill(kDcaBeam);
    // There are 2 global TOF tracks with opposite charge, originating from the same space
    mVertexTree->SaveEventInfo(mUpcEvt);
-   mVertexTree->setVertexStudyDcaParticles( dcaPart ); 
-   mVertexTree->setVertexStudyDcaBeamline( dcaBeam );
-   mVertexTree->setVertexStudyHypoZ( vertexZhypo );
+
    const StUPCTrack *trkPrimPlus, *trkPrimMinus;  
    pair<bool,bool> matchingPrimaryTracks = findPrimaryTracks(trkPrimPlus, trkPrimMinus, vertexZhypo);   
 
@@ -105,7 +131,6 @@ void VertexStudy::studyVertexRecoEff()
    mVertexTree->setVertexStudyPrimary( matchingPrimaryTracks.first );
    mVertexTree->setVertexStudySameVertex( matchingPrimaryTracks.second );
    mVertexTree->FillRecTree();
-
 }
 
 pair<bool,bool> VertexStudy::findPrimaryTracks(const StUPCTrack* &trkPrimPlus, const StUPCTrack* &trkPrimMinus, double vertexZhypo)
@@ -121,12 +146,21 @@ pair<bool,bool> VertexStudy::findPrimaryTracks(const StUPCTrack* &trkPrimPlus, c
          continue;
       if( !trk->getFlag(StUPCTrack::kTof)  || trk->getTofPathLength() < 0)
          continue;
+
       if( !IsGoodGlobalTrack(trk) ) 
          continue;
-      /*
+
+      if( trk->getNhitsFit() < 25) // harder cut implemented in CEP picoDst preselection 
+         continue;
+
+      if( trk->getPt() < minPt[PION])
+         continue;
+
+      hDcaVertex->Fill( TMath::Abs( trk->getVertex()->getPosZ() - vertexZhypo) );
+
       if( TMath::Abs( trk->getVertex()->getPosZ() - vertexZhypo)  > 3)
          continue;
-   */
+      
       primaryId.push_back(trackID);
    }
 
@@ -149,9 +183,12 @@ pair<bool,bool> VertexStudy::findPrimaryTracks(const StUPCTrack* &trkPrimPlus, c
    matchingPrimaryTracks.second = trkPrimPlus->getVertexId() == trkPrimMinus->getVertexId();
 
    if( matchingPrimaryTracks.second ){
-      mRecTree->SaveVertexInfo(trkPrimPlus->getVertex());
+      mVertexTree->SaveVertexInfo(trkPrimPlus->getVertex());
       hAnaFlow->Fill(kPrimVertex);
    }
+
+   mVertexTree->SaveTrackInfo(trkPrimPlus,PLUS);
+   mVertexTree->SaveTrackInfo(trkPrimMinus,MINUS);
 
    return matchingPrimaryTracks;
 }

@@ -36,7 +36,7 @@ void RpMCAna::Init()
    if( DEBUG )
       cout<<"RpMCAna::Init() called"<<endl;
 
-   mRecTree = new RecTree("RPMCAnaTree",treeBits[kRPMCANA], false); 
+   mRecTree = new RecTree(nameOfTree[kRPMCANA],treeBits[kRPMCANA], false); 
 
    for (int iSet = 0; iSet < DATA; ++iSet)
    {
@@ -105,9 +105,9 @@ void RpMCAna::SetRpPosition(TVector3* corr, TVector3 *offsets)
    embedMaker->setOffsetCorrections(corr);
 }
 
-void RpMCAna::SetMCInfo(double (&mc_vrtx)[nCoordinates], double (&mc_p)[nCoordinates][nSides])
+void RpMCAna::SetMCInfo(double (&mc_vtx)[nCoordinates], double (&mc_p)[nCoordinates][nSides])
 {
-   mVertex = mc_vrtx;
+   mVertex = mc_vtx;
    mMomentum = mc_p;
 }
 

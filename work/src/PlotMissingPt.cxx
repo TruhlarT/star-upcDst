@@ -66,7 +66,7 @@ void PlotManager::PlotMissingPt(int part, int rpCon)
 
         hist->SetTitle(";p_{" + name[i] +Form("}^{miss} [GeV] ;Events / %.f MeV",hist->GetXaxis()->GetBinWidth(2)*1000 ));
         SetHistStyle(hist);
-
+        //hist->GetXaxis()->SetTitleOffset(1.3);
         if( name[i] != "T")
             hist->GetYaxis()->SetRangeUser(0, 2*hist->GetMaximum() );   
         else
@@ -190,7 +190,7 @@ void PlotManager::DrawExclusiveLine(double xl, double yl, double xr, double yr)
 {
     CreateLine(xl,yl, xr, yr);
     line->SetLineStyle(10);
-    line->SetLineWidth(4);
+    line->SetLineWidth(8);
     line->Draw("same");
 }
 
@@ -205,7 +205,7 @@ std::tuple<double, double, double> PlotManager::FitpXYMissing( TString name, int
     double sigWidthRange[] = { 0.04, 0.045, 0.04};
 
     // [x or y][part][ default value, min, max]
-    double sigMeans[2][3][3] = {{{-0.04, -0.05, -0.03}, {-0.04, -0.05, -0.03}, {-0.02, -0.05, 0.03}}, // X
+    double sigMeans[2][3][3] = {{{-0.04, -0.05, 0.03}, {-0.04, -0.05, 0.03}, {-0.02, -0.05, 0.03}}, // X
                          {{0.008, 0.0, 0.02}, {0.008, 0.0, 0.02}, {0.01, -0.01, 0.025}}}; // Y
 
     double sigMeanDef = sigMeans[ name == "x" ? 0 : 1][part][0];
@@ -315,7 +315,7 @@ void PlotManager::GenereateMCpTDist(TH1 *hist, double* fitParam, int part, int r
 
     hSig->Scale(cepMax/hSig->Integral());
     SetHistStyle(hSig,1,25);
-    hSig->Draw("same E");
+    //hSig->Draw("same E");
 
     // Calculted the CEp sample below pTMissing cut and corresponding efficiency of teh cut 
     double integralOfFunc = func->Integral(0, exclusivityCut)/hist->GetBinWidth(1); // background sample in the region below pT missing cut from fit
@@ -361,13 +361,13 @@ void PlotManager::GenereateMCpTDist(TH1 *hist, double* fitParam, int part, int r
     mBcgFracError[part][rpCon] = ratio_uncertainty;
     //cout<<nameSuffix<<Form(": S/(S+B) = %.4f, sqrt( %.2f^2 * %.2f^2 + %.2f^2 * %.2f^2) / (%.2f+%.2f)^2", ratio_uncertainty, integralOfFunc, result.second, result.first, backgroundUncertainity, result.first, integralOfFunc)<<endl;
     text -> AddText(Form("S/(S+B) = %.3f #pm %.3f",ratio,ratio_uncertainty));
-    text -> AddText(Form("CEP: %i, %i, %.f",cepSignal[0],cepSignal[1],cepMax));
+    //text -> AddText(Form("CEP: %i, %i, %.f",cepSignal[0],cepSignal[1],cepMax));
     text -> Draw("same");
 
     CreateLegend(0.58, showTextUp ? 0.6 : 0.1, 0.8, showTextUp ? 0.8 : 0.3);
-    legend->AddEntry(hist, "Data (unlike-sign pairs)","ple");
-    legend->AddEntry(hTot, "MC Sig+Bcg","ple");
-    legend->AddEntry(hSig, "MC Signal","ple");
+    legend->AddEntry(hist, "Data (opposite-sign pairs)","ple");
+    legend->AddEntry(hTot, "MC Sig+Bkgd","ple");
+    //legend->AddEntry(hSig, "MC Signal","ple");
     legend->AddEntry(func, "Non-excl. bkgd","l");
     legend->Draw("same");
 

@@ -61,6 +61,7 @@ if __name__ == "__main__":
 
     #embedFile = embedDir + "/merged/StRP_production_0000.root"
     root_cmd = "./PlotManager " + location + infile #"\",\"" + embedFile + "\")"
+    print root_cmd
     root = Popen(root_cmd.split(), stdout=PIPE, stderr=PIPE).communicate()
 
     print root[0], root[1]

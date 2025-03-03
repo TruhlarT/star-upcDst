@@ -9,9 +9,9 @@ void Embedding::Make()
    if( DEBUG )
       cout<<"Embedding::Make() called"<<endl;
 
-   //PARTICLE PART = PION;
+   PARTICLE PART = PION;
    //PARTICLE PART = KAON;
-   PARTICLE PART = PROTON;
+   //PARTICLE PART = PROTON;
 
    int gePidPlus;
    int gePidMinus;
@@ -142,7 +142,7 @@ void Embedding::Make()
          treeState = 2;
          if( idTruth[PLUS] == 1 && idTruth[MINUS] == 2){
             hAnaFlow->Fill(kCorrectID);
-            mRecTree->CalculatePID(false, true, true);
+            mRecTree->CalculatePID(false, true, PART);
             treeState = 3;
          }
       }
@@ -160,8 +160,8 @@ void Embedding::Init()
       cout<<"Embedding::Init() called"<<endl;
    mOutFile->cd();
 
-   const bitset<8> bits = bitset<8>(string("10001110")); 
-   mRecTree = new RecTree("embedQATree", bits, false); 
+
+   mRecTree = new RecTree(nameOfTree[kEMBEDING], treeBits[kEMBEDING], false);  
    mTree = mRecTree->getTTree();
    for (int i = 0; i < nSigns; ++i){
       mTree->Branch(Form("tofTimeOrig%i",i), &tofTimeOrig[i]);

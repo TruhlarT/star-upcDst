@@ -15,7 +15,7 @@ namespace UTIL {
    class Util; // just tell the compiler to expect a class def
 
    // Enumerations - very helpful and convenient !
-   enum STUDYMAP { kMAINANA = 0, kVERTEXSTUDY, kEMBEDING, kTOFQA, kTRIGEFF, kFULLZB, kELASTICANA, kRPMCANA, kALIGNMENT, nStudies };
+   enum STUDYMAP { kMAINANA = 0, kVERTEXSTUDY, kEMBEDING, kTOFQA, kTOFEFF, kTRIGEFF, kFULLZB, kELASTICANA, kRPMCANA, kALIGNMENT, nStudies };
    enum SIDE { E=0, East=0, W=1, West=1, nSides };
    enum RPPORIENTATIONS { Up=0, Down=1, nRpOrientations };
    enum RPCONFIGURATION { IT=0, ET=1, nRpConfigurations};
@@ -39,7 +39,8 @@ namespace UTIL {
    enum RANGE_LIMIT { MIN, MAX };
    enum DATASET { MC = 0, MCZB, DATA, nDataSets };
    enum DATATAG { TRUEMC = 0, RECO, nDataTag };
-   enum NHITSVARIATION { nHitsDEdxLoose = 0, nHitsFitLoose, nHitsDEdxTight, nHitsFitTight, nHitsVariation };
+   enum NHITSVARIATION { nHitsDEdxLoose = 0, nHitsFitLoose, nHitsDEdxTight, nHitsFitTight};
+   enum VARIATION { NOMINAL = 0, LOOSE, TIGHT};
 }  
 using namespace UTIL;
 
@@ -70,7 +71,10 @@ class UTIL::Util{
       inline TString analysisCutName(UInt_t id) const { if(id<=nAnalysisCuts) return mCutName[id-1]; else{ std::cerr << "ERROR in Util::analysisCutName(UInt_t id): id out of range" << std::endl; return TString("");} }
       inline TString dataSetName(UInt_t id) const { if(id<nDataSets) return mDataSetName[id]; else{ std::cerr << "ERROR in Util::dataSetName(UInt_t id): id out of range" << std::endl; return TString("");} }
       inline TString dataTagName(UInt_t id) const { if(id<nDataTag) return mDataTagName[id]; else{ std::cerr << "ERROR in Util::dataTagName(UInt_t id): id out of range" << std::endl; return TString("");} }
-      inline TString nHitVaryName(UInt_t id) const { if(id<nHitsVariation) return mNHitVaryName[id]; else{ std::cerr << "ERROR in Util::nHitVaryName(UInt_t id): id out of range" << std::endl; return TString("");} }
+      inline TString nHitVaryName(UInt_t id) const { if(id<nTPCnHitsStudies) return mNHitVaryName[id]; else{ std::cerr << "ERROR in Util::nHitVaryName(UInt_t id): id out of range" << std::endl; return TString("");} }
+      inline TString pidVaryName(UInt_t id) const { if(id<nPidVariation) return mPidName[id]; else{ std::cerr << "ERROR in Util::pidVaryName(UInt_t id): id out of range" << std::endl; return TString("");} }
+      inline TString dcaVaryName(UInt_t id) const { if(id<nDcaVariation) return mDcaName[id]; else{ std::cerr << "ERROR in Util::dcaVaryName(UInt_t id): id out of range" << std::endl; return TString("");} }
+
 
       inline Double_t mass(int name) const{ return mParticleMass[name]; }
       inline Double_t c() const{ return mSpeedOfLight; }
@@ -91,6 +95,11 @@ class UTIL::Util{
       Double_t binomialCoeff(UInt_t, UInt_t) const;
       TVector3 fitLine(const vector<TVector3> trackPoints, double positionOfFit);
       pair<double, double> CalculateMeanAndError(const vector<double>& values);
+      Double_t smearPt(Double_t pt, UInt_t id);
+
+
+      std::pair<VARIATION, VARIATION> varyNHits(UInt_t var) const;
+      unsigned int varyNHits(UInt_t nHitFit, UInt_t nHitDEdx) const;
 
    private:
       // Labels, names etc. (defined as TString to gain higher functionality than const char*, e.g. defined "+" operator)
@@ -118,7 +127,10 @@ class UTIL::Util{
       vector<TString> mDataSetName;
       vector<TString> mDataTagName;
       vector<TString> mNHitVaryName;
-          
+      vector<TString> mPidName;
+      vector<TString> mDcaName;
+      
+
       Double_t mParticleMass[nParticles]; // GeV/c^2
       const Double_t mSpeedOfLight; // m/s
       const Double_t mBeamMomentum; // GeV/c

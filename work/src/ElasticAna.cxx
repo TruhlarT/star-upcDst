@@ -16,38 +16,43 @@ void ElasticAna::Init(){
    if( DEBUG )
       cout<<"ElasticAna::Init() called"<<endl;
    mOutFile->cd();
-   hAnalysisFlow = new TH1D("SimpleAnaFlow_" + anaName, "CutsFlow for simple elastic ana", nCuts-1, 1, nCuts);
-   for(int tb=1; tb<nCuts; ++tb) 
-      hAnalysisFlow->GetXaxis()->SetBinLabel(tb, mCutName[tb-1]);
+
+   mRecTree = new RecTree(anaName + "Tree",treeBits[kELASTICANA], false); 
+   mOutFile->mkdir(anaName)->cd();
+
+   const TString mElAnaCutsName[kMax] = { TString("All"), TString("El. trig"), TString("ET pattern"),
+               TString("4 points"), TString("Elastic")}; //TString("t-range") ,TString("Collinear"), //TString("Geo Window"), 
+               //TString(Form("#Delta d < %.2f mm",DCUT*1000)), TString("elastic")};
 
    hElasticAnaFlow = new TH1D("AnaFlow_" + anaName, "CutsFlow for elastic ana", kMax-1, 1, kMax);
    for(int tb=1; tb<kMax; ++tb) 
       hElasticAnaFlow->GetXaxis()->SetBinLabel(tb, mElAnaCutsName[tb-1]);
-
-   mRecTree = new RecTree(anaName + "Tree",treeBits[kELASTICANA], false); 
-   mOutFile->mkdir(anaName)->cd();
 
    hTheta[E][X] = new TH1D("hThetaEX", "hThetaEX", 3000, -0.03, 0.03);
    hTheta[E][Y] = new TH1D("hThetaEY", "hThetaEY", 3000, -0.03, 0.03);
    hTheta[W][X] = new TH1D("hThetaWX", "hThetaWX", 3000, -0.03, 0.03);
    hTheta[W][Y] = new TH1D("hThetaWY", "hThetaWY", 3000, -0.03, 0.03);
 
-   hDeltaTheta[0] = new TH1D("hDeltaTheta", "hDeltaTheta", 3000, -0.03, 0.03);
-   hDeltaTheta[1] = new TH1D("hDeltaTheta_ET", "hDeltaTheta_ET", 3000, -0.03, 0.03); 
-   hThetaCorr = new TH2D("hThetaCorr", "hThetaCorr", 200, -0.002, 0.002, 200, -0.002, 0.002);// bin size 0.000 040 rad
+   hDeltaTheta[0][X] = new TH1D("hDeltaTheta_X", "hDeltaTheta_X", 100,-0.001,0.001);//3000, -0.03, 0.03);
+   hDeltaTheta[1][X] = new TH1D("hDeltaTheta_X_ET", "hDeltaTheta_X_ET", 100,-0.001,0.001); 
+   hDeltaTheta[0][Y] = new TH1D("hDeltaTheta_Y", "hDeltaTheta_Y", 100,-0.001,0.001);
+   hDeltaTheta[1][Y] = new TH1D("hDeltaTheta_y_ET", "hDeltaTheta_y_ET", 100,-0.001,0.001); 
+   hDeltaTheta[0][2] = new TH1D("hDeltaTheta", "hDeltaTheta", 100,-0.001,0.001);
+   hDeltaTheta[1][2] = new TH1D("hDeltaTheta_ET", "hDeltaTheta_ET", 100,-0.001,0.001); 
+   hThetaCorr = new TH2D("hThetaCorr", "hThetaCorr", 100,-0.001,0.001, 100,-0.001,0.001);// bin size 0.000 040 rad
 
    hT = new TH1D("hT", "hT", 50, 0.2, 1.2);
 
    hDCutR = new TH1D("hDCutR", "hDCutR", 200, 0, 0.1);
    hDCut = new TH2D("hDCut", "hDCut", 200, -0.005, 0.005, 200, -0.005, 0.005);
-
+/*
    for (int iRp = 0; iRp < 2*nRomanPots; ++iRp)
    {
       hRpAdc[iRp]= new TH1D( mUtil->rpName(iRp/2) + Form("_%i_ADC",iRp%2), "ADC", 100, 0, 600);
       hRpAdcInWindow[iRp]= new TH1D(mUtil->rpName(iRp/2) + Form("_%i_ADCinTAC",iRp%2), "ADC in TAC window", 100, 0, 600);
       hRpTac[iRp]= new TH1D(mUtil->rpName(iRp/2) + Form("_%i_TAC",iRp%2), "TAC", 100, 0, 2000);
    }
-
+*/
    hFindHitDiff = new TH1D("hFindHitDiff", "hFindHitDiff", 100, .0, 0.1);
    
    for (int iBr = 0; iBr < nBranches; ++iBr){
@@ -112,11 +117,11 @@ void ElasticAna::Init(){
 
 void ElasticAna::Make()
 {
-   hElasticAnaFlow->Fill(ALL);
+   hElasticAnaFlow->Fill(kAll);
 
    if(!CheckTriggers(trigger, mUpcEvt, nullptr))
       return;
-
+/*
    for (int iRp = 0; iRp < nRomanPots; ++iRp)
    {
       for (int iPmt = 0; iPmt < 2; ++iPmt)
@@ -126,13 +131,26 @@ void ElasticAna::Make()
          if(mRpEvt->tac(iRp, iPmt) > 200 && mRpEvt->tac(iRp, iPmt) < 1750)
             hRpAdcInWindow[2*iRp+iPmt]->Fill(mRpEvt->adc(iRp, iPmt));
       }
-   }
-   hElasticAnaFlow->Fill(TRIG);
+   }*/
+   hElasticAnaFlow->Fill(kTtrig);
    AnaRpTracks(mRpEvt);
    runRpDataDrivenEffStudy();
    FillAccaptancePlots();
 
    bool isElastic = IsElasticEventCandidate();
+
+   if(trackEW.nPoints == 0)
+      return;
+
+   hElasticAnaFlow->Fill(kETPattern);
+   if(trackEW.nPoints < 0)
+      return;
+
+   hElasticAnaFlow->Fill(kFourPoints);
+   /*if( trackEW.t < 0.23 || trackEW.t > 0.67) 
+      return;
+   hElasticAnaFlow->Fill(kTRange);
+   */
 
    FillElasticPlots();
    if( !isElastic )
@@ -200,22 +218,22 @@ bool  ElasticAna::IsElasticEventCandidate(int RPStudy)
    trackW = makeTrack(rpsBitsWest, RPStudy);
    trackE = makeTrack(rpsBitsEast, RPStudy);
 
-   return (IsColinear() && IsInDCut() && true); 
+   return (IsColinear() && IsInDCut()); 
    //return (IsColinear() && IsInDCut() && InFiducial()); // The same fiducial region as for RHICf elastic analysis
 }
 
 bool ElasticAna::InFiducial()
 {
-   double phiE = trackE.phi;
-   double phiW = trackW.phi;  
-   return (IsInGeoWindow( phiE ) && IsInGeoWindow( phiW ));
+   //double phiE = trackE.phi;
+   //double phiW = trackW.phi;  
+   return true; //(IsInGeoWindow( phiE ) && IsInGeoWindow( phiW ));
 }//InFiducial
 
 bool ElasticAna::IsInDCut()
 {
-   double dx0 = trackE.X0 - trackW.X0;
-   double dy0 = trackE.Y0 - trackW.Y0;
-   return sqrt( dx0*dx0 + dy0*dy0 ) <= DCUT; // meters
+   //double dx0 = trackE.X0 - trackW.X0;
+   //double dy0 = trackE.Y0 - trackW.Y0;
+   return true;//sqrt( dx0*dx0 + dy0*dy0 ) < DCUT; // meters
 }//IsInDCut
 
 bool ElasticAna::IsColinear()
@@ -224,7 +242,7 @@ bool ElasticAna::IsColinear()
    double thetaWest = sqrt( trackW.thX*trackW.thX + trackW.thY*trackW.thY );
    double deltaTheta = thetaEast - thetaWest;
    
-   return abs(deltaTheta) <= nSigma*sigma;
+   return abs(deltaTheta) < nSigma*sigma;
 }//IsColinear
 
 
@@ -438,13 +456,6 @@ void ElasticAna::FillAccaptancePlots()
    }
 }
 
-const TString ElasticAna::mCutName[nCuts] = { TString("All"), TString("ET"), TString("2 RP trks"),
-               TString("In RP fiducial"), TString("Collinearity")};
-
-const TString ElasticAna::mElAnaCutsName[kMax] = { TString("All"), TString("El trig"), TString("ET pattern"),
-               TString("4 points"), TString("t-range") ,TString("Collinear"), TString("Geo Window"), 
-               TString("dCut"), TString("elastic")};
-
 
 void ElasticAna::runAlignment()
 {
@@ -514,11 +525,11 @@ void ElasticAna::InitRPMCInfo()
    mRecTree->InitRPMCInfo();
 }
 
-void ElasticAna::SetRPMCInfo(double *mc_vrtx, double (*mc_p)[nSides])
+void ElasticAna::SetRPMCInfo(double *mc_vtx, double (*mc_p)[nSides])
 {
-   mRecTree->setTrueRPVertexZInCm( mc_vrtx[Z] );
-   mRecTree->setTrueRPVertexXInCm( mc_vrtx[X] );
-   mRecTree->setTrueRPVertexYInCm( mc_vrtx[Y] );
+   mRecTree->setTrueRPVertexZInCm( mc_vtx[Z] );
+   mRecTree->setTrueRPVertexXInCm( mc_vtx[X] );
+   mRecTree->setTrueRPVertexYInCm( mc_vtx[Y] );
    for (int iSide = 0; iSide < nSides; ++iSide)
    {
       mRecTree->setRPTruePx( mc_p[X][iSide], iSide);
@@ -530,27 +541,15 @@ void ElasticAna::SetRPMCInfo(double *mc_vrtx, double (*mc_p)[nSides])
 
 void ElasticAna::FillElasticPlots()
 {
-   if(trackEW.nPoints == 0)
-      return;
-
-   hElasticAnaFlow->Fill(kETPattern);
-   if(trackEW.nPoints < 0)
-      return;
-
-   hElasticAnaFlow->Fill(kFourPoints);
-   if( trackEW.t < 0.23 )//|| trackEW.t > 0.67) // not use the cut and plot the N(t)
-      return;
-   hElasticAnaFlow->Fill(kTRange);
-
    bool inFiducial = InFiducial();
    bool isColinear = IsColinear();
    bool isInDCut = IsInDCut();
-   if(inFiducial)
-      hElasticAnaFlow->Fill(kFiducial);
-   if(isInDCut)
-      hElasticAnaFlow->Fill(kDCut);
-   if(isColinear)
-      hElasticAnaFlow->Fill(kColinear);
+   //if(inFiducial)
+   //   hElasticAnaFlow->Fill(kFiducial);
+   //if(isInDCut)
+   //   hElasticAnaFlow->Fill(kDCut);
+   //if(isColinear)
+   //   hElasticAnaFlow->Fill(kColinear);
 
    hThetaCorr->Fill(trackE.thX - trackW.thX,  trackE.thY - trackW.thY);
    hTheta[E][X]->Fill(trackE.thX);
@@ -562,7 +561,9 @@ void ElasticAna::FillElasticPlots()
    double thetaEast = sqrt( trackE.thX*trackE.thX + trackE.thY*trackE.thY );
    double thetaWest = sqrt( trackW.thX*trackW.thX + trackW.thY*trackW.thY );
    double deltaTheta = thetaEast - thetaWest;
-   hDeltaTheta[0]->Fill( deltaTheta );
+   hDeltaTheta[0][X]->Fill( trackE.thX - trackW.thX );
+   hDeltaTheta[0][Y]->Fill( trackE.thY - trackW.thY );
+   hDeltaTheta[0][2]->Fill( deltaTheta );
    
    double dx0 = trackE.X0 - trackW.X0;
    double dy0 = trackE.Y0 - trackW.Y0;
@@ -574,7 +575,10 @@ void ElasticAna::FillElasticPlots()
    }
    if(isColinear && isInDCut && inFiducial)
    {
-      hDeltaTheta[1]->Fill( deltaTheta ); 
+      hDeltaTheta[1][X]->Fill( trackE.thX - trackW.thX );
+      hDeltaTheta[1][Y]->Fill( trackE.thY - trackW.thY );
+      hDeltaTheta[1][2]->Fill( deltaTheta );
+   
       hT->Fill(trackEW.t);  
    }
 

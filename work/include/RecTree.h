@@ -242,13 +242,13 @@ class RecTree{
       inline void setVertexStudyDcaBeamline(Double_t var) { mDcaBeamline = var; }
       inline void setVertexStudyHypoZ(Double_t var) { mVertexZHypo = var; }
 
-      void CalculatePID(bool pTSpace = true, bool m2 = true, bool smearing = false);
+      void CalculatePID(bool pTSpace = true, bool m2 = true, int id = -1, UInt_t var = NOMINAL);
 
       void SaveEventInfo(const StUPCEvent *upcEvt);
       void SaveRPinfo(const StUPCRpsTrack *trackRP, unsigned int iSide);
       void SaveTrackInfo(const StUPCTrack *trk, unsigned int iTrack);
       void SaveStateInfo(TLorentzVector state);
-      void SaveVertexInfo(const StUPCVertex *vrtx);
+      void SaveVertexInfo(const StUPCVertex *vtx);
       void SaveZdcInfo(const StUPCEvent *upcEvt);
       void SaveBbcInfo(const StUPCEvent *upcEvt);
       void SaveTriggerInfo(const StUPCEvent *upcEvt, const StRPEvent *rpEvt);

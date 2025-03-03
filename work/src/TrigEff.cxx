@@ -68,6 +68,11 @@ void TrigEff::Make(){
       return;
    hAnalysisFlow->Fill(TRIG);
 
+   if( mRpEvt == nullptr){
+      cerr<<"Error RP event not set"<<endl;
+      return;
+   }
+
    // save event info
    mRecTree->SaveEventInfo(mUpcEvt);
    mRecTree->SaveTriggerInfo(mUpcEvt, mRpEvt);
@@ -176,5 +181,5 @@ void TrigEff::CheckRPTrigEff()
 }
 
 
-const TString TrigEff::mCutName[nCuts] = { TString("All"), TString("Zerobias"), TString("1 TOF vrtx"), 
+const TString TrigEff::mCutName[nCuts] = { TString("All"), TString("Zerobias"), TString("1 TOF vtx"), 
       TString("2 good TOF trks")};

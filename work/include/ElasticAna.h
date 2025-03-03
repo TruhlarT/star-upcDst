@@ -19,15 +19,12 @@ class ElasticAna : public Ana{
       TVector3 CalculateOffsetCorrForRP(unsigned int Rp, unsigned int iter);
 
       void InitRPMCInfo(); 
-      void SetRPMCInfo(double *mc_vrtx, double (*mc_p)[nSides]);
+      void SetRPMCInfo(double *mc_vtx, double (*mc_p)[nSides]);
 
    private:
       // Control plots
       TH1D *hElasticAnaFlow; 
-      enum ANA_CUT { ALL = 1, TRIG, TWORPTRKS, INFID, COLLINEAR, nCuts };
-      static const TString mCutName[nCuts];
-      enum { kAll = 1, kTtrig, kETPattern, kFourPoints, kTRange, kColinear, kFiducial, kDCut, kElastic, kMax};
-      static const TString mElAnaCutsName[kMax];
+      enum { kAll = 1, kTtrig, kETPattern, kFourPoints, kElastic, kMax};//kTRange, kColinear, kDCut, kElastic, kMax};
 
       typedef struct track_t{
         float posX[4];   // point position at RP 
@@ -45,7 +42,7 @@ class ElasticAna : public Ana{
       track_t trackEW, trackE, trackW;
 
       TH1D *hTheta[2][2];
-      TH1D *hDeltaTheta[2];
+      TH1D *hDeltaTheta[2][3];
       TH2D *hThetaCorr;
       TH1D *hDCutR;
       TH2D *hDCut;

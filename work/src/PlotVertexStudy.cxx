@@ -43,7 +43,7 @@ void PlotManager::runVertexStudy()
          continue;
       passed = htemp->GetEntries();
       SetHistStyle(htemp, mainColor, mainMarker);
-      htemp->SetTitle(";z_{vrtx} [cm]; Events / 10 cm");
+      htemp->SetTitle(";z_{vtx} [cm]; Events / 10 cm");
       htemp->GetYaxis()->SetTitleOffset(2.7);
       htemp->Draw("E");
       DrawSTARInternal();
@@ -68,7 +68,7 @@ void PlotManager::runVertexStudy()
       gausExtended->SetLineColor(bckgColor);
 
       SetHistStyle(htemp, mainColor, mainMarker);
-      htemp->SetTitle(";z_{vrtx} [cm]; Events / 10 cm");
+      htemp->SetTitle(";z_{vtx} [cm]; Events / 10 cm");
       htemp->GetYaxis()->SetTitleOffset(2.7);
       htemp->Draw("E");
       gausExtended->Draw("same");
@@ -114,7 +114,7 @@ void PlotManager::runVertexStudy()
    }
 
    mStudyDir[kVERTEXSTUDY]->cd();
-   TString yName[] = { TString("<z_{vrtx}> [cm]"), TString("#sigma(z_{vrtx}) [cm]"), TString("Entries"), TString("Eff")};
+   TString yName[] = { TString("<z_{vtx}> [cm]"), TString("#sigma(z_{vtx}) [cm]"), TString("Entries"), TString("Eff")};
    double yMinRange[] = { -10, 40};
    double yMaxRange[] = { 10, 80};
    for (int iPar = 0; iPar < 3; ++iPar)
@@ -125,6 +125,20 @@ void PlotManager::runVertexStudy()
       if( iPar < 2)
          hGausFitPar[iPar]->GetYaxis()->SetRangeUser(yMinRange[iPar], yMaxRange[iPar]);
       hGausFitPar[iPar]->Draw("E");
+
+      if( iPar == 1){
+         // Fit the constant function to the histogram
+         TF1 *f1 = new TF1("f1", "[0]");
+         hGausFitPar[iPar]->Fit(f1);
+         f1->SetLineColor(kRed);
+         f1->SetLineStyle(10);
+         f1->Draw("same"); 
+
+         CreateText(0.75,0.84,0.88,0.88);
+         text -> SetTextColor(kRed);
+         text -> AddText(Form("<#sigma(z_{vtx})> = %.0f #pm %.0f cm",f1->GetParameter(0),f1->GetParError(0)));   
+         text -> Draw("same");
+      }
 
       DrawSTARInternal();
       WriteCanvas(hName[iPar]);

@@ -449,8 +449,9 @@ void RecTree::InitVertexRecoStudy(TTree* tree)
    } 
 }
 
-void RecTree::CalculatePID(bool pTSpace, bool m2, bool smearing)
+void RecTree::CalculatePID(bool pTSpace, bool m2, int id, UInt_t var)
 {
+   bool smearing = id >= 0;
 
    Int_t pairID = -1;
    double chiPair[nParticles];
@@ -471,8 +472,8 @@ void RecTree::CalculatePID(bool pTSpace, bool m2, bool smearing)
    double deltaTime2 = (deltaTOF*deltaTOF)/(pow(10.0,18.0)); // convert TOFtime from ns to s
    double deltaTime4 = deltaTime2*deltaTime2;
 
-   double momentum1 = smearing ? this->getMomentumInGeV(PLUS,TRUEMC) + gen.Gaus(0.0, this->getPtInGev(PLUS,TRUEMC) < 0.3 ? 0.006 : 0.0024 + 0.012*this->getPtInGev(PLUS,TRUEMC)) : this->getMomentumInGeV(PLUS);
-   double momentum2 = smearing ? this->getMomentumInGeV(MINUS,TRUEMC) + gen.Gaus(0.0, this->getPtInGev(MINUS,TRUEMC) < 0.3 ? 0.006 : 0.0024 + 0.012*this->getPtInGev(MINUS,TRUEMC)) : this->getMomentumInGeV(MINUS);
+   double momentum1 = smearing ? mUtil->smearPt( this->getMomentumInGeV(PLUS,TRUEMC), 2*id)  : this->getMomentumInGeV(PLUS);
+   double momentum2 = smearing ? mUtil->smearPt( this->getMomentumInGeV(MINUS,TRUEMC), 2*id+1) : this->getMomentumInGeV(MINUS);
 
    double oneOverMomentum1sq = 1.0/pow(momentum1,2);
    double oneOverMomentum2sq = 1.0/pow(momentum2,2);
@@ -482,17 +483,17 @@ void RecTree::CalculatePID(bool pTSpace, bool m2, bool smearing)
    double mSquared = (-bEq + sqrt(bEq*bEq-4*aEq*cEq)) / (2*aEq);
    double pT[] = { this->getPtInGev(PLUS), this->getPtInGev(MINUS)};
 
-   if(chiPair[PION] > 9 && chiPair[KAON] > 9 && chiPair[PROTON] < 9 && ( m2 ? mSquared > m2minProtons : true)
+   if(chiPair[PION] > minChiSq[var] && chiPair[KAON] > minChiSq[var] && chiPair[PROTON] < minChiSq[var] && ( m2 ? mSquared > m2minProtons[var] : true)
       && (pTSpace ? (pT[PLUS] > minPt[PROTON] && pT[MINUS] > minPt[PROTON] && min(pT[PLUS], pT[MINUS]) < minPtPair[PROTON]) : true))
    { // it is... proton!
          pairID = PROTON;
    }
-   else if(chiPair[PION] > 9 && chiPair[KAON] < 9 && chiPair[PROTON] > 9 && ( m2 ? mSquared > m2minKaons : true)
+   else if(chiPair[PION] > minChiSq[var] && chiPair[KAON] < minChiSq[var] && chiPair[PROTON] > minChiSq[var] && ( m2 ? mSquared > m2minKaons[var] : true)
       && (pTSpace ? (pT[PLUS] > minPt[KAON] && pT[MINUS] > minPt[KAON] && min(pT[PLUS], pT[MINUS]) < minPtPair[KAON]) : true))
    { // it is... kaon!
          pairID = KAON;
    } 
-   else if( chiPair[PION] < 12 && (pTSpace ? (pT[PLUS] > minPt[PION] && pT[MINUS] > minPt[PION]) : true) ) // it is... pion!
+   else if( chiPair[PION] < minChiSqPions[var] && (pTSpace ? (pT[PLUS] > minPt[PION] && pT[MINUS] > minPt[PION]) : true) ) // it is... pion!
    {
       pairID = PION;
    }

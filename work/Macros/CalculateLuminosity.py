@@ -3,12 +3,13 @@
 
 #run with: python CalculateLuminosity.py
 # output: all in [pb-1]
-# Total number of events in root file: 587164368.0
-# Total integrated luminosity: 124.292292917
-# Total integrated luminosity from run by run: 120.43179982
-# Total corrected integrated luminosity from run by run: 29.4323986326
-# Total minimum corrected integrated luminosity from run by run: 28.2280806344
-# Total maximum corrected integrated luminosity from run by run: 30.6367166308
+# Total number of events in root file: 518075016.0
+# Total integrated luminosity: 109.667301272 [pb-1]
+# Total integrated luminosity from run by run: 108.856116218 [pb-1]
+# Total corrected integrated luminosity from run by run: 26.2541673925 [pb-1]
+# Total minimum corrected integrated luminosity from run by run: 25.1656062303 [pb-1]
+# Total maximum corrected integrated luminosity from run by run: 27.3427285546 [pb-1]
+
 
 
 import os
@@ -66,7 +67,7 @@ for file in root_files:
         root_file = ROOT.TFile.Open(path_to_rootfiles+file)
 
         # Access the histogram named "AnalysisFlow"
-        histogram = root_file.Get("AnalysisFlow")
+        histogram = root_file.Get("AnaPlots/hAnaFlow")
 
         # Get the content of the second bin
         events_in_root = histogram.GetBinContent(2)  # Indexing starts from 1, so the second bin [CPT trigger] is at index 2

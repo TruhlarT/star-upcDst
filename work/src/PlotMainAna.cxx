@@ -17,19 +17,28 @@ void PlotManager::runMainAnaPlots()
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots() going to runAnaPlots"<<endl;
    runAnaPlots(); 
+   //return;
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots() going to runMissingPt"<<endl;
    runMissingPt();
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots going to loop through tree"<<endl;
-   for(Long64_t iev=0; iev<mTree[kMAINANA]->GetEntries(); ++iev)
+
+   mCurrentTree = mRecTree[kMAINANA];
+   for(Long64_t iev=0; iev<mTree[kMAINANA]->GetEntries(); ++iev) // Nominal analysis
    { //get the event
       mTree[kMAINANA]->GetEntry(iev); 
-      loopThroughTree();
+      loopThroughTree(NOMINAL, NOMINAL, NOMINAL, NOMINAL, NOMINAL, NOMINAL, 0); 
+      for (unsigned int i = 1; i <= nTPCAppSysStudies; ++i)
+         loopThroughTree(i, NOMINAL, NOMINAL, NOMINAL, NOMINAL, NOMINAL, i);
+      for (unsigned int i = 1; i <= nTOFAppSysStudies; ++i)
+         loopThroughTree(NOMINAL, i, NOMINAL, NOMINAL, NOMINAL, NOMINAL, nTPCAppSysStudies + i);
    }
    if( DEBUG )
-      cerr<<"PlotManager::runMainAnaPlots() going to runNHitsVarStudy"<<endl;
-   runNHitsVarStudy();
+      cerr<<"PlotManager::runMainAnaPlots() going to runSysStudy"<<endl;
+   runSysStudy();
+
+   //return;
 
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots call correctMainPlotsForBinWidth()"<<endl;
@@ -37,7 +46,14 @@ void PlotManager::runMainAnaPlots()
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots call subtractBackgroundFromMainPlots()"<<endl;
    subtractBackgroundFromMainPlots();
-
+/*
+   changeDir(kMAINANA, "histos");
+   for (size_t iGroup = 0; iGroup < mainAnaHists.size(); ++iGroup)
+      for (unsigned int i = 0; i <= nTotalTPCTOFSysStudies; ++i){
+         mainAnaHists[iGroup].hMainBcgSubtracted[i]->Write();
+         mainAnaHists[iGroup].hMain[i]->Write();
+      }
+*/
    if( DEBUG )
       cerr<<"PlotManager::runMainAnaPlots call PlotSysStudy()"<<endl;
    changeDir(kMAINANA, "SysPlots");
@@ -57,7 +73,7 @@ void PlotManager::initMainAnaPlots()
    double *pTMissBins = setBinArray(91, 0.0, 0.9); 
    for (int iPart = 0; iPart < nParticles; ++iPart)
    {
-      for (int iRpCon = 0; iRpCon < nRpConfigurations +1; ++iRpCon)
+      for (int iRpCon = 0; iRpCon <= nRpConfigurations; ++iRpCon)
       {
          TString rpConName = iRpCon < nRpConfigurations ? mUtil->rpConfigTag(iRpCon) : "";
          TString hNameSuffix = mUtil->particleName(iPart);
@@ -69,7 +85,7 @@ void PlotManager::initMainAnaPlots()
          group.part = iPart;
          group.rpCon = iRpCon;
 
-         for (unsigned int iSys = 0; iSys <= nTotalTPCSysStudies; ++iSys)
+         for (unsigned int iSys = 0; iSys <= nTotalTPCTOFSysStudies; ++iSys)
          {
             TString hSuffix = iSys == 0 ? "" : Form("_s%i",iSys);
             TString unit = iPart == PROTON ? "pb" : "nb";
@@ -78,7 +94,7 @@ void PlotManager::initMainAnaPlots()
             hMissingPtVsInvMass[iPart][iRpCon][iSys] = new TH2F("hMissingPtVsInvMass"+hNameSuffix+hSuffix, rpConName + ";m(" + mUtil->pairLabel(iPart) + ") [GeV];p_{T}^{miss} GeV;d#sigma/dm(" + mUtil->pairLabel(iPart) + ") [" + unit +"/GeV]", massNBins[iPart]-1,massBins[iPart], 90, pTMissBins);//, int(mRuns.size()-1), mRuns.data());
             hMissingPtVsInvMass[iPart][iRpCon][iSys]->Sumw2();
 
-            hDeltaPhi[iPart][iRpCon][iSys] = new TH1F("hDeltaPhi"+hNameSuffix+hSuffix,";#Delta#varphi [deg];d#sigma/d#Delta#varphi [pb/deg]", 18, 0, 180);
+            hDeltaPhi[iPart][iRpCon][iSys] = new TH1F("hDeltaPhi"+hNameSuffix+hSuffix,";#Delta#varphi [deg];d#sigma/d#Delta#varphi [pb/deg]", 18, 0.1, 180);
             hDeltaPhi[iPart][iRpCon][iSys]->Sumw2();    
             hMissingPtVsDeltaPhi[iPart][iRpCon][iSys] = new TH2F("hMissingPtVsDeltaPhi"+hNameSuffix+hSuffix, rpConName + ";#Delta#varphi [deg];p_{T}^{miss} GeV;d#sigma/d#Delta#varphi [pb/deg]", 18, 0, 180, 91, 0.0, 0.9);//, int(mRuns.size()-1), mRuns.data());
             hMissingPtVsDeltaPhi[iPart][iRpCon][iSys]->Sumw2();
@@ -86,7 +102,7 @@ void PlotManager::initMainAnaPlots()
          }
          group.hMain = hDeltaPhi[iPart][iRpCon];
          group.hVsPt = hMissingPtVsDeltaPhi[iPart][iRpCon];
-         group.hMainBcgSubtracted = new TH1F*[nTotalTPCSysStudies+1];
+         group.hMainBcgSubtracted = new TH1F*[nTotalTPCTOFSysStudies+1];
          group.hName = "DeltaPhi";
          group.xLabel = "#Delta#varphi [deg]";
          group.yLabel = "#Delta#varphi";
@@ -94,7 +110,7 @@ void PlotManager::initMainAnaPlots()
 
          group.hMain = hInvMassCorr[iPart][iRpCon];
          group.hVsPt = hMissingPtVsInvMass[iPart][iRpCon];
-         group.hMainBcgSubtracted = new TH1F*[nTotalTPCSysStudies+1];
+         group.hMainBcgSubtracted = new TH1F*[nTotalTPCTOFSysStudies+1];
          group.hName = "InvMass";
          group.xLabel = "m(" + mUtil->pairLabel(iPart) + ") [GeV]";
          group.yLabel = "m(" + mUtil->pairLabel(iPart) + ")";
@@ -106,9 +122,9 @@ void PlotManager::initMainAnaPlots()
    mCurrentTree = mRecTree[kMAINANA];
 }//initMainAnaPlots
 
-void PlotManager::loopThroughTree(int nHitVar)
+void PlotManager::loopThroughTree(UInt_t tpcAppMethod, UInt_t tofAppMethod, UInt_t nHitsFit, UInt_t nHitsDeDx, UInt_t pidMethod, UInt_t dcaMethod, int id)
 {
-   mCurrentTree->CalculatePID();
+   mCurrentTree->CalculatePID(true, true, -1, pidMethod);
    int pairID = mCurrentTree->getPairID(); 
    if( pairID < 0)
       return;
@@ -118,45 +134,43 @@ void PlotManager::loopThroughTree(int nHitVar)
    //totalEff *= getRetainCorrection(); // already on luminosity correction
    totalEff *= getRpEff();
    totalEff *= getVertexCutEff();
-   totalEff *= getVertexReconstructionEff();
+   totalEff *= getVertexReconstructionEff(dcaMethod);
    totalEff *= getPtMissEff();
-   totalEff *= getPIDEff();
-   totalEff *= getTofEff();
+   totalEff *= getPIDEff(pidMethod);
    totalEff *= getLuminosity();
+   totalEff *= getTpcEff(tpcAppMethod, nHitsFit, nHitsDeDx);
+   totalEff *= getTofEff(tofAppMethod);
 
-   unsigned int start = (nHitVar != -1) ? nTPCAppSysStudies + 1 + nHitVar : 0;
-   unsigned int end = (nHitVar != -1) ? start : nTPCAppSysStudies;
+   //cout<<Form("Eff: %f = %f*%f*%f*%f*%f*%f*%f*%f",id, totalEff, getRpEff(), getVertexCutEff(), getVertexReconstructionEff(), getPtMissEff(), getPIDEff(pidMethod), getLuminosity(), getTpcEff(tpcAppMethod, nHitsFit, nHitsDeDx), getTofEff(tofAppMethod))<<endl;
 
-   for (unsigned int i = start; i <= end; ++i)
-   {
-      double effnb = (nHitVar != -1) ? totalEff*getTpcEff(-nHitVar-1) : totalEff*getTpcEff(i); // in nb
-      double effpb = effnb/1000;
-      double eff = pairID == PROTON ? effpb : effnb;
+   double effpb = totalEff/1000; // convert from nb to pb
+   double eff = pairID == PROTON ? effpb : totalEff; // convert from nb to pb for Protons
 
-      double missingPt = mCurrentTree->getPtMissing();
-      int rpComb = getRpCombination();
-      double invMass = mCurrentTree->getInvMass();
- 
-      hMissingPtVsInvMass[pairID][rpComb][i]->Fill(invMass,missingPt, 1./eff);
-      hMissingPtVsInvMass[pairID][nRpConfigurations][i]->Fill(invMass,missingPt, 1./eff);
-      double deltaPhi = getRpDeltaPhi();
-      hMissingPtVsDeltaPhi[pairID][rpComb][i]->Fill(deltaPhi,missingPt, 1./effpb);
-      hMissingPtVsDeltaPhi[pairID][nRpConfigurations][i]->Fill(deltaPhi,missingPt, 1./effpb);
-      if(missingPt > exclusivityCut)
-         continue;
+   double missingPt = mCurrentTree->getPtMissing();
+   int rpComb = getRpCombination();
+   double invMass = mCurrentTree->getInvMass();
 
-      hInvMassCorr[pairID][rpComb][i]->Fill(invMass, 1./eff);
-      hInvMassCorr[pairID][nRpConfigurations][i]->Fill(invMass, 1./eff);
+   hMissingPtVsInvMass[pairID][rpComb][id]->Fill(invMass,missingPt, 1./eff);
+   hMissingPtVsInvMass[pairID][nRpConfigurations][id]->Fill(invMass,missingPt, 1./eff);
+   double deltaPhi = getRpDeltaPhi();
+   hMissingPtVsDeltaPhi[pairID][rpComb][id]->Fill(deltaPhi,missingPt, 1./effpb);
+   hMissingPtVsDeltaPhi[pairID][nRpConfigurations][id]->Fill(deltaPhi,missingPt, 1./effpb);
 
-      hDeltaPhi[pairID][rpComb][i]->Fill( deltaPhi, 1./effpb );
-      hDeltaPhi[pairID][nRpConfigurations][i]->Fill( deltaPhi, 1./effpb );
-   }
+   if(missingPt > exclusivityCut)
+      return;
+
+   hInvMassCorr[pairID][rpComb][id]->Fill(invMass, 1./eff);
+   hInvMassCorr[pairID][nRpConfigurations][id]->Fill(invMass, 1./eff);
+
+   hDeltaPhi[pairID][rpComb][id]->Fill( deltaPhi, 1./effpb );
+   hDeltaPhi[pairID][nRpConfigurations][id]->Fill( deltaPhi, 1./effpb );
+
 }//loopThroughTree
 
 
 void PlotManager::PlotMainAnaPlots()
 {
-   double scaleFactor[nParticles] = {2.2, 1.6, 2.6};
+   double scaleFactor[nParticles][nRpConfigurations + 1] = { {1.3, 1.6, 1.3} , {1.35, 2.2, 1.5}, {1.85, 1.8, 1.3}};
    for (size_t iGroup = 0; iGroup < mainAnaHists.size(); ++iGroup) 
    {
       int part = mainAnaHists[iGroup].part;
@@ -181,11 +195,11 @@ void PlotManager::PlotMainAnaPlots()
       if(part == PROTON)
          hist->GetYaxis()->SetTitleOffset(1.45);
 
-      hist->GetYaxis()->SetRangeUser(0, scaleFactor[part]*hist->GetMaximum());
-      hist->Draw("hist E");
+      hist->GetYaxis()->SetRangeUser(0, scaleFactor[part][rpCon]*hist->GetMaximum());
+      hist->Draw("hist E1X0");
 
       SetHistBcgStyle(hBkgdHistogram);
-      hBkgdHistogram->Draw("same hist E");
+      hBkgdHistogram->Draw("same hist E1X0");
 
       DrawSTAR(0.17,0.89,0.33,0.95);
       DrawMainText(part, rpCon);
@@ -200,13 +214,14 @@ void PlotManager::PlotMainAnaPlots()
       integrateCrossSection(mainAnaHists[iGroup], hName + "_" + nameSuffix);
       /////////////////////////////////////
       TH1F *histSubtracted = (TH1F*)mainAnaHists[iGroup].hMainBcgSubtracted[0]->Clone( "h" + hName + "Sub_" + nameSuffix );
+      double integral = histSubtracted->Integral("width");
       SetHistStyle(histSubtracted);
       //subtractBackground( hist, hBkgdHistogram );
-      histSubtracted->GetYaxis()->SetRangeUser(0, scaleFactor[part]*histSubtracted->GetMaximum());
-      histSubtracted->Draw("hist E");
+      histSubtracted->GetYaxis()->SetRangeUser(0, scaleFactor[part][rpCon]*histSubtracted->GetMaximum());
+      histSubtracted->Draw("AXIS");
 
-      TH1F *histMC = GetGraniittiPlot(part, rpCon, hName, histSubtracted->Integral("width"), false);
-      histMC->Draw("same E");
+      TH1F *histMC = GetGraniittiPlot(part, rpCon, hName, integral, false);
+      histMC->Draw("same hist");
 
       DrawSTAR(0.17,0.89,0.33,0.95);
       DrawSystemDescription(part);
@@ -214,6 +229,7 @@ void PlotManager::PlotMainAnaPlots()
       DrawForwardProtonKin(rpCon);
 
       DrawSysUncertainty(mainAnaHists[iGroup], true);
+      histSubtracted->Draw("same E1X0");
 
       if( hName == "DeltaPhi")
          CreateLegend(0.3, 0.65, 0.65, 0.8);
@@ -221,76 +237,121 @@ void PlotManager::PlotMainAnaPlots()
          CreateLegend(0.64, 0.45, 0.9, 0.59);
       legend->AddEntry(histSubtracted, "Data","ple");
       legend->AddEntry(systUncertainty, "Systematic uncertainty", "f");
-      legend->AddEntry(histMC, "GRANIITI not scaled","ple");
+      legend->AddEntry(histMC, "GRANIITTI not scaled","l");
       //legend->AddEntry(systUncertainty[bcg], "Background sys. uncert.", "f");
       legend->Draw("same");
 
+      histSubtracted->Draw("AXIS same");
       WriteCanvas(hName + nameSuffix + "bckgSubUnscaled");    
       /////////////////////////////////////
-      histSubtracted->Draw("hist E");
-
-      TH1F *histMC2; 
-      TString granTag = " not scaled";
-      TString granTag2 = " not scaled";
-      if( hName == "DeltaPhi" && rpCon == nRpConfigurations)
+      TString canTag[] = { TString("bckgSubScaled"), TString("sq")};
+      for (int i = 0; i < 2; ++i)
       {
-         histMC = GetGraniittiPlot(part, IT, hName, histSubtracted->Integral("width"), true);
-         histMC->Draw("same E"); 
-         granTag = getGraniittiSF(part,IT) == 1.0 ? granTag : TString::Format(" #times %.2f",getGraniittiSF(part,IT));
+         if( i == 1)
+         {
+            CreateCanvas(&canvas, hName + "_" + nameSuffix, 1165.0, 980.0);
+            gPad->SetMargin( hName == "DeltaPhi" ? 0.11 : 0.09, 0.03, 0.11, 0.01); // (Float_t left, Float_t right, Float_t bottom, Float_t top)
+            
+            if( hName != "DeltaPhi")
+               histSubtracted->GetYaxis()->SetTitleOffset(1.13);
+            else
+               histSubtracted->GetYaxis()->SetTitleOffset(1.4);
+         }
+         histSubtracted->Draw("AXIS");
+         systUncertainty->Draw("E5 same");
+         histSubtracted->Draw("E1X0 same");
+         
+         TH1F *histMC2; 
+         TString granTag = " not scaled";
+         TString granTag2 = " not scaled";
 
-         histMC2 = GetGraniittiPlot(part, ET, hName, histSubtracted->Integral("width"), true);
-         SetHistBcgStyle(histMC2,3,23);
-         histMC2->Draw("same E");  
-         granTag2 = getGraniittiSF(part,ET) == 1.0 ? granTag2 : TString::Format(" #times %.2f",getGraniittiSF(part,ET));
-      }else{
-         histMC = GetGraniittiPlot(part, rpCon, hName, histSubtracted->Integral("width"), true);
-         histMC->Draw("same E");
+         TH1F *histContinuum; 
+         TH1F *histContinuum2;
+         if( hName == "DeltaPhi" && rpCon == nRpConfigurations)
+         {
+            histMC = GetGraniittiPlot(part, IT, hName, integral, true);
+            if(part != PROTON)
+               histMC->Draw("same hist"); 
+            histContinuum = GetGraniittiPlot(part, IT, hName, integral, true, true);
+            histContinuum->Draw("same hist"); 
 
-         if( rpCon == nRpConfigurations && getGraniittiSF(part,ET) != getGraniittiSF(part,IT))
-            granTag = " scaled";
+            granTag = getGraniittiSF(part,IT) == 1.0 ? granTag : TString::Format(" #times%.2f",getGraniittiSF(part,IT));
+
+            histMC2 = GetGraniittiPlot(part, ET, hName, integral, true);
+            if(part != PROTON)
+               histMC2->Draw("same hist");  
+
+            histContinuum2 = GetGraniittiPlot(part, ET, hName, integral, true, true);
+            histContinuum2->Draw("same hist");  
+
+            granTag2 = getGraniittiSF(part,ET) == 1.0 ? granTag2 : TString::Format(" #times%.2f",getGraniittiSF(part,ET));
+         }else{
+            histMC = GetGraniittiPlot(part, rpCon, hName, integral, true);
+            if(part != PROTON)
+               histMC->Draw("same hist");
+
+            histContinuum = GetGraniittiPlot(part, rpCon, hName, integral, true, true);
+            histContinuum->Draw("same hist");
+
+            if( rpCon == nRpConfigurations && getGraniittiSF(part,ET) != getGraniittiSF(part,IT))
+               granTag = " scaled";
+            else
+               granTag = getGraniittiSF(part,rpCon) == 1.0 ? granTag : TString::Format(" #times%.2f",getGraniittiSF(part,rpCon));
+         }
+
+         DrawSTAR( 0.14, 0.89, 0.24, 0.96);
+         DrawSystemDescription(part, 0.24, 0.89, 0.88, 0.96);
+         //DrawCentralKin(part);
+         if( i == 0)
+            DrawForwardProtonKin(rpCon);
          else
-            granTag = getGraniittiSF(part,rpCon) == 1.0 ? granTag : TString::Format(" #times %.2f",getGraniittiSF(part,rpCon));
+            DrawForwardProtonKin(rpCon, 0.33, 0.8, 0.87, 0.87);
+
+
+         double xshift = i == 0 ? 0.0 : 0.17;
+         if( hName == "DeltaPhi")
+            CreateLegend(0.3, part != PROTON ? 0.45 : 0.55, 0.65, 0.87);
+         else
+            CreateLegend( (part == PION ? 0.5 : 0.6) - xshift, 0.55, 0.9, 0.8);
+         legend->AddEntry(histSubtracted, "Data","ple");
+         legend->AddEntry(systUncertainty, "Systematic uncertainty", "f");
+         if(part != PROTON)
+            legend->AddEntry(histMC, "GRANIITTI Res.+Cont." + granTag,"l");
+         legend->AddEntry(histContinuum, "GRANIITTI Cont." + granTag,"l");
+         if( hName == "DeltaPhi" && rpCon == nRpConfigurations){
+            if(part != PROTON)
+               legend->AddEntry(histMC2, "GRANIITTI Res.+Cont." + granTag2,"l");
+            legend->AddEntry(histContinuum2, "GRANIITTI Cont." + granTag2,"l");
+         }
+         //legend->AddEntry(systUncertainty[bcg], "Background sys. uncert.", "f");
+         legend->Draw("same");
+
+         histSubtracted->Draw("AXIS same");
+         WriteCanvas(hName + nameSuffix + canTag[i]); 
+         canvas->Close();
       }
-
-
-      DrawSTAR(0.17,0.89,0.33,0.95);
-      DrawSystemDescription(part);
-      //DrawCentralKin(part);
-      DrawForwardProtonKin(rpCon);
-
-      DrawSysUncertainty(mainAnaHists[iGroup]);
-
-
-      if( hName == "DeltaPhi")
-         CreateLegend(0.3, 0.65, 0.65, 0.8);
-      else
-         CreateLegend(0.64, 0.45, 0.9, 0.59);
-      legend->AddEntry(histSubtracted, "Data","ple");
-      legend->AddEntry(systUncertainty, "Systematic uncertainty", "f");
-      legend->AddEntry(histMC, "GRANIITI" + granTag,"ple");
-      if( hName == "DeltaPhi" && rpCon == nRpConfigurations)
-         legend->AddEntry(histMC2, "GRANIITI" + granTag2,"ple");
-      //legend->AddEntry(systUncertainty[bcg], "Background sys. uncert.", "f");
-      legend->Draw("same");
-
-      WriteCanvas(hName + nameSuffix + "bckgSubScaled");   
-      /////////////////////////////////////        
+      /////////////////////////////////////  
+      CreateCanvas(&canvas, hName + "_" + nameSuffix);      
       gPad->SetMargin(0.07,0.13,0.105,0.03);
       SetHistStyle(hMissPtVsX);
       hMissPtVsX->GetZaxis()->SetTitleOffset(1.4);
       hMissPtVsX->Draw("colz");
       SetPalletRange(hMissPtVsX);
 
-      DrawExclusiveLine(massBins[part][2], exclusivityCut, massBins[part][massNBins[part]-2], exclusivityCut);
 
-      CreateLine(massBins[part][2], nonExclFitRangeMin[part], massBins[part][massNBins[part]-2], nonExclFitRangeMin[part] );
+      double xMin = hName == "DeltaPhi" ? 0.0 : massBins[part][2];
+      double xMax = hName == "DeltaPhi" ? 180.0 : massBins[part][massNBins[part]-2];
+
+      DrawExclusiveLine(xMin, exclusivityCut, xMax, exclusivityCut);
+
+      CreateLine(xMin, nonExclFitRangeMin[part], xMax, nonExclFitRangeMin[part] );
       line->SetLineStyle(10);
-      line->SetLineWidth(4);
+      line->SetLineWidth(8);
       line->SetLineColor(2);
       line->Draw("same");
-      CreateLine(massBins[part][2], nonExclFitRangeMax[part], massBins[part][massNBins[part]-2], nonExclFitRangeMax[part] );
+      CreateLine(xMin, nonExclFitRangeMax[part], xMax, nonExclFitRangeMax[part] );
       line->SetLineStyle(10);
-      line->SetLineWidth(4);   
+      line->SetLineWidth(8);   
       line->SetLineColor(2);   
       line->Draw("same");
 
@@ -331,7 +392,7 @@ void PlotManager::runAnaPlots()
       SetHistStyle(hist);
       hist->SetTitle(title);
 
-      TString opt = twoDim ? "colz" : "";
+      TString opt = twoDim ? "colz" : "E1";
       if(twoDim)
          hist->GetZaxis()->SetTitleOffset(1.6);
       else
@@ -367,13 +428,13 @@ void PlotManager::runAnaPlots()
       else if( ID == 3)
          DrawLine(hist,vertexRange, true);
       else if( ID == 4)
-         DrawLine(hist, minNHitsFit[0]);
+         DrawLine(hist, minNHitsFit[NOMINAL]);
       else if( ID == 5)
-         DrawLine(hist, minNHitsDEdx[0]);
+         DrawLine(hist, minNHitsDEdx[NOMINAL]);
       else if( ID == 6)
-         DrawLine(hist,maxDcaXY);
+         DrawLine(hist,maxDcaXY[NOMINAL]);
       else if( ID == 7)
-         DrawLine(hist,maxDcaZ, true);
+         DrawLine(hist,maxDcaZ[NOMINAL], true);
 
       WriteCanvas(histName);
       canvas->Close();
@@ -384,23 +445,23 @@ void PlotManager::runAnaPlots()
       drawHist("hNRPTracksInFV"+mUtil->branchName(i), ";Number of RP tracks in FV;Number of events", 1, true, "Branch: "+ mUtil->branchName(i));
    }
 
-   drawHist("hEtaZVertex", ";#eta;z_{vrtx} [cm];Number of tracks", -1, false); //TH2D
+   drawHist("hEtaZVertex", ";#eta;z_{vtx} [cm];Number of tracks", -1, false); //TH2D
    drawHist("hNTOFVerticies", ";Number of TOF vertices;Number of events",1,true);
    drawHist("hNTOFGoodTracks", ";Number of good TOF tracks in TOF vertex;Number of events",2,true);
-   drawHist("hZVertex", ";z_{vrtx} [cm];Number of events",3);
+   drawHist("hZVertex", ";z_{vtx} [cm];Number of events",3);
    drawHist("hNHitFit", ";N^{fit}_{hits};Number of tracks",4);
    drawHist("hNHitDedx", ";N^{dE/dx}_{hits};Number of tracks",5);
    drawHist("hDcaXY", ";DCA_{xy} [cm];Number of tracks",6);
    drawHist("hDCAZ", ";DCA_{z} [cm];Number of tracks",7,true);
    drawHist("hAnaFlow", ";;Number of events",8, true);
 
-   TString histName = "hRPFV";
+      TString histName = "hRPFV";
    CreateCanvas(&canvas, histName);
    canvas->cd();
-   gPad->SetMargin(0.0, 0.0, 0.0, 0.03);
+   gPad->SetMargin(0.0, 0.0, 0.1, 0.01);
    canvas->Divide(2, 1, .0, .0, 0);
 
-   TH2D* hist[nBranches];;
+   TH2D* hist[nBranches];
 
    for (int iBr = 0; iBr < nBranches; ++iBr) 
    {
@@ -425,23 +486,29 @@ void PlotManager::runAnaPlots()
       canvas->cd(side+1);
       SetHistStyle(hist[iBr-1]);
       hist[iBr-1]->SetTitle(";p_{x} [GeV];p_{y} [GeV];Number of tracks");
-      hist[iBr-1]->GetYaxis()->SetTitleOffset(0.7);
+      hist[iBr-1]->GetYaxis()->SetTitleOffset(1.0);
 
       if ( Last ) 
          hist[iBr-1]->GetZaxis()->SetTitleOffset(1.3);
       else 
          hist[iBr-1]->GetZaxis()->SetTickLength(0);
-      gPad->SetMargin(  side == East ? 0.1 : 0.0, Last ? 0.18 : 0.0, 0.105, 0.01);
+      gPad->SetMargin(  side == East ? 0.12 : 0.0, Last ? 0.19 : 0.0, 0.12, 0.01);
       
       gPad->SetLogz();
 
       hist[iBr-1]->Draw("colz");
       DrawFiducial(side);
 
-      CreateText(0.4, 0.45, 0.5, 0.55);
+      CreateText( side == East ? 0.15 : 0.05, 0.9, side == East ? 0.25 : 0.15, 0.95);
       text->AddText( mUtil->sideName(side) );
       text->Draw("same");
    }
+   
+   CreateLegend(0.05, 0.52, 0.7, 0.58);
+   legend->AddEntry(line, "Forward proton fiducial region", "f");
+   legend->SetFillStyle(1001);
+   legend->SetFillColor(kWhite);
+   legend->Draw("same");
    
    WriteCanvas(histName);
    canvas->Close();
@@ -471,7 +538,7 @@ void PlotManager::correctMainPlotsForBinWidth()
 
    for (size_t iGroup = 0; iGroup < mainAnaHists.size(); ++iGroup) 
    {
-      for (unsigned int i = 0; i <= nTotalTPCSysStudies; ++i)
+      for (unsigned int i = 0; i <= nTotalTPCTOFSysStudies; ++i)
       {
          scaledHist1D(mainAnaHists[iGroup].hMain[i]);
          scaledHist2D(mainAnaHists[iGroup].hVsPt[i]);
@@ -483,7 +550,7 @@ void PlotManager::subtractBackgroundFromMainPlots()
 {
    for (size_t iGroup = 0; iGroup < mainAnaHists.size(); ++iGroup) 
    {
-      for (unsigned int i = 0; i <= nTotalTPCSysStudies; ++i)
+      for (unsigned int i = 0; i <= nTotalTPCTOFSysStudies; ++i)
       {
          mainAnaHists[iGroup].hMainBcgSubtracted[i] = (TH1F*) mainAnaHists[iGroup].hMain[i]->Clone( Form("%s_subtracted",mainAnaHists[iGroup].hMain[i]->GetName()) );
          TH1D *hBkgdHistogram = (TH1D*)backgroundStudy(mainAnaHists[iGroup].hVsPt[i], mainAnaHists[iGroup].part, mainAnaHists[iGroup].rpCon);
@@ -508,7 +575,8 @@ void PlotManager::integrateCrossSection(hGroup mainHists, TString hName)
    double statError = 0.0;  // For statistical uncertainty
    double integral = hist->IntegralAndError(1, hist->GetNbinsX(), statError, "width");
 
-   double systError = integral*sqrt( pow(relLumUncertainty,2) + pow(relativEffSys[part],2) + pow(mBcgFracError[part][rpCon],2));
+   double systErrorLow = integral*sqrt( pow(relLumUncertainty,2) + pow(relativEffSysLow[part],2) + pow(mBcgFracError[part][rpCon],2));
+   double systErrorHigh = integral*sqrt( pow(relLumUncertainty,2) + pow(relativEffSysHigh[part],2) + pow(mBcgFracError[part][rpCon],2));
 
-   cout<<"Integrated cross-section for "<< hist->GetName() <<" is "<<integral<<" +- "<<statError<<" + "<<systError<<unit<<endl;
+   cout<<"Integrated cross-section for "<< hist->GetName() <<" is "<<integral<<" +- "<<statError<<" + "<<systErrorHigh<<" - "<<systErrorLow<<unit<<endl;
 }//integrateCrossSection

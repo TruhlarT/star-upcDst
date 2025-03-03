@@ -37,6 +37,7 @@
 #include <TF1.h> 
 #include <TF2.h> 
 #include <TH3.h> 
+#include "TEllipse.h"
 #include <THStack.h> 
 #include <TStyle.h> 
 #include <TGraph.h> 

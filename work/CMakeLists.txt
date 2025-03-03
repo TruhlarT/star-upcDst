@@ -26,6 +26,7 @@ set (SRCS
   src/PlotSysStudy.cxx 
   src/PlotGetEfficiency.cxx       
   src/PlotEmbedding.cxx
+  src/PlotElastic.cxx
   src/PlotTrigEff.cxx 
   src/PlotTofQA.cxx  
   src/PlotProbOfRetainEvent.cxx

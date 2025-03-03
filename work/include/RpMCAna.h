@@ -18,7 +18,7 @@ class RpMCAna : public Ana {
       void Make() override;
       void Init() override;
 
-      void SetMCInfo(double (&mc_vrtx)[nCoordinates], double (&mc_p)[nCoordinates][nSides]);
+      void SetMCInfo(double (&mc_vtx)[nCoordinates], double (&mc_p)[nCoordinates][nSides]);
       bool IsTrackInRp(int side);
       void ProjectToRP(double& x, double& y, int RP, int side);
       bool AreTracksInRp();

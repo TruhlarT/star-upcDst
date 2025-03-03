@@ -19,7 +19,9 @@ class MainAna : public Ana{
       void Init() override;
 
    private:
-      RecTree* mHitsTree[nHitsVariation];
+      RecTree* mHitsTree[nTPCnHitsStudies];
+      RecTree* mPidTree[nPidVariation];
+      RecTree* mDcaTree[nDcaVariation];
       RecTree* mCurrentTree;
       UInt_t mRunNumber;
 
@@ -44,7 +46,7 @@ class MainAna : public Ana{
       TH2D *hEtaZVertex;
 
 
-      void runMainAna(RecTree* recTree, int nHitFitStatus = 0, int nHitDEdxStatus = 0);
+      void runMainAna(RecTree* recTree, VARIATION nHitFitStatus = NOMINAL, VARIATION nHitDEdxStatus = NOMINAL, VARIATION pid = NOMINAL, unsigned int dca = NOMINAL);
       Int_t PIDStartegy(int strategy);
       bool IsPairOf(int type);
 

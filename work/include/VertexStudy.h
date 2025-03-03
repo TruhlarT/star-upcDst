@@ -13,7 +13,7 @@ using namespace UTIL;
 class VertexStudy : public Ana{
    public:
       VertexStudy(TFile *outFile);
-      ~VertexStudy(){if(mVertexTree) delete mVertexTree;};
+      ~VertexStudy(){};
       
       void Make() override;
       void Init() override;
@@ -26,7 +26,8 @@ class VertexStudy : public Ana{
 
       TH2D *hDca;
       TH1D *hAnaFlow; 
-      enum { kAll = 1, kTwoTracks, kSameSign, kDcaPart, kDcaBeam, kPrimAll, kPrimTwoTracks, kPrimSameSign, kPrimVertex, kMax};
+      TH1D *hDcaVertex;
+      enum { kAll = 1, kTwoTracks, kSameSign, kGoodEta, kDcaPart, kDcaBeam, kPrimAll, kPrimTwoTracks, kPrimSameSign, kPrimVertex, kMax};
 
 };
 

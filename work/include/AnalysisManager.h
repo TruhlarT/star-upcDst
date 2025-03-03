@@ -30,7 +30,7 @@ RpMCAna* mRpMCAna;
 vector<Ana*> mAnaVector;
 
 bool runRP;
-double mc_vrtx[nCoordinates]; // x,y,z position of vertex from MC
+double mc_vtx[nCoordinates]; // x,y,z position of vertex from MC
 double mc_p[nCoordinates][nSides]; // x,y,z momenta of proton on East/West side from MC
 
 Long64_t nEvents, nMcEvents, iMcEvnt, iZbEv;
