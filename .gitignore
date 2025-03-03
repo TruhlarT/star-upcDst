@@ -16,7 +16,7 @@ work/lists/
 work/src/Backup/
 work/submit.xml
 work/os
-work/sched/*
+work/sched/
 work/rootinit.sh
 work/init.sh
 temp_gccflags.c

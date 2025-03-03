@@ -40,11 +40,11 @@ The code consists of two parts:
 
 ### Run the code locally:
 - To run the code locally on a single file: 
-<pre><code> AnalysisManager path_to_upcDst_root_file </code></pre>
+<pre><code> AnalysisManager /star/data01/pwg_tasks/upc03/pp17/ExtendedUpcDst/18100001.root </code></pre>
 - To run the code locally on a list of files: 
-<pre><code> AnalysisManager path_to_list_of_upcDst_root_files </code></pre>
+<pre><code> AnalysisManager /gpfs01/star/pwg_tasks/upc02/CEP_input_files/lists/extendedUpc.list </code></pre>
 - Or to run on the i-th file from list of files: 
-<pre><code> AnalysisManager path_to_list_of_upcDst_root_files index </code></pre>
+<pre><code> AnalysisManager /gpfs01/star/pwg_tasks/upc02/CEP_input_files/lists/extendedUpc.list 111 </code></pre>
 - The output will be stored in the work dir as "AnalysisOutput.root"
 
 ### Submitting jobs on condor:
@@ -53,33 +53,38 @@ The code consists of two parts:
 - And in "PrintStat.py" and "RunMerge.py":
 <pre><code> defaultdir = "/gpfs01/star/pwg/truhlar/Run17_P20ic" </pre></code>
 
+- Also one has to create sched directory for the scheduler output
+<pre><code> mdkir sched </pre></code>
+
 - To submit the jobs on condor, run:
-<pre><code> SubmitPlugin.py tag inputSource </pre></code>
-- If "inputSource" is not given, then the default one from SubmitPlugin.py is used.
+<pre><code> SubmitPlugin.py qaTest /gpfs01/star/pwg_tasks/upc02/CEP_input_files/lists/extendedUpc.list </pre></code>
+- If the list is not given, then the default one from SubmitPlugin.py is used.
+- The "qaTest" serves as a tag for the given run of the analysis. Use uniq tag for each analysis.
 
 - One can check the job status using "PrintStat.py":
-<pre><code> PrintStat.py tag </pre></code>
-- If "tag" is not given, then the last submitted jobs are checked.
+<pre><code> PrintStat.py qaTest </pre></code>
+- If tag is not given, then the last submitted jobs are checked.
 - If there are any failed jobs, one can resubmit them by:
-<pre><code> PrintStat.py r tag </pre></code>
+<pre><code> PrintStat.py r qaTest </pre></code>
 
 
 - Each jobs produce an individual output. One can merge the output files by:
-<pre><code> RunMerge.py tag </pre></code>
-- Again, if "tag" is not given, then the last submitted jobs are merged.
+<pre><code> RunMerge.py qaTest </pre></code>
+- Again, if tag is not given, then the last submitted jobs are merged.
 
 ### Create final plots:
 - Plot manager was developed to process the output of the main analysis describe above and produce the plots to the thesis and paper.
-- To create the plots for the analysis with "tag", run:
-<pre><code> runPlotManager.py tag </pre></code>
-- Again, if "tag" is not given, then the last submitted analysis is processed.
+- To create the plots for the analysis with tag = "qaTest", run:
+<pre><code> runPlotManager.py qaTest </pre></code>
+- Again, if tag is not given, then the last submitted analysis is processed.
 - If one wants to process a local analysis, run:
 <pre><code> runPlotManager.py l </pre></code>
 - The root file called "FinalPlots.root" is produced in work dir containing all final plots, except the dEdx plot. 
+- If the runPlotManager is run over small statics (e.g. a single run), many errors may occur. Ignore them. They originate from failed fits.
 - To produce the dEdx plot, one has to run with root4star:
 <pre><code> root4star -l </pre></code>
 <pre><code> .L bichselG10.C </pre></code>
-<pre><code> .x bichselG10.C("tag") </pre></code>
+<pre><code> .x bichselG10.C("qaTest") </pre></code>
 - But firstly, the path to the file should be modified:
 <pre><code> TString inputFileLocation = "/gpfs01/star/pwg/truhlar/Run17_P20ic/" + input + "/merged/StRP_production_0000.root"; </pre></code>
 
